@@ -5,7 +5,14 @@
 {% csrf_token  %}
 <style>
     .table-wrapper{
-        height:calc(100vh - 393px)
+        height:calc(100vh - 383px)
+    }
+    .input_holder{
+        position: relative;
+    }
+    .error__box,.error__box2{
+        position:absolute;
+        bottom: -19px;
     }
 </style>
 
@@ -122,9 +129,6 @@
                         <span class="error" id="campion-error"></span>
                       </div>
                 </div>
-    
-               
-    
                
                 </div>
     
@@ -150,19 +154,20 @@
               <tbody>  
                   {% for i in obj  %}
                         <tr>
-                            <td class="listid">{{i.list_id}}</td>
-                            <td>{{i.added_date_time}}</td>
-                            <td>{{i.list_name}}</td>
-                            <td>{{i.excel_file}}</td>
+                            <td class="listid">{{i.listid}}</td>
+                            <td>{{i.entry}}</td>
+                            <td>{{i.listname}}</td>
+                            <td>{{i.file}}</td>
                             <td>{{i.count}}</td>
                             <td>
+                                <input type="hidden" name="current_listid" value="{{i.id}}">
                                 <label class="switch">
-                                    <input type="checkbox" {% if i.status == '1'  %}checked{% endif %}>
+                                    <input type="checkbox" class="status_toggle" {% if i.status == 1  %}checked{% endif %}>
                                     <span class="slider round"></span>
                                 </label>
                             </td>
                         </tr>
-                    {% endfor  %}
+                    {% endfor %}
                 </tbody>
             </table>
         </div>

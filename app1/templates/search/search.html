@@ -11,7 +11,7 @@
 <main class="main-reminder main-ots">
     <div class="searchdiv flex-wrap">
         <div class="searchlabel">
-            <span class="sl">Borrowor Name</span>
+            <span class="sl">Name</span>
             <input type="text" name="borrowor_name"  autocomplete="off"  class="searchinput">
         </div>
              
@@ -22,7 +22,7 @@
         </div>
            
         <div class="searchlabel"  style="margin: 0;">
-            <span class="sl">Loan No.</span>
+            <span class="sl">Agreement No.</span>
             <input  type="tel" name="loan_id"  autocomplete="off" class="searchinput">
         </div>
          
@@ -78,9 +78,9 @@ function sajax(){
                         output += (`<tr class='clickable-row dashhover'data-href='/cms/${x[i].id}''  id="show">
                         <input type="hidden" class="attempted" value="${x[i].attempted}">
                         <td>${x[i].id}</td>
-                        <td>${x[i].borrowor_name}</td>
-                        <td>${x[i].mobile_number}</td>
-                        <td>${x[i].bank_loan_accountno}</td>
+                        <td>${x[i].name}</td>
+                        <td>${x[i].mobile_no}</td>
+                        <td>${x[i].agreement_no}</td>
                         
                         <td><img src="/static/Images/attachment1.svg"/></td>
                         

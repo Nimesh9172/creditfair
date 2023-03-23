@@ -1,0 +1,237 @@
+
+<style>
+    
+    /* loading animation css start */
+    :root {
+        --hue: 223;
+        --bg: hsl(var(--hue),10%,90%);
+        --fg: hsl(var(--hue),10%,10%);
+        --trans-dur: 0.3s;
+        /* font-size: calc(16px + (24 - 16) * (100vw - 320px) / (1280 - 320)); */
+    }
+    /* body {
+        background: var(--bg);
+        color: var(--fg);
+        font: 1em/1.5 sans-serif;
+        height: 100vh;
+        display: grid;
+        place-items: center;
+        transition:
+            background-color var(--trans-dur),
+            color var(--trans-dur);
+    } */
+    .loader__text{
+        color: #047BD5;
+        font-weight: 500;
+    }
+    
+    
+    .pl {
+        display: block;
+        width: 8em;
+        height: 8em;
+    }
+    .pl__ring,
+    .pl__ball1,
+    .pl__ball2 {
+        animation-duration: 2s;
+        animation-timing-function: ease-in-out;
+        animation-iteration-count: infinite;
+        transform-origin: 32px 32px;
+    }
+    .pl__ring {
+        animation-name: ring;
+    }
+    .pl__ball1 {
+        animation-name: ball1;
+    }
+    .pl__ball2 {
+        animation-name: ball2;
+    }
+    
+    /* Dark theme  */
+    @media (prefers-color-scheme: dark) {
+        :root {
+            --bg: hsl(var(--hue),10%,10%);
+            --fg: hsl(var(--hue),10%,90%);
+        }
+    }
+    
+    
+    .loader-body{
+        display: flex;
+        justify-content: center;
+    }
+    
+    .loader-text{
+        color: #047BD5;
+        font-weight: 500;
+        margin: 10px 0px;
+    }
+    
+    .waviy {
+      position: relative;
+      /* -webkit-box-reflect: below -20px linear-gradient(transparent, rgba(0,0,0,.2)); */
+      font-size: 25px;
+    }
+    .waviy span {
+      font-family: 'poppins',;
+      position: relative;
+      display: inline-block;
+      /* color: ; */
+      text-transform: uppercase;
+      animation: waviy 1s infinite;
+      animation-delay: calc(.1s * var(--i));
+      
+    }
+    
+    @keyframes blink {50% { color: transparent }}
+    .loader__dot { animation: 1s blink infinite }
+    .loader__dot:nth-child(2) { animation-delay: 250ms }
+    .loader__dot:nth-child(3) { animation-delay: 500ms }
+    
+    @keyframes waviy {
+      0%,40%,100% {
+        transform: translateY(0)
+      }
+      20% {
+        transform: translateY(-20px)
+      }
+    }
+    /* Animation */
+    @keyframes ring {
+        from {
+            animation-timing-function: ease-in-out;
+            stroke-dashoffset: -122.52;
+            transform: rotate(135deg);
+        }
+        15% {
+            animation-timing-function: ease-in;
+            stroke-dashoffset: -122.52;
+            transform: rotate(90deg);
+        }
+        35% {
+            animation-timing-function: ease-out;
+            stroke-dashoffset: -65.34;
+            transform: rotate(297.5deg);
+        }
+        55% {
+            animation-timing-function: ease-in-out;
+            stroke-dashoffset: -122.52;
+            transform: rotate(505deg);
+        }
+        70% {
+            animation-timing-function: ease-in-out;
+            stroke-dashoffset: -122.52;
+            transform: rotate(490deg);
+        }
+        85%,
+        to {
+            stroke-dashoffset: -122.52;
+            transform: rotate(497.5deg);
+        }
+    }
+    @keyframes ball1 {
+        from {
+            transform: rotate(14deg);
+        }
+        20% {
+            transform: rotate(-7deg);
+        }
+        60% {
+            transform: rotate(399deg);
+        }
+        75% {
+            transform: rotate(361deg);
+        }
+        90%,
+        to {
+            transform: rotate(374deg);
+        }
+    }
+    @keyframes ball2 {
+        from {
+            transform: rotate(-21deg);
+        }
+        25% {
+            transform: rotate(-47deg);
+        }
+        60% {
+            transform: rotate(364deg);
+        }
+        75% {
+            transform: rotate(326deg);
+        }
+        90%,
+        to {
+            transform: rotate(339deg);
+        }
+    }
+    
+    .loader__overlay{
+      width: 100%;
+      height: 100vh;
+      z-index: 10221;
+      position: fixed;
+      /* filter: blur(115px); */
+      backdrop-filter: brightness(0.5);
+    
+    }
+    
+    .css__loader{
+      position: fixed;
+      top: 30%;
+      left: 0;
+      background: #fff;
+      right: 0;
+      margin: auto;
+      z-index: 10222;
+      width: min(100% - 2rem, 249px);
+      border-radius: 10px;
+      padding: 20px 0;
+    }
+    
+    .loader__wrapper{
+        display: none;
+    }
+    
+    </style>
+    <body>
+        <div class="loader__wrapper">
+            <div class="loader__overlay"></div>
+            <div class="css__loader">
+              <div class="loader-body">
+                <svg class="pl" viewBox="0 0 64 64" width="64px" height="64px" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="grad" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="0%" stop-color="#000" />
+                            <stop offset="100%" stop-color="#fff" />
+                        </linearGradient>
+                        <mask id="grad-mask">
+                            <rect x="0" y="0" width="64" height="64" fill="url(#grad)" />
+                        </mask>
+                    </defs>
+                    <circle class="pl__ring" cx="32" cy="32" r="26" fill="none" stroke="hsl(206,100%,80.5%)"  stroke-width="8" stroke-dasharray="169.65 169.65" stroke-dashoffset="-127.24" stroke-linecap="round" transform="rotate(135)" />
+                    <g fill="hsl(233,90%,65%)">
+                        <circle class="pl__ball1" fill="#83c5f8" cx="32" cy="47" r="5" transform="rotate(14)" />
+                        <circle class="pl__ball2" fill="#83c5f8" cx="32" cy="50" r="3" transform="rotate(-21)" />
+                    </g>
+                    <g mask="url(#grad-mask)">
+                        <circle class="pl__ring" cx="32" cy="32" r="26" fill="none" stroke="hsl(206,96.3%,42.5%)"  stroke-width="8" stroke-dasharray="169.65 169.65" stroke-dashoffset="-127.24" stroke-linecap="round" transform="rotate(135)" />
+                        <g fill="hsl(283,90%,55%)">
+                            <circle class="pl__ball1" fill="#407bd5" cx="32" cy="47" r="5" transform="rotate(14)" />
+                            <circle class="pl__ball2" fill="#407bd5" cx="32" cy="50" r="3" transform="rotate(-21)" />
+                        </g>
+                    </g>
+                </svg>
+              </div>
+              <div class="d-flex justify-content-center loader-text">
+                  <span><span class="loader__text">Loading</span>
+                    <span class="loader__dot">.</span>
+                    <span class="loader__dot">.</span>
+                    <span class="loader__dot">.</span>
+                  </span>
+              </div>
+            </div>
+          </div>
+    

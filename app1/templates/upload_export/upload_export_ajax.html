@@ -7,16 +7,103 @@
         }
   });
 
-  $('.cal__icon').click(function () {
-    $(this).next().click()
+const success_msg =(msg) =>  `<div class="message_wrapper success_usid display-toggle">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none">
+                    <path d="M6.99992 13.6667C3.31792 13.6667 0.333252 10.682 0.333252 7.00001C0.333252 3.31801 3.31792 0.333344 6.99992 0.333344C10.6819 0.333344 13.6666 3.31801 13.6666 7.00001C13.6666 10.682 10.6819 13.6667 6.99992 13.6667ZM6.22925 9.99001L10.9426 5.27601L9.99992 4.33334L6.22925 8.10468L4.34325 6.21868L3.40058 7.16134L6.22925 9.99001Z" fill="#2BAC47"/>
+                    </svg> 
+                    <span class="message_text">${msg}</span>
+                </div>`
+
+const error_msg =  (msg) => {  return ` <div class="message_wrapper error_usid display-toggle">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none">
+                        <path d="M6.99992 13.6666C3.31792 13.6666 0.333252 10.682 0.333252 6.99998C0.333252 3.31798 3.31792 0.333313 6.99992 0.333313C10.6819 0.333313 13.6666 3.31798 13.6666 6.99998C13.6666 10.682 10.6819 13.6666 6.99992 13.6666ZM6.33325 8.99998V10.3333H7.66659V8.99998H6.33325ZM6.33325 3.66665V7.66665H7.66659V3.66665H6.33325Z" fill="#C83532"/>
+                    </svg>
+                    <span class="message_text error_msg">${msg}</span>
+                </div>`}
+
+let list_ids=[];
+
+const check_list_id = () => {
+
+    $.ajax({
+        method: 'GET',
+        headers: {
+            "X-CSRFToken": document.querySelector('[name=csrfmiddlewaretoken]').value,
+        },
+        url: "/check_list_id",
+        datatype:'json',
+        processData: false,
+        contentType: false,
+        
+        success: function (data) {
+            // console.log(data.list_id)
+            x = data.list_id
+            for (i in x){
+                // console.log(x[i].listid)
+                list_ids.push(x[i].listid);
+            }
+        }
+    })
+}
+
+function showstatus(an,lstid){
+    console.log("its",an,lstid )
+    var data=new FormData()
+          data.append("an",an)
+          data.append("lstid",lstid)
+          
+        $.ajax({
+            method: 'POST',
+            headers: {
+                "X-CSRFToken": document.querySelector('[name=csrfmiddlewaretoken]').value,
+            },
+            url: "{% url 'datastatus' %}",
+            data: data,
+            datatype:'json',
+            processData: false,
+            contentType: false,
+            
+            success: function (data) {
+                console.log(data)
+            }
   })
+}
 
 
-$('.header-title').html("Upload")
+const upload_excelfile = () => {
 
-$('.upload_file_wrapper').click(function (){
-    $('#fileinput').click()
-})
+    let data = new FormData()
+    data.append('list_id',$('input[name="list_id"]').val())
+    data.append('list_name',$('input[name="list_name"]').val())
+    data.append('excel_file',$('input[name="excel_file"]')[0].files[0])
+
+    $.ajax({
+        method: 'POST',
+        headers: {
+            "X-CSRFToken": document.querySelector('[name=csrfmiddlewaretoken]').value,
+        },
+        url: "/upload_ajax",
+        data: data,
+        datatype:'json',
+        processData: false,
+        contentType: false,
+        beforeSend: function() {
+            $('.loader__wrapper').css({"display":"block"})
+        }, 
+        success: function (data) {
+            console.log(data)
+            if (data.status == 200){
+                showToast("Successfully Uploaded",1);
+            }else{
+                showToast("Something wrong in Excel File",0);
+            }
+            $('.loader__wrapper').css({"display":"none"})
+            setTimeout(function(){window.location.reload(1);},3000);
+
+        }
+    })
+}
+
 
 const dropArea = $("#drop-area");
 
@@ -46,28 +133,119 @@ const files = event.originalEvent.dataTransfer.files;
     $("#fileinput").prop("files", files);
     $('.drop_text').html(files[0]['name'])
 });
-$('#fileinput').change(function(){
-    var file = this.files[0];
-    console.log("asdsd",file['name'])
-
-    if (file) {
-    if (file.type !== "text/csv") {
-        $('.upload_file_wrapper').addClass('drag_box_error')
-        alert("Only CSV files are allowed.");
-        return;
-    }
-    $('.drop_text').html(file['name'])
-    // Do something with the file (e.g., read its contents)
-    }
-})
 
 $(document).ready(function(){
-    $('#format_select').on('change',function(){
-        window.location.href = '/media/formats/creditfair_format.csv'
+
+    check_list_id()
+
+    $('.cal__icon').click(function () {
+        $(this).next().click()
     })
+
+    $('.header-title').html("Upload")
+
+    $('.upload_file_wrapper').click(function (){
+        $('#fileinput').click()
+    })
+
+    $('#format_select').on('change',function(){
+        window.location.href = '/media/formats/upload_format_cf.csv'
+    })
+
     $('input[name="list_id"]').keyup(function(){
         this.value = this.value.replace(/[^\d]/g, "");
+        if (this.value.length < 1){
+            $('.error__box').html(error_msg("Enter List id"))
+            $(this).addClass('input_failed')
+            $(this).removeClass('input_success')
+        }
+        else if (list_ids.includes(this.value)){
+            console.log(this.value,"Asdasd")
+            $('.error__box').html(error_msg("List id already exists"))
+            $(this).addClass('input_failed')
+            $(this).removeClass('input_success')
+        }else{
+            $(this).addClass('input_success')
+            $(this).removeClass('input_failed')
+            $('.error__box').html(success_msg("Success"))
+        }
     })
+    $('#fileinput').change(function(){
+        var file = this.files[0];
+        console.log("asdsd",file['name'])
+
+        if (file) {
+        if (file.type !== "text/csv") {
+            $('.upload_file_wrapper').addClass('drag_box_error')
+            alert("Only CSV files are allowed.");
+            return;
+        }
+        $('.drop_text').html(file['name'])
+        $('.upload_file_wrapper').removeClass('drag_box_error')
+
+        // Do something with the file (e.g., read its contents)
+        }
+    })
+    
+
+    $('input[name="list_name"]').keyup(function(){
+        console.log(this.value.length)
+        if (this.value.length < 6){
+            $(this).addClass('input_failed')
+            $('.error__box2').html(error_msg("Minimum 6 Characters"))
+        }
+        else{
+            $(this).removeClass('input_failed')
+            $(this).addClass('input_success')
+            $('.error__box2').html(success_msg("Success"))
+        }
+    })
+
+ 
+    $('#upload_btn').click(function(){
+        let lid =  $('input[name=list_id]').val().length
+        let lname =  $('input[name=list_name]').val().length
+        let file = $('input[name=excel_file]').val().length
+        
+        if (lid < 1 && lname < 1 && file < 1){
+            $('input[name=list_id]').addClass('input_failed')
+            $('.error__box').html(error_msg("Enter list id"))
+            $('input[name=list_name]').addClass('input_failed')
+            $('.error__box2').html(error_msg("Enter list name"))
+            $('.upload_file_wrapper').addClass('drag_box_error')
+            return
+        }else if(lid < 1){
+            $('input[name=list_id]').addClass('input_failed')
+            $('.error__box').html(error_msg("Enter list id"))
+            return
+        }else if(lname < 1){
+            $('input[name=list_name]').addClass('input_failed')
+            $('.error__box2').html(error_msg("Enter list name"))
+            return
+        }else if(file < 1){
+            $('.upload_file_wrapper').addClass('drag_box_error')
+            return
+        }
+            
+        $('.upload_file_wrapper').removeClass('drag_box_error')
+        console.log("donee")
+        upload_excelfile()
+    })
+
+    $('.status_toggle').on('change',function(){
+        let current_id = $(this).parent().prev().val()
+        if($(this).prop('checked')){
+            console.log("1",current_id)
+            showstatus("1",current_id)
+            
+        }else{
+            console.log("0",current_id)
+            showstatus("0",current_id)
+
+        }
+    })
+
+
 })
 
 </script>

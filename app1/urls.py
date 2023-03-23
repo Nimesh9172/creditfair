@@ -2,7 +2,8 @@ from django.conf import settings
 from django.urls import path
 from django.conf.urls.static import static
 from . import views
-
+from .utils.upload_export import check_list_id,upload_ajax,upload_export,datastatus
+from .utils.search import search,searchajax
 
 urlpatterns = [
     path('',views.home,name="home"),
@@ -11,8 +12,8 @@ urlpatterns = [
     path('login_user_ajax',views.login_user_ajax,name="login_user_ajax"),
     path('logout',views.logoutuser,name="logout"),
 
-    path('search', views.search, name='search'),
-    path('sajax',views.searchajax,name="sajax"),
+    path('search',search, name='search'),
+    path('sajax',searchajax,name="sajax"),
 
     path('reminder',views.reminder,name="reminder"),
 
@@ -26,7 +27,11 @@ urlpatterns = [
 
     path('connect_to_customer',views.connect_to_customer,name="connect_to_customer"),
 
-    path('upload_export',views.upload_export,name="upload_export"),
+    path('upload_export',upload_export,name="upload_export"),
+    path('upload_ajax',upload_ajax,name="upload_ajax"),
+    path('check_list_id',check_list_id,name="check_list_id"),
+    path("datastatus/",datastatus,name="datastatus"),
+
 
     path('leadupdate',views.leadupdate,name="leadupdate"),
     

@@ -12,6 +12,115 @@ body{
 }
 
 
+/* ///////////////////toast notification css start/////////////// */
+#toast-container {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  z-index: 9999;
+}
+
+.custom__toast {
+    background: #FBEFEF;
+    font-family: roboto;
+    padding: 18px 10px;
+    font-size: 13px;
+    color: #C83532;
+    display: flex;
+    align-items: center;
+    border-left: 4px solid #C83532;
+    box-sizing: border-box;
+    border-radius: 6px;
+    margin-bottom: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    position: relative;
+    animation: slide-in 1s;
+}
+
+.toast-container.success .custom__toast{
+    background-color: #ffffff;
+    border-color: #2BAC47;
+    color: #2BAC47;
+}
+
+@keyframes slide-in {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+/* ///////////////////toast notification css end/////////////// */
+
+
+/* ////////////////////////  switch button  start  ///////////////////////////////// */
+.switch {
+  position: relative;
+  display: inline-block;
+  width:20px;
+  height:20px;
+}
+.switch input { 
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right:0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+  border-radius: 24px;
+  height: 14px;
+  width: 25px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 8px;
+  width: 8px;
+  left: 3px;
+  bottom: 3.5px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+  border-radius: 50%;
+}
+
+input:checked + .slider {
+  background-color: #047BD5;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #047BD5;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(15px);
+  -ms-transform: translateX(15px);
+  transform: translateX(11px);
+}
+
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+/* ////////////////////////  switch button  end  ///////////////////////////////// */
+
+
 /* ///////////////////////////////////navbar css start//////////////////////// */
 .sidebar{
     position: fixed;
@@ -386,15 +495,15 @@ vertical-align: middle;
 }
 
 .table tbody>tr>td{
-text-align: left;
+text-align: center;
 font-family: 'Roboto';
 font-weight: 400;
 font-size: 11px;
 }
 
 .table thead>tr>th{
-  text-align: left;
-  padding-left: 40px;
+  text-align: center;
+  /* padding-left: 40px; */
   font-size: 11px;
 }
 
@@ -716,8 +825,8 @@ main.upload_main{
 .upload_section_1 .upload_input_wrapper .input_holder{
   display: grid;
   /* width: min(100% - 2em , 321px); */
-  gap: 6px;
-  margin-top: 6px;
+  gap: 1px;
+  margin-top: 2px;
 }
 
 .upload_section_1 .upload_input_wrapper .input_holder label,
@@ -752,7 +861,7 @@ main.export section .main_input__wrapper .input_holder label{
   height: auto;
   width: min(100%,1000px);
   margin: auto;
-  margin-top: .3rem;
+  margin-top: 17px;
   border: 1.4px dashed #3C6EDE;
   border-radius: 4px;
   display: grid;
@@ -788,7 +897,7 @@ main.export section .main_input__wrapper .input_holder label{
   border: 0;
   color: #fff;
   width: min(100% - 2rem,137px);
-  margin-top: 14px;
+  margin-top: 7px;
   cursor: pointer;
   height: 37px;
   font-size: 14px;
@@ -1005,6 +1114,33 @@ input:focus,select:focus{
     right: 11px;
     top: 8px;
 }
+
+.message_wrapper{
+  display: flex;
+  gap: 6px;
+}
+
+.message_text{
+  color: #2BAC47;
+  font-size: 12px;
+}
+.message_text.error_msg{
+  color: #C83532;
+}
+.input_success{
+  background: #FFFFFF !important;
+  outline: 1.5px solid #2BAC47 !important;
+}
+
+.input_failed{
+  background: #FFFFFF !important;
+  outline: 1.5px solid #C83532 !important;
+}
+/* 
+.drag_box_error{
+  border-color: #C83532 !important;
+  background-color: #FBEFEF !important;
+} */
 /* ///////////////// common styles ///////////// */
 
 /* //////////////////select2 designs//////////////// */
@@ -1226,6 +1362,7 @@ input:focus,select:focus{
 
   .upload_input_wrapper .input_holder_wrapper{
     gap:0;
+    row-gap: 12px;
     grid-template-columns: 1fr;
   }
   .csv_icon{

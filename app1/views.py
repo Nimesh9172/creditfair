@@ -35,57 +35,6 @@ def logoutuser(request):
     logout(request)
     return redirect('login')
 
-
-@login_required(login_url="login")
-def searchajax(request):
-    # if request.method == 'POST':
-    #     given_name=request.POST.get('borrowor_name')
-    #     given_phone=request.POST.get("mobile_number")
-    #     given_loan=request.POST.get("loan_id")
-    #     print(given_name)
-    #     print(given_phone)
-    #     print(given_loan)
-    #     if given_name == None or given_phone == None or given_loan == None:
-    #         given_name = ""
-    #         given_loan = ""
-    #         given_phone = ""
-        
-    #     try:
-    #         add = Additional.objects.values_list('debtor_id',flat=True).get(contactnum=given_phone)
-    #     except:
-    #         add = None
-    #         if add == 0:
-    #             add = None
-    #     try:
-    #         if request.user.user_level == 9:
-    #             per=personaldetails.objects
-    #         else:
-    #             per=personaldetails.objects.filter(callername=request.user.username).exclude(list_id__status__contains="0")
-            
-    #         if given_name != "":
-    #             per=per.filter(borrowor_name__icontains=given_name).exclude(list_id__status__contains="0")
-    #         elif given_phone != "":
-    #             per=per.filter(Q(mobile_number__icontains=given_phone) | Q(id = add) | Q(alt_mno_1__icontains=given_phone) | Q(alt_mno_2__icontains=given_phone)  | Q(alt_mno_3__icontains=given_phone)).exclude(list_id__status__contains="0")
-    #         elif given_loan != "":
-    #             per=per.filter(bank_loan_accountno__icontains=given_loan).exclude(list_id__status__contains="0")
-
-    #         if given_name  == "" and given_phone == "" and given_loan == "":
-    #             per=personaldetails.objects.filter(id__isnull=True).exclude(list_id__status__contains="0")
-            
-    #         per = per[:100]
-     
-    #         return JsonResponse({"status":200,'all_data':list(per.values())})
-    #     except Exception as e:
-    #         print(e)
-    #         return JsonResponse({'status':300})
-
-    
-    return JsonResponse({'status':400})
-
-@login_required(login_url="login")
-def search(request):
-    return render(request,"search/search.html")
-
 @login_required(login_url="login")
 def reminder(request):
     return render(request,"reminder/reminder.html")
@@ -109,10 +58,6 @@ def non_attempted(request):
 @login_required(login_url="login")
 def connect_to_customer(request):
     return render(request,"connect_to_customer/connect_to_customer.html")
-
-@login_required(login_url="login")
-def upload_export(request):
-    return render(request,"upload_export/upload_export.html")
 
 @login_required(login_url="login")
 def leadupdate(request):
