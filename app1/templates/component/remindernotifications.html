@@ -1,0 +1,143 @@
+
+{% load static  %}
+
+<script>
+
+const showNotification = (link_id,cnum) => {
+  const notification = new Notification('Callback Reminder', {
+            body: `Call ${cnum}  in 5 minutes.`,
+            icon: `{% static  'Images/callbackicon.png' %}`,
+        });
+        notification.onclick = (e) => {
+          window.open(`/cms/${link_id}`, '_blank');
+        };
+
+}
+
+const excute_notification = (id,cnum) => {
+  let get_notificationlist2 = sessionStorage.getItem("notificationlist")
+
+  if(get_notificationlist2){
+    get_notificationlist2=get_notificationlist2.split(",")
+    console.log(get_notificationlist2)
+    if (!get_notificationlist2.includes(String(id))){
+      notifyMe(id,cnum)
+    }
+  }else{
+    notifyMe(id,cnum)
+  }
+
+  // let get_notificationlist2 = sessionStorage.getItem("notificationlist")
+  let get_notificationlist = sessionStorage.getItem("notificationlist")
+
+  if(get_notificationlist){
+    if (!(get_notificationlist.includes(id))) {
+      sessionStorage.setItem("notificationlist", get_notificationlist+","+id);
+      // console.log("asdas",get_notificationlist)
+    }
+  }else{
+    sessionStorage.setItem("notificationlist", id);
+  }
+}
+
+function notifyMe(link_id,cnum) {
+    console.log(Notification.permission)
+  if (!("Notification" in window)) {
+    // Check if the browser supports notifications
+    alert("This browser does not support desktop notification");
+  } else if (Notification.permission === "granted") {
+    // Check whether notification permissions have already been granted;
+    // if so, create a notification
+    showNotification(link_id,cnum)
+
+    // …
+  } else if (Notification.permission !== "denied") {
+    // We need to ask the user for permission
+    Notification.requestPermission().then((permission) => {
+      // If the user accepts, let's create a notification
+      if (permission === "granted") {
+        showNotification(link_id,cnum)
+      }
+    });
+  }
+}
+
+function msToTime(ms) {
+    let minutes = (ms / (1000 * 60)).toFixed(1);
+    return minutes + " Min";
+}
+function msToDHM(v) {
+  var days = v / 8.64e7 | 0;
+  var hrs  = (v % 8.64e7)/ 3.6e6 | 0;
+  var mins = Math.round((v % 3.6e6) / 6e4);
+
+  return days + ':' + z(hrs) + ':' + z(mins);
+
+  function z(n){return (n<10?'0':'')+n;}
+}
+
+function notification_ajax(){
+  $.ajax({
+    method: 'get',
+    url: "{% url 'remindernotification' %}",
+    datatype:'json',
+    processData: false,
+    contentType: false,
+    success: function (data) {
+        let x = data.all_data
+        let s = data.sch
+        let p =data.ptp
+
+        console.log(x,"ASDASDASASD")
+        for (var i=0; i <x.length;i++ ){
+          console.log("nniemeeheoensomeneom")
+            let dtFormat = new Intl.DateTimeFormat('en-US',{ month:'short',day:'2-digit',year:'numeric',hour: 'numeric',minute:'numeric',second:'numeric',hour12:false})
+                  
+            let d = x[i].callbacktime
+            d = new Date(d);
+
+            let d2 = new Date(); 
+            let difference = Math.abs(d.valueOf() - d2.valueOf())
+            let convert_ms_to_minute = parseInt(msToTime(difference).replace('Min',''))
+            console.log(convert_ms_to_minute,"sdffff")
+            if (convert_ms_to_minute < 5){
+              excute_notification(x[i].id,x[i].mobile_number)
+            }
+        }
+
+        for (var j=0; j < s.length;j++ ){
+          let dtFormat = new Intl.DateTimeFormat('en-US',{ month:'short',day:'2-digit',year:'numeric',hour: 'numeric',minute:'numeric',second:'numeric',hour12:false})
+          let d = s[j].callbacktime
+          d = new Date(d);
+          let d2 = new Date();
+          let difference = Math.abs(d.valueOf() - d2.valueOf())
+          let convert_ms_to_minute = parseInt(msToTime(difference).replace('Min',''))     
+          if (convert_ms_to_minute < 5){
+              excute_notification(s[j].id,s[j].mobile_number)
+          }
+
+        }
+        for (var k=0; k < p.length;k++ ){
+          let dtFormat = new Intl.DateTimeFormat('en-US',{ month:'short',day:'2-digit',year:'numeric',hour: 'numeric',minute:'numeric',second:'numeric',hour12:false})
+          let d = p[k].callbacktime
+          d = new Date(d);
+          let d2 = new Date();
+          let difference = Math.abs(d.valueOf() - d2.valueOf())
+          let convert_ms_to_minute2 = parseInt(msToDHM(difference))
+          console.log(convert_ms_to_minute2,"dateteteteteeet")
+          if (convert_ms_to_minute2 == 0){
+              excute_notification(p[k].id,p[k].mobile_number)
+          }
+
+        }
+
+    }
+  })
+}
+
+      setInterval(notification_ajax, 2*60*1000);
+      $(document).ready(function(){
+          notification_ajax()
+      })
+</script>
+

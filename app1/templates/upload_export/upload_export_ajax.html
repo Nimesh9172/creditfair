@@ -1,0 +1,74 @@
+<script>
+  $('.datepick').daterangepicker({
+    singleDatePicker:true,
+    autoApply:true,
+    locale: {
+            format: 'DD-MM-YYYY'
+        }
+  });
+
+  $('.cal__icon').click(function () {
+    $(this).next().click()
+  })
+
+
+$('.header-title').html("Upload")
+
+$('.upload_file_wrapper').click(function (){
+    $('#fileinput').click()
+})
+
+const dropArea = $("#drop-area");
+
+// prevent default dragover
+dropArea.on("dragover", function(event) {
+    event.preventDefault();
+});
+
+// handle drop event
+dropArea.on("drop", function(event) {
+event.preventDefault();
+
+const files = event.originalEvent.dataTransfer.files;
+    // console.log)
+    var file = files[0];
+
+    if (file) {
+    if (file.type !== "text/csv") {
+        $('.upload_file_wrapper').addClass('drag_box_error')
+        alert("Only CSV files are allowed.");
+        return;
+    }
+    $('.upload_file_wrapper').removeClass('drag_box_error')
+
+    // Do something with the file (e.g., read its contents)
+    }
+    $("#fileinput").prop("files", files);
+    $('.drop_text').html(files[0]['name'])
+});
+$('#fileinput').change(function(){
+    var file = this.files[0];
+    console.log("asdsd",file['name'])
+
+    if (file) {
+    if (file.type !== "text/csv") {
+        $('.upload_file_wrapper').addClass('drag_box_error')
+        alert("Only CSV files are allowed.");
+        return;
+    }
+    $('.drop_text').html(file['name'])
+    // Do something with the file (e.g., read its contents)
+    }
+})
+
+$(document).ready(function(){
+    $('#format_select').on('change',function(){
+        window.location.href = '/media/formats/creditfair_format.csv'
+    })
+    $('input[name="list_id"]').keyup(function(){
+        this.value = this.value.replace(/[^\d]/g, "");
+    })
+
+})
+
+</script>

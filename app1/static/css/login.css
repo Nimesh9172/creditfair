@@ -1,0 +1,257 @@
+body{
+    background:url('/static/Images/dsds.jpg');
+    background-size: cover;
+    overflow: hidden;
+
+}
+.display-toggle{
+    display: none !important;
+}
+
+.img1{
+    height:88%;
+    width: 70%;
+    border-radius: 50%;
+    margin-top: 8%;
+}
+.box{
+    box-sizing: border-box;
+    width: 80%;
+    height: 75%;
+    /* margin-left: 20px; */
+    background: linear-gradient(111.68deg, #ffffff 7.59%, #ffffff 102.04%);
+    border: 3px solid #ffffff4b;
+    /* margin-top: 30px; */
+    border-radius: 61px;
+    /* padding-bottom: 18%; */
+    padding-top: 28px;
+    margin-left: 2%;
+    min-height: 467px;
+} 
+h3{
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 600px;
+    font-size: 25px;
+    line-height: 144%;
+    margin-left: 30px;
+/* identical to box height, or 58px */
+    color: #1E7EA6;
+}
+
+input{
+    box-sizing: border-box;
+    width:83%;
+    height: 35px;
+    margin-left: 9%;
+    top: 470px;
+    background-color: white;
+    border-radius: 10px;
+    padding: 0px 10px; 
+    box-shadow: 0px 0px 4px rgb(0 0 0 / 25%);
+    border:0;
+}
+
+.fp{
+    /* width: 137px;
+    height: 24px;*/
+    margin-top: 8px;
+    padding-bottom: 0px;
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 80%;
+    color: #052CF9;  
+}
+
+label{
+    margin-left: 9%;
+    padding: 10px 10px 10px 5px;
+}
+
+.btn{
+    box-sizing: border-box;
+    width: 160px;
+    color: #FFFFFF;
+    background: #4151E9;
+    border: 2px solid #FFFFFF;
+    border-radius: 10px;
+    margin-top: 0px;
+}
+
+.btn:hover{
+    color:white;
+}
+
+.su{
+    font-family: 'Poppins';
+font-style: normal;
+font-weight: 500;
+font-size: 13px;
+line-height: 160%;
+/* identical to box height, or 24px */
+
+margin-top: 1px;
+color: rgba(0, 0, 0, 0.47);
+}
+
+.su span{
+    color:#052CF9 ;
+}  
+  
+#eyechange{
+position: absolute;
+right: 33px;
+top: 11px;
+color:  rgba(0, 0, 0, 0.47);
+font-size: 12px;
+}  
+
+
+/* ///////////////input effects start//////////// */
+input:hover{
+    background: #F5F8FF;
+    border: 1px solid #D5D4DC;
+}
+input:focus{
+    background: #FFFFFF; 
+    font-weight: 500;
+    outline: 1.5px solid #0F62FE;;
+}
+/* ///////////////input effects end//////////// */
+.input_failed{
+    background: #FFFFFF !important;
+    outline: 1.5px solid #C83532 !important;
+}
+
+.input_success{
+    background: #FFFFFF !important;
+    outline: 1.5px solid #2BAC47 !important;
+}
+
+.message_wrapper{
+    display: flex;
+    gap: 6px;
+    align-items:center;
+    margin-left: 9%;
+}
+
+.message_text{
+    color: #2BAC47;
+    font-size: 12px;
+}
+.message_text.error_msg{
+    color: #C83532;
+}
+
+@media screen and (max-width: 990px) {
+    
+    h3{
+        font-size: 25px;
+    }
+    .fp{
+        font-size: 12px;
+    }
+
+    label{
+        font-size: 12px;
+    }
+    .btn{
+    
+        width: 150px;
+        margin-top: 0px;
+    }
+   
+
+}
+
+.fa:hover {
+    opacity: 0.5;
+    text-decoration: none;
+}
+.alw{
+    width: 85%;
+}
+
+.fps {
+    text-align: center;
+    font-family: 'Poppins';
+    color: white;
+}
+
+.mimg{
+    width: 349px;
+}
+
+.img-div{
+    position: relative;
+    left: -8px;
+    top: -28px;
+}
+
+.skylogo{
+    height:58px;
+}
+
+footer {
+    padding: 2px 0px 0px 0px;
+    background-color: none;
+    margin: 0px;
+    position: absolute;
+    bottom: -32px;
+}
+
+.ots-filter{
+    width: 83%;
+}
+
+.select2-container .select2-selection--single{
+    height: 33px;
+ }
+
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+    line-height: 35px;
+}
+
+.select2-container--default .select2-selection--single{
+    border-radius: 8px;
+    background-color: #ffffff;
+    box-shadow: 0px 0px 4px rgb(0 0 0 / 25%);
+    border: none;
+ }
+ 
+.select2-container--default .select2-selection--single .select2-selection__arrow{
+    top: 4px;
+}
+
+@media screen and (max-width: 990px) {
+    .skylogo{
+        height: 42px;
+    }
+}
+
+@media screen and (max-width: 764px) {
+    .hide-div{
+        display: none;
+    }
+    .fps {
+      margin-top: 20px;
+    }
+    .box {
+        box-sizing: border-box;
+        width: 100%;
+        height: 75%;
+        /* margin-left: 20px; */
+        background: linear-gradient(111.68deg, #ffffff 7.59%, #ffffff 102.04%);
+        border: 3px solid #ffffff4b;
+        margin-top: 30px;
+        border-radius: 61px;
+        /* padding-bottom: 18%; */
+        padding-top: 28px;
+        margin-left: 0;
+        min-height: 467px;
+    }
+    .alw{
+        width: 100%;
+    }
+}

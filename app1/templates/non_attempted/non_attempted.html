@@ -1,0 +1,119 @@
+{% extends 'base.html'  %}
+
+{% block content  %}
+{% csrf_token %}
+<style>
+  .filter-wrapper{
+    margin-bottom: 0;
+  }
+  .table-wrapper{
+    height:calc(100vh - 129px)
+  }
+</style>
+<main class="main-non-attempted">
+  <div class="non_attempt_select_wrapper">
+    <div class="filter-wrapper" {% if request.user.user_level != 9  %} style="display: none;"{% endif %}>
+      <p class="m-0">Select Agent Name</p>
+      <div class="select2-wrapper">
+        <select class="np-select"  name="np-select" style="width: 100%;">
+          <option value="">Select</option>
+          {% for i in u  %}
+          <option value="{{i.username}}">{{i.username}}</option>
+          {% endfor %}
+        </select>
+      </div>
+    </div>
+    <div class="filter-wrapper">
+      <p class="m-0">Select List_id</p>
+      <div class="select2-wrapper">
+        <select class="np-select" name="list-select"  style="width: 100%;">
+          <option value="all">Select</option>
+          {% for i in l_id %}
+          <option value="{{i.listid}}">{{i.listid}}</option>
+          {% endfor %}
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="table-wrapper table-responsive">
+      <table class="table table-borderless  rounded">
+        <thead class="sticky-top">
+          <tr>
+            <th scope="col">Lead id</th>
+            <th scope="col">Borrower Name</th>
+            <th scope="col">Phone no.</th>
+            <th scope="col">Loan no.</th>
+            <th scope="col">Caller ID</th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+  </div>
+</main>
+
+<script>
+  $('.header-title').html("Non-attempted")
+
+  function agn(){
+    var data=new FormData()
+    data.append("agent",$("select[name=np-select]").val())
+    data.append("list_id",$("select[name=list-select]").val())
+            
+    $.ajax({
+      method: "POST",
+      headers: {
+                "X-CSRFToken": document.querySelector('[name=csrfmiddlewaretoken]').value,
+            },
+      url: "/nonattempted",
+      data: data,
+      datatype:'json',
+      processData: false,
+      contentType: false,
+      beforeSend: function() {
+             $('.loader__wrapper').css({"display":"block"})
+      }, 
+      success: function (data) {
+        console.log(data.data)
+        let v=data.data
+        output=''
+        $('tbody').empty()
+        // if (v != undefined ){
+        for(var i in v){
+          console.log("tbody",`${v[i].id}`)
+          $("tbody").append(`  <tr class='clickable-row dashhover' data-href="/cms/${v[i].id}/" style="cursor: pointer;">
+                    <td style="font-size: 12px;">${v[i].id}</td>
+                    <td style="font-size: 12px;">${v[i].borrowor_name}</td>
+                    <td style="font-size: 12px;">${v[i].mobile_number}</td>
+                    <td style="font-size: 12px;">${v[i].bank_loan_accountno}</td>
+                    <td style="font-size: 12px;text-transform: uppercase;">${v[i].callername}</td>
+                </tr>`)
+          }
+
+          $('.loader__wrapper').css({"display":"none"})
+
+      
+      },
+
+        });
+      }
+    $(document).ready(function () {
+      agn()
+      $(".non-atmp").addClass("active-page")
+        $(document).on('click','.clickable-row',function() {
+        window.location = $(this).data("href");
+    });
+    $("select[name=np-select]").change(function(){
+
+      console.log("change",$("select[name=np-select]").val())
+         agn()
+            
+            })
+
+    $("select[name=list-select]").change(function(){
+         agn()
+    })
+  })
+</script>
+{% endblock content  %}

@@ -1,0 +1,161 @@
+{% extends 'base.html'  %}
+
+
+{% block content  %}
+{% load static  %}
+<style>
+  .data-render-section{
+    height: calc(100vh - 135px);
+  }
+</style>
+<form action="/exportrs" method="post" id="export_form">
+  {% csrf_token  %}
+
+  <input type="hidden" value="" name="filterval">
+  <main class="main-reminder main-recovery">
+  {% include 'component/exportpages.html'  %}
+  <div class="parent-filter-wrapper">
+    <div class="first-child-parent-filter">
+      <div class="filter-wrapper-reminder">
+        <p class="m-0">From</p>
+        <div class="date-wrapper">
+          <svg class="cal__icon" width="18" height="13" viewBox="0 0 18 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M6 9V11H4V9H6ZM10 9V11H8V9H10ZM14 9V11H12V9H14ZM16 2C16.5304 2 17.0391 2.21071 17.4142 2.58579C17.7893 2.96086 18 3.46957 18 4V18C18 18.5304 17.7893 19.0391 17.4142 19.4142C17.0391 19.7893 16.5304 20 16 20H2C0.89 20 0 19.1 0 18V4C0 3.46957 0.210714 2.96086 0.585786 2.58579C0.960859 2.21071 1.46957 2 2 2H3V0H5V2H13V0H15V2H16ZM16 18V7H2V18H16ZM6 13V15H4V13H6ZM10 13V15H8V13H10ZM14 13V15H12V13H14Z" fill="#575757"/>
+          </svg>
+          <input type="text" class="datepick" name="fdate" autocomplete="off">
+        </div>
+      </div>
+      <div class="filter-wrapper-reminder" >
+        <p class="m-0">To</p>
+        <div class="date-wrapper">
+          <svg class="cal__icon" width="18" height="13" viewBox="0 0 18 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M6 9V11H4V9H6ZM10 9V11H8V9H10ZM14 9V11H12V9H14ZM16 2C16.5304 2 17.0391 2.21071 17.4142 2.58579C17.7893 2.96086 18 3.46957 18 4V18C18 18.5304 17.7893 19.0391 17.4142 19.4142C17.0391 19.7893 16.5304 20 16 20H2C0.89 20 0 19.1 0 18V4C0 3.46957 0.210714 2.96086 0.585786 2.58579C0.960859 2.21071 1.46957 2 2 2H3V0H5V2H13V0H15V2H16ZM16 18V7H2V18H16ZM6 13V15H4V13H6ZM10 13V15H8V13H10ZM14 13V15H12V13H14Z" fill="#575757"/>
+          </svg>
+          <input type="text" class="datepick" name="todate" autocomplete="off">
+        </div>
+      </div>
+    </div>
+    <div class="filter-wrapper-reminder">
+      <p class="m-0">Recovery Status</p>
+      <div class="sort-by-wrapper filter-by-wrapper">
+      <svg class="sort-by-icon filter-by-icon" width="14" height="13" viewBox="0 0 14 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M6.36402 6.22698L10.0293 1.53086C10.1326 1.3982 10.1793 1.23004 10.159 1.06311C10.1387 0.896181 10.0532 0.744063 9.92111 0.639993C9.81431 0.554117 9.68263 0.505018 9.54568 0.5H0.637036C0.493503 0.500833 0.354467 0.550168 0.242511 0.639993C0.110431 0.744063 0.0249122 0.896181 0.00464239 1.06311C-0.0156274 1.23004 0.0309995 1.3982 0.134335 1.53086L3.81869 6.22698V9.96225C3.80718 10.0585 3.81782 10.1562 3.8498 10.2477C3.88179 10.3392 3.93426 10.4222 4.00323 10.4904L5.27589 11.7631C5.39512 11.8816 5.5564 11.9481 5.72451 11.9481C5.89262 11.9481 6.0539 11.8816 6.17312 11.7631C6.24323 11.6955 6.29689 11.6128 6.32999 11.5212C6.36308 11.4296 6.37473 11.3317 6.36402 11.2349V6.22698ZM7.63668 9.40864L10.8183 12.5903L14 9.40864H7.63668Z" fill="#047BD5"/>
+        </svg>
+        <div class="multiselect">         
+          <div class="selectbox" onclick="showCheckBoxes()">
+              <select class="customselect">
+                  <option value="">Filter By</option>
+              </select>
+              <div class="overselect"></div>
+          </div>
+              <div id="checkboxess"  class="d-none">
+                <!-- <label for="ots" class="checkbox-wrapper">
+                  <input type="checkbox" value="OTS Request" name="remcb" id="ots">
+                  <label for="ots">OTS Request</label>
+                </label> --> 
+                            
+                <label for="{{i.1}}" class="checkbox-wrapper">
+                    <input type="checkbox" value="{{i.0}}" name="remcb" id="{{i.1}}">
+                    <label for="{{i.1}}"><span>test11</span> <span class="dispo_count"></span></label>
+                  </label>
+                {% for i in qt  %}
+                            
+                <label for="{{i.1}}" class="checkbox-wrapper">
+                  <input type="checkbox" value="{{i.0}}" name="remcb" id="{{i.1}}">
+                  <label for="{{i.1}}"><span>{{i.0}}</span> <span class="dispo_count"></span></label>
+                </label>
+                {% endfor  %}
+             
+              </div>
+            </div>
+      </div>
+    </div>
+  </div>
+
+
+  <section class="data-render-section">
+   <div class="main-data-wrapper">
+    
+   </div>
+  </section>
+</main>
+
+</form>
+
+
+<script>
+
+$('.datepick').daterangepicker({
+        singleDatePicker:true,
+        autoApply:true,
+        locale: {
+                format: 'DD-MM-YYYY'
+            }
+      });
+    
+    if (sessionStorage.getItem('rstdate') != null) {
+      $('input[name=fdate]').val(sessionStorage.getItem('rsfdate'))
+      $('input[name=todate]').val(sessionStorage.getItem('rstdate'))
+    }
+
+      let rsfil=sessionStorage.getItem("sortval2")
+      
+      if (rsfil){
+        rsfil = rsfil.split(',')
+      }
+
+      $('#checkboxess').find('input[name=remcb]').each(function(){
+      
+      try{
+        if (rsfil.includes($(this).val())){
+          $(this).attr('checked',true)
+        }
+      }
+      catch(error){
+        console.log(error)
+      }
+    })
+
+  var expanded = false;
+  function showCheckBoxes() {
+    var checkboxes = document.getElementById('checkboxess');
+    if (!expanded){
+      checkboxes.style.display = "block";
+      expanded = true;
+    }else {
+      checkboxes.style.display = "none";
+      expanded = false;
+    }
+  }// 
+  $(document).ready(function(){
+
+    $('.header-title').html("Recovery Status")
+
+
+    $('.cal__icon').click(function () {
+    $(this).next().click()
+  })
+
+    $(document).on("click", function (event) {
+    
+      // If the target is not the container or a child of the container, then process
+      // the click event for outside of the container.
+
+      if ($(event.target).parent().attr('id') != "checkboxess" && $(event.target).parent().attr('class') != 'checkbox-wrapper'){
+        $('#checkboxess').addClass('d-none')
+      }
+      if ($(event.target).attr('class') == "overselect" ){
+        console.log("You");
+        $('#checkboxess').removeClass('d-none')
+      }
+    });
+
+      
+    
+      
+      
+  
+  })
+</script>
+{% include 'recovery/recovery_ajax.html'  %}
+{% endblock content  %}

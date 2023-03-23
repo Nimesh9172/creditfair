@@ -1,0 +1,264 @@
+<script>
+    $(document).ready(function(){
+
+    // -----------Reminder filteration start-------
+    
+    let class_tl = ""
+
+    if (`{{request.user.user_level}}` == 9){
+        class_tl = "tl_wrapper"
+      }
+    
+    const cbkhtml = (id,name,acno,tos,cname,dispo,d) =>{
+        return component = `<a href="/cms/${id}" class="callback-wrapper ${class_tl}">
+      <div class="svg-icon">
+        <img src="/static/Images/callback_icon.svg" alt="">
+      </div>
+      <div class="">
+        <div class="data-card-title">Borrower Name</div>
+        <div class="data-card-content">${name}</div>
+      </div>
+      <div class="">
+        <div class="data-card-title">Loan ID</div>
+        <div class="data-card-content2">${acno}</div>
+      </div>
+      <div class="">
+        <div class="data-card-title">Loan Amount</div>
+        <div class="data-card-content2">Rs. ${tos}</div>
+      </div>
+      <div class="">
+        <div class="data-card-title">Disposition</div>
+        <div class="data-card-content2">${dispo}</div>
+      </div>
+      <div class="">
+        <div class="data-card-title">Reminder Set for</div>
+        <div class="data-card-content2">${d}</div>
+      </div>
+      <div class="user_wrapper ${class_tl}">
+        <div class="data-card-title">Caller ID</div>
+        <div class="data-card-content2">${cname}</div>
+      </div>
+    </a> `
+    }
+
+    const schhtml = (id,name,acno,tos,cname,dispo,d) =>{
+        return component = `<a href="/cms/${id}" class="callsch-wrapper  ${class_tl}">
+      <div class="svg-icon">
+        <img src="/static/Images/callsch_icon.svg" alt="">
+      </div>
+      <div class="">
+        <div class="data-card-title">Borrower Name</div>
+        <div class="data-card-content">${name}</div>
+      </div>
+      <div class="">
+        <div class="data-card-title">Loan ID</div>
+        <div class="data-card-content2">${acno}</div>
+      </div>
+      <div class="">
+        <div class="data-card-title">Loan Amount</div>
+        <div class="data-card-content2">Rs. ${tos}</div>
+      </div>
+      <div class="">
+        <div class="data-card-title">Disposition</div>
+        <div class="data-card-content2">${dispo}</div>
+      </div>
+      <div class="">
+        <div class="data-card-title">Reminder Set for</div>
+        <div class="data-card-content2">${d}</div>
+      </div>
+      <div class="user_wrapper ${class_tl}">
+        <div class="data-card-title">Caller ID</div>
+        <div class="data-card-content2">${cname}</div>
+      </div>
+    </a> `
+    }
+
+    const ptphtml = (id,name,acno,tos,cname,dispo,d) =>{
+        return component = `<a href="/cms/${id}" class="ptp-wrapper  ${class_tl}">
+      <div class="svg-icon">
+        <img src="/static/Images/ptp_icon.svg" alt="">
+      </div>
+      <div class="">
+        <div class="data-card-title">Borrower Name</div>
+        <div class="data-card-content">${name}</div>
+      </div>
+      <div class="">
+        <div class="data-card-title">Loan ID</div>
+        <div class="data-card-content2">${acno}</div>
+      </div>
+      <div class="">
+        <div class="data-card-title">Loan Amount</div>
+        <div class="data-card-content2">Rs. ${tos}</div>
+      </div>
+      <div class="">
+        <div class="data-card-title">Disposition</div>
+        <div class="data-card-content2">${dispo}</div>
+      </div>
+      <div class="">
+        <div class="data-card-title">Reminder Set for</div>
+        <div class="data-card-content2">${d}</div>
+      </div>
+      <div class="user_wrapper ${class_tl}">
+        <div class="data-card-title">Caller ID</div>
+        <div class="data-card-content2">${cname}</div>
+      </div>
+    </a> `
+    }
+
+
+
+    function dataSubmit(dispo) {
+        var data = new FormData();
+
+            data.append('remfilter',$('input[name="filterval"]').val());
+            data.append('tdate',$('input[name="todate"]').val())
+            data.append('fdate',$('input[name="fdate"]').val())
+            data.append('sortby',$('.rm-sortby').val())
+
+            sessionStorage.setItem('remfilter',$('input[name="filterval"]').val())
+            sessionStorage.setItem('sort',$('.rm-sortby').val())
+            sessionStorage.setItem('fdate',$('input[name="fdate"]').val())
+            sessionStorage.setItem('tdate',$('input[name="todate"]').val())
+            
+            $.ajax({
+                method: 'POST',
+                headers: {
+                "X-CSRFToken": document.querySelector('[name=csrfmiddlewaretoken]').value,
+                },
+                url: "/filterrm",
+                data: data,
+                datatype:'json',
+                processData: false,
+                contentType: false,
+                beforeSend: function() {
+                    $('.loader__wrapper').css({"display":"block"})
+                },
+                success: function (data) {
+                    let x = data.all_data
+                    console.log("ptp",data.ptpct,"cbk",data.cbkct,"scbk",data.scbkct,"all",data.allct)
+                    // console.log(x)
+                    $('.main-data-wrapper').empty()
+                    if (data.allct == 0){
+                      $("#allct").css({"display":"none"})
+                    }
+                    else{
+                      $("#allct").html(data.allct)
+                      $("#allct").css({"display":"block"})
+                    }
+                    if (data.scbkct == 0){
+                      $("#sct").css({"display":"none"})
+                    }
+                    else{
+                      $("#sct").css({"display":"block"})
+
+                      $("#sct").html(data.scbkct)
+                    }
+                    if (data.ptpct == 0){
+                      $("#pct").css({"display":"none"})
+                    }
+                    else{
+                      $("#pct").html(data.ptpct)
+                      $("#pct").css({"display":"block"})
+
+                    }
+                    if (data.cbkct ==0){
+                      $("#cbt").css({"display":"none"})
+                    }
+                    else{
+                        $("#cbt").html(data.cbkct)
+                    }
+        
+
+                    if (x != undefined){
+                        // $('.bigdiv').css({'min-height':'auto'})
+                    for (var i in x){
+
+                        let dtFormat = new Intl.DateTimeFormat('en-US',{
+                                        month:'short',
+                                        day:'2-digit',
+                                        year:'numeric',
+                                        hour: 'numeric',
+                                        minute:'numeric',
+                                        second:'numeric',
+                                        hour12:false
+                                    })
+                        
+                        let d = x[i].callbacktime
+                        d = new Date(d);
+                        d = dtFormat.format(d)
+                        
+                        if (x[i].sub_dispossitions == "Call Back"){
+                            $('.main-data-wrapper').append(cbkhtml(x[i].id,x[i].borrowor_name,x[i].bank_loan_accountno,x[i].TOS.toLocaleString("en-US", {style:"currency", currency:"INR",maximumFractionDigits: 0}).replace(/₹/gi, ''),x[i].callername,x[i].sub_dispossitions,d))
+                        }
+
+                        else if (x[i].sub_dispossitions == "Schedule Call"){
+                            $('.main-data-wrapper').append(schhtml(x[i].id,x[i].borrowor_name,x[i].bank_loan_accountno,x[i].TOS.toLocaleString("en-US", {style:"currency", currency:"INR",maximumFractionDigits: 0}).replace(/₹/gi, ''),x[i].callername,x[i].sub_dispossitions,d))
+                        }
+
+                        else if (x[i].sub_dispossitions == "Promise To Pay"){
+                            $('.main-data-wrapper').append(ptphtml(x[i].id,x[i].borrowor_name,x[i].bank_loan_accountno,x[i].TOS.toLocaleString("en-US", {style:"currency", currency:"INR",maximumFractionDigits: 0}).replace(/₹/gi, ''),x[i].callername,x[i].sub_dispossitions,d))
+                        }
+                        
+                        
+
+                }
+            }
+            $('.loader__wrapper').css({"display":"none"})
+
+                }
+            })
+    }
+
+
+        $('input[name="todate"]').change(function(){
+            dataSubmit()
+        })
+
+        $('input[name="fdate"]').change(function(){
+            dataSubmit()
+        })
+
+        $('input[name=remcb]').click(function(){
+
+            dataSubmit()
+        })
+        
+        $('.rm-sortby').change(function(){
+            dataSubmit()
+        })
+
+        
+        $(document).ready(function(){
+
+          if (`{{request.user.user_level}}` == 9){
+            
+          }
+
+          dataSubmit()
+
+          $(document).on('click','.cbk',function(){
+            $('input[name="filterval"]').val("Call Back")
+           dataSubmit()
+          })
+          $(document).on('click','.schc',function(){
+            $('input[name="filterval"]').val("Schedule Call")
+           dataSubmit()
+          })
+          $(document).on('click','.ptp',function(){
+            $('input[name="filterval"]').val("Promise To Pay")
+           dataSubmit()
+          })
+          $(document).on('click','.fall',function(){
+            $('input[name="filterval"]').val("")
+           dataSubmit()
+          })
+
+        })
+
+    // -----------Reminder filteration end-------
+    
+    
+       
+    })
+
+</script>

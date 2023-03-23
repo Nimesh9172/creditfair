@@ -1,0 +1,207 @@
+
+<style>
+    /* menu */
+nav.float-action-button {
+  position: fixed;
+      bottom: 0;
+  right: -40px;
+  margin: 1em;
+  -webkit-transition: all .1s ease-out;
+  transition: all .1s ease-out;
+  z-index: 110;
+}
+
+nav.float-action-button.animate{
+    right:0;
+}
+
+a.buttons {
+  box-shadow: 0 5px 11px -2px rgba(0, 0, 0, 0.18), 0 4px 12px -7px rgba(0, 0, 0, 0.15);
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  color: #fff;
+  font-size:20px;
+  padding: 1px 0 0 0;
+  text-align: center;
+  display: block;
+  margin: 20px auto 0;
+  position: relative;
+  -webkit-transition: all .1s ease-out;
+  transition: all .1s ease-out;
+  position: relative;
+}
+
+.icon__title{
+    background-color: #272727;
+    position: absolute;
+    width: 100px;
+    /* left: -108px; */
+    left: -108px;
+    font-size: 11px;
+    top: 10px;
+    border-radius: 5px;
+    padding: 2px 0px;
+    opacity: 0;
+    -webkit-transition: all .2s ease-out;
+  transition: all .2s ease-out;
+}
+
+a.buttons:active,
+a.buttons:focus,
+a.buttons:hover {
+  box-shadow: 0 0 4px rgba(0, 0, 0, .14), 0 4px 8px rgba(0, 0, 0, .28);
+  text-decoration: none;
+}
+
+a.buttons:nth-of-type(1):hover .icon__title{
+    opacity: 1;    
+}
+
+a.buttons:not(:last-child) {
+  width: 40px;
+  height: 40px;
+  margin: 20px auto 0;
+  opacity: 0;
+  font-size: 15px;
+    padding-top: 9px;
+    padding-left: 4px;
+  -webkit-transform: translateY(50px);
+  -ms-transform: translateY(50px);
+  transform: translateY(50px);
+}
+
+a.buttons.main-button > i:first-child {
+  position: relative;
+  margin-top: 13px;
+}
+
+a.buttons:nth-child(1){
+    position: relative;
+}
+
+a.buttons:not(:last-child).animate3 {
+  opacity: 1;
+  -webkit-transform: none;
+  -ms-transform: none;
+  transform: none;
+  margin: 20px auto 0;
+}
+
+a.buttons:nth-last-child(1) {
+  -webkit-transition-delay: 25ms;
+  transition-delay: 25ms;
+  background-color: #F3A23A;
+  /* Button color */
+}
+
+a.buttons:nth-last-child(1).animate2 i.fa {
+  transform: rotate3d(0, 0, 1, 0);
+  transition: content 0.4s, transform 0.4s, opacity 0.4s;
+}
+
+a.buttons:nth-last-child(1).animate2 i.fa {
+  transform: rotate3d(0, 0, 1, -180deg);
+}
+
+a.buttons:nth-last-child(1) i.fa:nth-last-child(1) {
+    position: absolute;
+    margin: 14px 0 0 -21px;
+}
+
+a.buttons:nth-last-child(1) i.fa:nth-last-child(2) {
+  opacity: 0;
+}
+
+a.buttons:nth-last-child(1).animate2 i.fa:nth-last-child(1) {
+  opacity: 0;
+}
+
+a.buttons:nth-last-child(1).animate2 i.fa:nth-last-child(2) {
+  opacity: 1;
+}
+
+a.buttons:not(:last-child):nth-last-child(2) {
+  -webkit-transition-delay: 50ms;
+  transition-delay: 20ms;
+  background-color: #00B84A;
+  /* Facebook color */
+}
+
+a.buttons:not(:last-child):nth-last-child(3) {
+  -webkit-transition-delay: 75ms;
+  transition-delay: 40ms;
+  background-color: #1da1f2;
+  /* Twitter color */
+}
+
+a.buttons:not(:last-child):nth-last-child(4) {
+  -webkit-transition-delay: 100ms;
+  transition-delay: 60ms;
+  background-color: #dd4b39;
+  /* Google plus color */
+}
+
+</style>
+
+
+<nav class="float-action-button">
+    <a href="#" class="buttons" id="float-icon"  onclick="download_table_as_csv('exportthis')" title="Export" data-toggle="tooltip" data-placement="left">
+        <i class="fa-solid fa-file-export"></i>
+        <div class="icon__title">Export Report</div>
+    </a>
+    <a href="#" class="buttons main-button" title="Share" data-toggle="tooltip" data-placement="left">
+        <i class="fa fa-times"></i>
+        <i class="fa-solid fa-caret-left fa"></i>
+    </a>
+  </nav>
+
+<script>
+     a =  document.getElementsByClassName('float-action-button')[0]
+    b = document.getElementsByClassName('main-button')[0]
+    c = document.getElementById('float-icon')
+    a.addEventListener('click',() => {
+        a.classList.toggle("animate")
+        b.classList.toggle("animate2")
+        c.classList.toggle('animate3')
+    })
+    // Quick and simple export target #table_id into a csv
+function download_table_as_csv(table_id, separator = ',') {
+
+    $('.agentname_th').css({"display":"none"})
+    $('.agentname_th2').removeClass("d-none")
+    $('.bankname_th1').css({"display":"none"})
+    $('.bankname_th2').removeClass("d-none")
+    // Select rows from table_id
+    var rows = document.querySelectorAll('table#' + table_id + ' tr');
+    // Construct csv
+    var csv = [];
+    for (var i = 0; i < rows.length; i++) {
+        var row = [], cols = rows[i].querySelectorAll('td, th');
+        for (var j = 0; j < cols.length; j++) {
+            // Clean innertext to remove multiple spaces and jumpline (break csv)
+            var data = cols[j].innerText.replace(/(\r\n|\n|\r)/gm, '').replace(/(\s\s)/gm, ' ')
+            // Escape double-quote with double-double-quote (see https://stackoverflow.com/questions/17808511/properly-escape-a-double-quote-in-csv)
+            data = data.replace(/"/g, '""');
+            // Push escaped string
+            row.push('"' + data + '"');
+        }
+        csv.push(row.join(separator));
+    }
+    var csv_string = csv.join('\n');
+    // Download it
+    var filename = 'Teamoverall_Report'+'_' + new Date().toLocaleDateString() + '.csv';
+    var link = document.createElement('a');
+    link.style.display = 'none';
+    link.setAttribute('target', '_blank');
+    link.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv_string));
+    link.setAttribute('download', filename);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    $('.agentname_th').css({"display":"block"})
+    $('.agentname_th2').addClass("d-none")
+    $('.bankname_th1').css({"display":"block"})
+    $('.bankname_th2').addClass("d-none")
+}
+</script>

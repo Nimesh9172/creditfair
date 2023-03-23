@@ -1,0 +1,80 @@
+{% extends 'base.html'  %}
+{% load static %}
+
+{% block content %}
+{% csrf_token  %}
+<style>
+    .table-wrapper{
+        height: calc(100vh - 326px);
+    }
+</style>
+<div id="toast-container" class="toast-container">
+</div>
+<main class="upload_main leadupdate">
+        <section class="upload_section_1">
+                <div class="upload_input_wrapper">
+                    <div class="csv_icon">
+                        <img src="{% static 'images/dnc.svg'  %}" alt="">
+                        <!-- <span class="upload_text">Upload Data</span> -->
+                        <div class="input_holder">
+                            <div class="select2__wrapper">
+                                <select name="" id="format_select" class="np-select" style="width:100%">
+                                    <option value="" selected>Download Format</option>
+                                    <option value="">Format 1</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                   
+            <input type="file" id="fileinput" name="excel_file" accept=".csv" hidden/>
+    
+            <div class="upload_file_wrapper" id="drop-area">
+                <div style="text-align: center;"><img src="{% static 'images/upbw.svg'  %}" alt=""></div>
+                <h5 class="drop_text">Drag & drop files or <span class="trigger_input">Browse</span></h5>
+                <p>Supported formats: CSV</p>
+            </div>
+            <div style="text-align: center;">
+                <button id="upload_btn">Upload</button>
+            </div>
+        </section>
+        
+    <section>
+        <div class="table-wrapper table-responsive">
+            <table class="table table-borderless rounded">
+              <thead class="sticky-top">
+                <tr>
+                    <th scope="col">List id</th>
+                    <th scope="col">Entry date</th>
+                    <th scope="col">List name</th>
+                    <th scope="col">File</th>
+                    <th scope="col">Count</th>
+                    <th scope="col">Status</th>
+                  </tr>
+              </thead>
+              <tbody>  
+                  {% for i in obj  %}
+                        <tr>
+                            <td class="listid">{{i.list_id}}</td>
+                            <td>{{i.added_date_time}}</td>
+                            <td>{{i.list_name}}</td>
+                            <td>{{i.excel_file}}</td>
+                            <td>{{i.count}}</td>
+                            <td>
+                                <label class="switch">
+                                    <input type="checkbox" {% if i.status == '1'  %}checked{% endif %}>
+                                    <span class="slider round"></span>
+                                </label>
+                            </td>
+                        </tr>
+                    {% endfor  %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+   
+</main>
+
+    
+{% include 'dnd/dnd_ajax.html'  %}
+
+{% endblock content  %}

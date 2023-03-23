@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SKYCRM</title>
+    <!-- /////////////////// favicon icon ////////////////// -->
+    <link rel="shortcut icon" href="{% static 'images/favicon.svg' %}" type="image/x-icon">
+    <!-- ////////////////////////////// main css link  //////////////////////////////// -->
+    <link rel="stylesheet" href="{% static 'css/style.css'  %}">
+    <!-- //////////////////////////fontawesom link /////////////////////// -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
+    <!-- ///////////////////////////////////select 2 css link////////////////// -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" />
+    <!-- ///////////////////////bootstrap 5 css link //////////////////////////////// -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- ///////////////////////daterangepicker css link //////////////////////////////// -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+</head>
+<body>  
+
+
+     <!-- ///////////////////jquery link////////////////////////// -->
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+
+    <!-- ///////////////////////daterangepicker  link //////////////////////////////// -->
+     <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+    <!-- ///////////////////select 2 js link//////////////////////// -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js" ></script>
+    
+    {% include 'navbar.html'  %}
+    
+    <!-- ///////////////////main javascript  link////////////////////////// -->
+    <script src="{% static  'js/main.js'  %}"></script>
+    
+    <div class="main-contents-card">
+      <div class="top-header">
+        <h4 class="header-title m-0"></h4>
+        </div>
+        
+        {% block content %}
+        
+        {% endblock content %}
+      </div>
+      
+      
+
+      <!-- ///////////////////////////bootstrap 5 bundle cdn//////////////////////// -->
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+      
+</html>

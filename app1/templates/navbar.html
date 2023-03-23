@@ -1,0 +1,143 @@
+{% load static  %}
+<div class="sidebar close">
+    <div class="logo-details">
+      <i ><img src="{% static 'images/skywhitelogo.png' %}" height="45px" width="45px" alt="" > </i>
+      <span class="logo_name"><img src="{% static 'images/skycmside.png' %}"  style="height: 29px;" alt=""></span>
+    </div>
+    <ul class="nav-links">
+      
+        <li style="border-radius: 10px;" class="dashsel arrow2">
+          <div class="iocn-link">
+            <a href="/dashboard">
+              <i><img src="{% static 'images/Vector.svg' %} " style="height: 18px;"/></i>
+              <span class="link_name">Dashboard</span>
+            </a>
+            <i class='fa-solid fa-caret-down arrow' style="min-width: 6px;margin-right:21px;font-size: 14px;"></i>
+          </div>
+          <ul class="sub-menu" style="border-radius: 10px;">
+            <li><a class="link_name" href="/dashboard">Dashboard</a></li>
+           
+            {% if request.user.user_level == 9 %}
+            <li><a href="/ptp">Team OverALL Report</a></li>
+            {% else %}
+            <li><a href="/ptp"> OverALL Report</a></li>
+            {% endif %}
+          </ul>
+        </li>
+  
+        <li >
+          <div class="iocn-link">
+          <li style="border-radius: 10px;" class="sa" >
+            <a href="/search">
+              <i class="fa-solid fa-magnifying-glass" style=" color: white;font-size: 18px;"></i>
+              <span class="link_name">Search</span>
+            </a>
+          </li>
+        <li style="border-radius: 10px;" class="cmssel arrow2">
+          <div class="iocn-link">
+            <a href="#">
+              <i style="position: relative;">
+                <img class="cmsimg" src="{% static 'images/icon.svg' %}" style="height: 18px;"/>
+                <span class="cmsnotification"></span>
+              </i>
+            <span class="link_name">Call Management System</span>
+            </a>
+            <i class='fa-solid fa-caret-down showno arrow' style="min-width: 6px; margin-right: 21px;font-size: 14px;"></i>
+          </div>
+          <ul class="sub-menu" style="border-radius: 10px;">
+            <li><a class="link_name" href="#">Call Management System</a></li>
+            <li><a href="/reminder">Reminder<div class="notification" style="font-size: 9px;position: absolute;margin-left:45px;background-color: red;border-radius: 50%;margin-top: -13px;color: white;height:15px;width:15px;text-align: center;padding-top: 1px;">{{value}}</div></a></li>
+            <li><a href="/recovery">Recovery Status</a></li>
+            <li><a href="/missedcall">Missed Call<div class="missnotification" style="font-size: 9px;position: absolute;margin-left:55px;background-color: red;border-radius: 50%;margin-top: -13px;color: white;height:15px;width:15px;text-align: center;padding-top: 1px;">{{d}}</div></a></li>
+            
+          </ul>
+        </li>
+        {% if request.user.user_level == 9 %}
+        <li style="border-radius: 10px;" class="otspg">
+          <a href="/ots">
+            <i><img src="{% static 'images/deal icon.svg' %}" style="height: 18px;"/></i>
+            <span class="link_name">One Time Settlement</span>
+          </a>
+        </li>
+      
+        {%else%}
+        <li style="border-radius: 10px;" class="otspage">
+          <a href="/ots">
+            <i><img src="{% static 'images/deal icon.svg' %}" style="height: 18px;"/></i>
+            <span class="link_name">One Time Settlement</span>
+          </a>
+        </li>
+        {% endif %}
+        {% if request.user.user_level == 1 %}
+        <li style="border-radius: 10px;" class="non-atmped">
+          <a href="non_attempted">
+            <i><img src="{% static 'images/noncontacted.png' %}" style="height: 18px;"/></i>
+            <span class="link_name">Non-Attempted</span>
+          </a>
+        </li>
+        {% endif %}
+        {% if request.user.user_level == 9 %}
+        <li style="border-radius: 10px;" class="non-atmp">
+          <a href="non_attempted">
+            <i><img src="{% static 'images/noncontacted.png' %}" style="height: 18px;"/></i>
+            <span class="link_name">Non-Attempted</span>
+          </a>
+        </li>
+        {% else %}
+  
+        {% endif %}
+            {% if request.user.user_level == 9 %}
+        <li style="border-radius: 10px;" class="ctc">
+          <a href="/connect_to_customer">
+            <i><img src="{% static 'images/connect.png' %}"  style="height: 18px;" alt=""></i>
+            <span class="link_name">Connect To Customer</span>
+          </a>
+          <!-- <ul class="sub-menu blank">
+            <li><a class="link_name" href="#">Connect To Customer</a></li>
+          </ul> -->
+        </li>
+        <li style="border-radius: 10px;" class="cmssel arrow2">
+          <div class="iocn-link">
+            <a href="#">
+              <i style="position: relative;">
+                <img class="cmsimg" src="{% static 'images/icon.svg' %}" style="height: 18px;"/>
+              </i>
+              <span class="link_name ">Lead Management System</span>
+            </a>
+            <i class='fa-solid fa-caret-down showno arrow' style="min-width: 6px; margin-right: 21px;font-size: 14px;"></i>
+          </div>
+          <ul class="sub-menu" style="border-radius: 10px;">
+            <li><a class="link_name" href="#">Lead Management System</a></li>
+            <li><a href="/upload_export">Data Upload</a></li>
+            <li><a href="/leadupdate">Lead Update</a></li>
+            <li><a href="/dnd">DNC</a></li>
+          </ul>
+        </li>
+        <li style="border-radius: 10px;">
+          <a href="/sms">
+            <i><img src="{% static 'images/bulk sms 1.png' %}" style="height: 18px;"/></i>
+            <span class="link_name">SMS</span>
+          </a>
+        </li>
+          {% endif %}
+             
+          <!-- <li style="border-radius: 10px;" class="dialnow">
+            <a target="_blank"  class="dialerlog">
+             
+              <i><img src="{% static 'images/dialer icon.svg' %}" class="dialicon" alt=""></i>
+              <span class="link_name diallinkname">Dialer Login</span>
+              <input type="hidden" value="online" class="ustatus">
+            </a>
+          </li> -->
+          
+        <div class="logoutlinkdiv" onclick="clearFilterSessions()">
+          <li style="border-radius: 10px;">
+            <a href="/logout">
+              <i class="fa-solid fa-power-off" style=" color: white;font-size: 18px"></i>
+                <span class="link_name">Logout</span>
+              </a>
+            </li>
+        </div>
+        
+          </ul>
+      </div>

@@ -1,0 +1,112 @@
+<script>
+       
+    // image slider starts here
+    let imgs = [     
+    "/static/Images/1.png",
+    "/static/Images/2.png",
+    "/static/Images/3.png",
+    "/static/Images/4.png",
+    "/static/Images/5.png",
+    "/static/Images/6.png",
+    "/static/Images/7.png",
+    "/static/Images/8.png",
+    "/static/Images/9.png",
+    "/static/Images/10.png",
+    ];
+
+    var i = 0;
+    let isrc = imgs[2];
+    $(".mimg").attr("src", imgs[i]);
+    setInterval(function () {
+        i++;
+        if (i > 10) {i = 0;}
+        $('.mimg').attr("src", imgs[i]);
+    }, 1500);
+
+    // image slider ends here
+    const login_user = () =>{
+        let data = new FormData()
+        data.append('username',$('input[name=username]').val())
+        data.append('password',$('input[name=password]').val())
+
+        $.ajax({
+            method: 'POST',
+            headers: {
+                "X-CSRFToken": document.querySelector('[name=csrfmiddlewaretoken]').value,
+            },
+            url: "{% url 'login_user_ajax' %}",
+            data: data,
+            datatype:'json',
+            processData: false,
+            contentType: false,
+            success: function (data) {
+                console.log(data)
+                if (data.status == 200){
+                    $('.error_pwd').addClass('display-toggle')
+                    $('.success_pwd').removeClass('display-toggle')
+                    $('input[name=password]').addClass('input_success')
+                    window.location = "/dashboard"
+                }
+                if(data.status == 400){
+                    pwd_inp = $('input[name=password]').val()
+                    if (pwd_inp.length > 0){
+                        $('.error_pwd').removeClass('display-toggle')
+                        $('.success_pwd').addClass('display-toggle')
+                        $('input[name=password]').addClass('input_failed')
+                    }
+                }
+                if(data.status == 301 && data.status != 400){
+                    $('.error_usid').removeClass('display-toggle')
+                    $('.success_usid').addClass('display-toggle')
+                    $('input[name="username"]').removeClass('input_success')
+                    $('input[name="username"]').addClass('input_failed')
+                }
+                else{
+                    $('.error_usid').addClass('display-toggle')
+                    $('.success_usid').removeClass('display-toggle')
+                    $('input[name="username"]').removeClass('input_failed')
+                    $('input[name="username"]').addClass('input_success')
+                }
+                    
+            }
+        })
+    }
+
+
+    $(document).ready(function(){
+      
+    $("#eyechange").click(function(){
+        $(this).toggleClass("fa-eye-slash")
+        attr = $(this).prev().attr('type')
+        attr == "password" ? $(this).prev().attr('type','text') :  $(this).prev().attr('type','password') 
+    })
+
+    $('#login_button').click(function(){
+        login_user()
+        pwd_inp = $('input[name=password]')
+        if (pwd_inp.val().length <= 0){
+            pwd_inp.addClass('input_failed')
+            $('.error_pwd').removeClass('display-toggle')
+            $('.success_pwd').addClass('display-toggle')
+        }
+    })
+
+    $('input[name=username]').keyup(function(){
+        // if ($(this).val().length > 3 ){
+            login_user()
+        // }
+    })
+    $('input[name=password]').keyup(function(){
+        if ($(this).val().length <= 0 ){}
+            $('.error_pwd').addClass('display-toggle')
+            $('.success_pwd').addClass('display-toggle')
+            $('input[name=password]').removeClass('input_failed')
+            $('input[name=password]').removeClass('input_success')
+    })
+
+        
+ });
+
+
+   
+</script>

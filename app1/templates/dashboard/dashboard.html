@@ -1,0 +1,209 @@
+{% extends 'base.html'  %}
+{% load static %}
+{% block content %}
+
+
+<style>
+.maindiv{
+  display: grid;
+  grid-template-columns: 1.7fr 0.9fr 1fr;
+  overflow-y: hidden;
+  height: 90vh;
+}
+
+
+
+.four_cards{
+  display: grid;
+    flex-wrap: wrap;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    padding: 15px;
+}
+
+.div1 > .maingraph{
+  height: 43%;
+    padding: 15px;
+}
+
+.div1 > .maingraph > img{
+  width: 99%;
+  height: 100%;
+}
+
+
+.cards{
+  width: 297px;
+    height: 125px;
+    background-color: #E4E8F2 !important;
+    border-radius: 8px;
+}
+
+.cards > img{
+  width: 100%;
+  height: 100%;
+}
+
+.div2{
+  height: 84vh;
+    display: grid;
+    /* grid-template-columns: 1fr; */
+    margin-top: 15px;
+}
+
+
+
+.graph > img{
+  height: 234px;
+}
+
+
+
+.div3{
+  height: 88vh;
+}
+
+
+
+.div3 > img{
+  height: calc(100vh - 90px);
+  margin-top: 15px;
+}
+
+.three_card{
+  display: flex;
+}
+
+
+@media only screen and (max-width: 1029px) {
+  .maindiv {
+    grid-template-columns: 1fr 1fr;
+    overflow-y: auto;
+  }
+  .div3{
+    margin-left: 12px;
+  }
+}
+
+@media only screen and (max-width: 962px) {
+  .maindiv {
+    grid-template-columns: 1fr;
+  }
+  .div2{
+    margin-left: 12px;
+  }
+  .div3{
+    margin-left: 12px;
+  }
+}
+
+
+@media only screen and (max-width: 724px) {
+  .maindiv {
+    grid-template-columns: 1fr;
+  }
+  .div2{
+    margin-left: 12px;
+  }
+  .div3{
+    margin-left: 12px;
+  }
+  .div1 > .maingraph{
+    width: calc(100vw - 73px);
+    height: 24%;
+  }
+  .four_cards{
+    display: flex;
+  }
+}
+
+
+</style>
+
+{% csrf_token %}
+
+{% if request.user.user_level == 9 %}
+
+
+<div class="maindiv">
+  <div class="div1">
+    <div class="maingraph">
+      <img src="{% static 'Images/HorizontalBarGraph.png'%}">
+    </div>
+    <div class="four_cards">
+      <div class="cards">
+        <img src="{% static 'Images/card1.png'%}">
+      </div>
+      <div class="cards">
+        <img src="{% static 'Images/card2.png'%}">
+      </div>
+      <div class="cards">
+        <img src="{% static 'Images/card3.png'%}">
+      </div>
+      <div class="cards">
+        <img src="{% static 'Images/card4.png'%}">
+      </div>
+    </div>
+  </div>
+  <div class="div2">
+    <div class="graph">
+      <img src="{% static 'Images/paidvsptp.png'%}">
+    </div>
+    <div class="graph">
+      <img src="{% static 'Images/scorecard.png'%}" style="width: 258px;">
+    </div>
+  </div>
+  <div class="div3">
+    <img src="{% static 'Images/overview.png'%}">
+  </div>
+</div>
+
+{% endif %}
+
+{% if request.user.user_level == 1 %}
+
+<div class="maindiv">
+  <div class="div1">
+    <div class="maingraph">
+      <img src="{% static 'Images/HorizontalBarGraph.png'%}">
+    </div>
+    <div class="four_cards">
+      <div class="cards" style="height:249px">
+        <img src="{% static 'Images/nonattempted.png'%}">
+      </div>
+      <div>
+        <div class="cards">
+          <img src="{% static 'Images/card2.png'%}" style="height: 114px;">
+        </div>
+    
+        <div class="cards">
+          <img src="{% static 'Images/break.png'%}">
+        </div>
+      </div>
+    </div>
+    <!-- <div class="three_card">
+      <div class="onecard">
+        <img src="{% static 'Images/nonattempted.png'%}">
+      </div>
+      <div class="twocard">
+        <img src="{% static 'Images/card2.png'%}">
+        <img src="{% static 'Images/break.png'%}">
+      </div>
+    </div> -->
+  </div>
+  <div class="div2">
+    <div class="graph">
+      <img src="{% static 'Images/paidvsptp.png'%}">
+    </div>
+    <div class="graph">
+      <img src="{% static 'Images/notification.png'%}" style="width: 258px;">
+    </div>
+  </div>
+  <div class="div3">
+    <img src="{% static 'Images/overview.png'%}">
+  </div>
+</div>
+{% endif %}
+
+
+{% endblock content %}
