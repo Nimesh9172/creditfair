@@ -5,7 +5,14 @@
 {% csrf_token  %}
 <style>
     .table-wrapper{
-        height: calc(100vh - 393px);
+        height:calc(100vh - 383px)
+    }
+    .input_holder{
+        position: relative;
+    }
+    .error__box,.error__box2{
+        position:absolute;
+        bottom: -19px;
     }
 </style>
 <div id="toast-container" class="toast-container">
@@ -61,23 +68,16 @@
                     <th scope="col">List name</th>
                     <th scope="col">File</th>
                     <th scope="col">Count</th>
-                    <th scope="col">Status</th>
                   </tr>
               </thead>
               <tbody>  
                   {% for i in obj  %}
                         <tr>
-                            <td class="listid">{{i.list_id}}</td>
-                            <td>{{i.added_date_time}}</td>
-                            <td>{{i.list_name}}</td>
-                            <td>{{i.excel_file}}</td>
+                            <td class="listid">{{i.listid}}</td>
+                            <td>{{i.entry}}</td>
+                            <td>{{i.listname}}</td>
+                            <td>{{i.file}}</td>
                             <td>{{i.count}}</td>
-                            <td>
-                                <label class="switch">
-                                    <input type="checkbox" {% if i.status == '1'  %}checked{% endif %}>
-                                    <span class="slider round"></span>
-                                </label>
-                            </td>
                         </tr>
                     {% endfor  %}
                 </tbody>

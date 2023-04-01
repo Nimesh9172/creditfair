@@ -1,0 +1,685 @@
+{% extends 'base.html'  %}
+
+{% block content  %}
+{% csrf_token %}
+<script>
+    $('.top-header').css('display',"none")
+</script>
+<style>
+
+.sidebar__overlay{
+  left: 0;
+  position: fixed;
+  background-color:#fff;
+  opacity: 0.5;
+  height: 100vh;
+  width: 58px;
+  z-index: 1999;
+}
+
+.visibility {
+    opacity: 1 !important;
+    z-index: 9 !important;
+}
+
+
+    
+.overlay{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    top: 0;
+    background: linear-gradient(270deg, #0957E9 0%, #41BBFF 86.48%);
+    box-shadow: 0px 8px 16px rgb(0 0 0 / 25%);
+    border-radius: 10px;
+    position: absolute;
+    opacity: 0;
+    z-index: -1;
+    -webkit-transition: all 1s ease-in-out 0s;
+    transition: all 1s ease-in-out 0s;
+}
+.discon {
+    margin-top: 3%;
+    margin-left:0;
+    border-radius: 50%;
+    height: 35px;
+    width: 35px;
+    background: red;
+    text-align: center;
+    padding-top: 5px;
+}
+.discon > i {
+    transform: rotate(135deg);
+    color: white;
+}
+
+.overlay span:first-child {
+    color: #FFFFFF;
+    font-size: 14px;
+}
+.overlay span:nth-child(2) {
+    font-size: 24px;
+    font-weight: 700;
+    color: #FFFFFF;
+}
+
+
+    /* /////////////////////////////////overlay ////////////////////////////// */
+    [type="radio"]:checked, [type="radio"]:not(:checked){
+        position: absolute;
+        left: -9999px;
+    }
+    [type="radio"]:checked + label, [type="radio"]:not(:checked) + label{
+        position: relative;
+        padding-left: 17px;
+        cursor: pointer;
+        line-height: 20px;
+        display: inline-block;
+        color: #666;
+        font-size: 11px;
+    }
+    [type="radio"]:checked + label:before, [type="radio"]:not(:checked) + label:before{
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 5px;
+        width: 10px;
+        height: 10px;
+        border: 1px solid #197aa4;
+        border-radius: 100%;
+        background: #fff;
+    }
+    
+    [type="radio"]:checked + label:after{
+        content: "";
+        width: 6px;
+        height: 6px;
+        background: #197aa4;
+        position: absolute;
+        top: 7px;
+        left: 2px;
+        border-radius: 100%;
+        opacity: 1;
+        -webkit-transform: scale(1);
+        transform: scale(1);
+        -webkit-transition: all 0.2s ease;
+        transition: all 0.2s ease;
+    }
+
+    .historytitle{
+        position: absolute;
+        bottom: 0px;
+        width: 100%;
+        font-size: 12px;
+        display: flex;
+        align-items: center;
+        color: #407bd5;
+        gap: 10px;
+        justify-content: end;
+        right: 0px;
+        padding-right: 14px;
+        padding-bottom: 3px;
+        border-radius: #fff;
+        border-radius: 10px;
+    }
+    
+    #back_btn{
+        color: #047BD5;
+        cursor: pointer;
+        position: absolute;
+        width: 100%;
+        border-radius: 10px;
+        padding-left: 14px;
+        padding-top: 16px;
+        font-size: 10px;
+
+    }
+
+    .blinking-border {
+        border: 1px solid #cc0000 ;
+        outline: 1px solid #cc0000 ;
+        animation: blink ease-in-out 1.5s infinite ;
+    }
+
+    .select2-results__options{
+        font-size: 12px;
+    }
+    
+/* cms pagination starts */
+.simple-pagination ul {
+margin: 0 0 20px;
+padding: 0;
+list-style: none;
+text-align: center;
+}
+
+.simple-pagination li {
+display: inline-block;
+margin-right: 5px;
+}
+
+.simple-pagination li a,
+.simple-pagination li span {
+color: #666;
+padding: 2px 6px;
+text-decoration: none;
+font-size: 10px;
+border: 1px solid #EEE;
+background-color: #FFF;
+border-radius: 19px;
+box-shadow: 0px 0px 10px 0px #EEE;
+}
+
+.simple-pagination .current {
+color: #FFF;
+background-color: rgb(4,123,213);
+border-color: rgb(4,123,213);
+}
+
+.simple-pagination .prev.current,
+.simple-pagination .next.current {
+background: rgb(4,123,213);
+}
+
+.data{
+    
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 400;
+    font-size: clamp(11px,11%,15px);
+    line-height: 144%;
+    color: rgba(0, 0, 0, 0.47);
+}
+
+#info {
+    margin-left: 4px;
+    font-family: 'Roboto';
+    /* font-style: normal; */
+    font-weight: 400;
+    font-size: clamp(12px,11%,15px);
+    line-height: 144%;
+    color: #000000;
+    margin-right: 4px;
+}
+#historyajax{
+    width: min(100% - 1em);
+    margin: auto;
+}
+
+.select_no_wrapper .select2-container--default .select2-selection--single .select2-selection__rendered{
+    text-align: center;
+}
+/* cms pagination ends */
+
+
+
+    @keyframes blink {
+        0% {
+            border-color: #cc0000 ;
+            outline-color: #cc0000 ;
+        }
+        50% {
+            border-color: transparent ;
+            outline-color: transparent ;
+        }
+        100% {
+            border-color: #cc0000 !important;
+            outline-color: #cc0000 !important;
+        }
+    }
+</style>
+{% load static %}
+{% include 'modals.html'  %}
+
+<link rel="stylesheet" href="{% static 'css/inc_cms.css' %}">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/simplePagination.js/1.6/jquery.simplePagination.js"></script>
+<div class="sidebar__overlay display-toggle"></div>
+
+<main class="main_cms_wrapper">
+    {% csrf_token  %}
+    <section class="main_card_wrapper">
+        <div class="main_card">
+            <header class="card__title">Customer Information</header>
+            <input type="hidden" name="lead_id"  value="{{id}}">
+            <input type="hidden" name="lastdial" value="{% if last_dial %}{{last_dial}}{% else %}{{mobile}}{% endif %}">
+
+            <div class="card__body">
+                <div class="card_info_wrapper">
+                    <div class="icon_title">
+                        <img src="{% static 'images/Ringing.png'  %}" alt="">
+                        <span class="card_info_title mobile_no_field">Mobile no.</span>
+                    </div>
+                    <div class="card__info mobile">{{mobile|default:'&nbsp;'}}</div>
+                </div>
+                <div class="card_info_wrapper">
+                    <div class="icon_title">
+                        <img src="{% static 'images/team.png'  %}" alt="">
+                        <span class="card_info_title">Name</span>
+                        <span><img src="{% static 'images/edit.png'%}" style="height: 12px; width: 12px;" class="editfield"></span>
+                    </div>
+                    <div class="card__info show_content name">{{name|default:'&nbsp;'}}</div>
+                    <div class="edit-field-wrapper hide_content">
+                        <input type="text" class="edit_input" name="name">
+                        <button class="add_btn updateadd" >Add +</button>
+                    </div>
+                </div>
+                <div class="card_info_wrapper">
+                    <div class="icon_title">
+                        <img src="{% static 'images/address1.png'  %}" alt="">
+                        <span class="card_info_title">Current City</span>
+                        <span><img src="{% static 'images/edit.png'%}" style="height: 12px; width: 12px;" class="editfield"></span>
+                    </div>
+                    <div class="card__info show_content address">{{address|default:'&nbsp;'}}</div>
+                    <div class="edit-field-wrapper hide_content">
+                        <input type="text" class="edit_input" name="edit_address">
+                        <button class="add_btn updateadd" >Add +</button>
+                    </div>
+                </div>
+                <div class="card_info_wrapper">
+                    <div class="icon_title">
+                        <img src="{% static 'images/address1.png'  %}" alt="">
+                        <span class="card_info_title">Current State</span>
+                        <span><img src="{% static 'images/edit.png'%}" style="height: 12px; width: 12px;" class="editfield"></span>
+                    </div>
+                    <div class="card__info state">{{state|default:'&nbsp;'}}</div>
+                    <div class="edit-field-wrapper hide_content">
+                        <input type="text" class="edit_input" name="state">
+                        <button class="add_btn updateadd" >Add +</button>
+                    </div>
+                </div>  
+                <div class="card_info_wrapper">
+                    <div class="icon_title">
+                        <img src="{% static 'images/address1.png'  %}" alt="">
+                        <span class="card_info_title">Pincode</span>
+                        <span><img src="{% static 'images/edit.png'%}" style="height: 12px; width: 12px;" class="editfield"></span>
+                    </div>
+                    <div class="card__info show_content pincode">{{pincode|default:'&nbsp;'}}</div>
+                    <div class="edit-field-wrapper hide_content">
+                        <input type="text" class="edit_input" name="pincode">
+                        <button class="add_btn updateadd" >Add +</button>
+                    </div>
+                </div>
+                <div class="card_info_wrapper">
+                    <div class="icon_title">
+                        <img src="{% static 'images/email.png'  %}" alt="">
+                        <span class="card_info_title">Email-ID</span>
+                        <span><img src="{% static 'images/edit.png'%}" style="height: 12px; width: 12px;" class="editfield"></span>
+                    </div>
+                    <div class="card__info show_content email">{{email|default:'&nbsp;'}}</div>
+                    <div class="edit-field-wrapper hide_content">
+                        <input type="text" class="edit_input" name="edit_email">
+                        <button class="add_btn" id="update_email">Add +</button>
+                    </div>
+                </div>
+                <div class="card_info_wrapper">
+                    <div class="icon_title">
+                        <img src="{% static 'images/team.png'  %}" alt="">
+                        <span class="card_info_title">Co Applicant Name</span>
+                        <span><img src="{% static 'images/edit.png'%}" style="height: 12px; width: 12px;" class="editfield"></span>
+                    </div>
+                    <div class="card__info show_content co_name">{{co_name|default:'&nbsp;'}}</div>
+                    <div class="edit-field-wrapper hide_content">
+                        <input type="text" class="edit_input" name="co_name">
+                        <button class="add_btn updateadd" >Add +</button>
+                    </div>
+                </div>
+                <div class="card_info_wrapper">
+                    <div class="icon_title">
+                        <img src="{% static 'images/Ringing.png'  %}" alt="">
+                        <span class="card_info_title">Co Applicant Number</span>
+                        <span><img src="{% static 'images/edit.png'%}" style="height: 12px; width: 12px;" class="editfield"></span>
+                    </div>
+                    <div class="card__info show_content co_mobile_no">{{co_mobile_no|default:'&nbsp;'}}</div>
+                    <div class="edit-field-wrapper hide_content">
+                        <input type="text" class="edit_input" name="co_mobile_no">
+                        <button class="add_btn updateadd" >Add +</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="main_card_wrapper">
+        <div class="main_card">
+            <header class="card__title">Process Information</header>
+            <div class="card__body">
+                <div class="card_info_wrapper">
+                    <div class="icon_title">
+                        <img src="{% static 'images/team.png'  %}" alt="">
+                        <span class="card_info_title">Lender Name</span>
+                        <span><img src="{% static 'images/edit.png'%}" style="height: 12px; width: 12px;" class="editfield"></span>
+                    </div>
+                    <div class="card__info show_content lender_name">{{lender_name|default:'&nbsp;'}}</div>
+                    <div class="edit-field-wrapper hide_content">
+                        <input type="text" class="edit_input" name="lender_name">
+                        <button class="add_btn updateadd" >Add +</button>
+                    </div>
+                </div>
+                <div class="card_info_wrapper">
+                    <div class="icon_title">
+                        <img src="{% static 'images/user.png'  %}" alt="">
+                        <span class="card_info_title">Merchant Name</span>
+                        <span><img src="{% static 'images/edit.png'%}" style="height: 12px; width: 12px;" class="editfield"></span>
+                    </div>
+                    <div class="card__info show_content merchant_name">{{merchant_name|default:'&nbsp;'}}</div>
+                    <div class="edit-field-wrapper hide_content">
+                        <input type="text" class="edit_input" name="merchant_name">
+                        <button class="add_btn updateadd" >Add +</button>
+                    </div>
+                </div>
+                <div class="card_info_wrapper">
+                    <div class="icon_title">
+                        <img src="{% static 'images/pencil1.png'  %}" alt="">
+                        <span class="card_info_title">ID</span>
+                        <span><img src="{% static 'images/edit.png'%}" style="height: 12px; width: 12px;" class="editfield"></span>
+                    </div>
+                    <div class="card__info show_content agreement_id">{{agreement_id|default:'&nbsp;'}}</div>
+                    <div class="edit-field-wrapper hide_content">
+                        <input type="text" class="edit_input" name="agreement_id">
+                        <button class="add_btn updateadd" >Add +</button>
+                    </div>
+                </div>
+                <div class="card_info_wrapper">
+                    <div class="icon_title">
+                        <img src="{% static 'images/pencil1.png'  %}" alt="">
+                        <span class="card_info_title">Agreement No.</span>
+                        <span><img src="{% static 'images/edit.png'%}" style="height: 12px; width: 12px;" class="editfield"></span>
+                    </div>
+                    <div class="card__info show_content agreement_no">{{agreement_no|default:'&nbsp;'}}</div>
+                    <div class="edit-field-wrapper hide_content">
+                        <input type="text" class="edit_input" name="agreement_no">
+                        <button class="add_btn updateadd" >Add +</button>
+                    </div>
+                </div>
+                <div class="card_info_wrapper">
+                    <div class="icon_title">
+                        <img src="{% static 'images/dis.png'  %}" alt="">
+                        <span class="card_info_title">Due Date</span>
+                        <span><img src="{% static 'images/edit.png'%}" style="height: 12px; width: 12px;" class="editfield"></span>
+                    </div>
+                    <div class="card__info show_content due_date">{{due_date|default:'&nbsp;'}}</div>
+                    <div class="edit-field-wrapper hide_content">
+                        <input type="text" class="edit_input" name="due_date">
+                        <button class="add_btn updateadd" >Add +</button>
+                    </div>
+                </div>  
+                <div class="card_info_wrapper">
+                    <div class="icon_title">
+                        <img src="{% static 'images/address1.png'  %}" alt="">
+                        <span class="card_info_title">Nach Status</span>
+                        <span><img src="{% static 'images/edit.png'%}" style="height: 12px; width: 12px;" class="editfield"></span>
+                    </div>
+                    <div class="card__info show_content nach_status">{{nach_status|default:'&nbsp;'}}</div>
+                    <div class="edit-field-wrapper hide_content">
+                        <input type="text" class="edit_input" name="nach_status">
+                        <button class="add_btn updateadd" >Add +</button>
+                    </div>
+                </div>
+                <div class="card_info_wrapper">
+                    <div class="icon_title">
+                        <img src="{% static 'images/user.png'  %}" alt="">
+                        <span class="card_info_title">Advisor</span>
+                        <span><img src="{% static 'images/edit.png'%}" style="height: 12px; width: 12px;" class="editfield"></span>
+                    </div>
+                    <div class="card__info show_content advisor">{{advisor|default:'&nbsp;'}}</div>
+                    <div class="edit-field-wrapper hide_content">
+                        <input type="text" class="edit_input" name="advisor">
+                        <button class="add_btn updateadd" >Add +</button>
+                    </div>
+                </div>
+                <!-- <div class="card_info_wrapper">
+                    <div class="icon_title">
+                        <img src="{% static 'images/team.png'  %}" alt="">
+                        <span class="card_info_title">Co Applicant Name</span>
+                    </div>
+                    <div class="card__info">Nimesh</div>
+                </div>
+                <div class="card_info_wrapper">
+                    <div class="icon_title">
+                        <img src="{% static 'images/Ringing.png'  %}" alt="">
+                        <span class="card_info_title">Co Applicant Number</span>
+                    </div>
+                    <div class="card__info">Nimesh</div>
+                </div> -->
+            </div>
+        </div>
+       
+    </section>
+
+    <section class="main_card_wrapper main_card_wrapper2">
+        <div class="main_card">
+            <header class="card__title">Process Additional Information</header>
+            <div class="card__body">
+                <div class="card_info_wrapper">
+                    <div class="icon_title">
+                        <img src="{% static 'images/rupee.png'  %}" alt="">
+                        <span class="card_info_title">Amount</span>
+                        <span><img src="{% static 'images/edit.png'%}" style="height: 12px; width: 12px;" class="editfield"></span>
+                    </div>
+                    <div class="card__info show_content amount">{{amount|default:'&nbsp;'}}</div>
+                    <div class="edit-field-wrapper hide_content">
+                        <input type="text" class="edit_input" name="amount">
+                        <button class="add_btn updateadd" >Add +</button>
+                    </div>
+                </div>
+                <div class="card_info_wrapper">
+                    <div class="icon_title">
+                        <img src="{% static 'images/dis.png'  %}" alt="">
+                        <span class="card_info_title">First EMI Date</span>
+                        <span><img src="{% static 'images/edit.png'%}" style="height: 12px; width: 12px;" class="editfield"></span>
+                    </div>
+                    <div class="card__info show_content first_emi_date">{{first_emi_date|default:'&nbsp;'}}</div>
+                    <div class="edit-field-wrapper hide_content">
+                        <input type="date" class="edit_input" name="firstemidate">
+                        <button class="add_btn updateadd" >Add +</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="main_card">
+            <header class="card__title">Additional Details</header>
+            <div class="card__body">
+                <div class="card_info_wrapper">
+                    <div class="icon_title">
+                        <img src="{% static 'images/Ringing.png'  %}" alt="">
+                        <span class="card_info_title">Contact No.</span>
+                    </div>  
+                    <div class="card__info" id="contact_div"></div>
+                    
+                </div>
+                <div class="card_info_wrapper">
+                    <div class="icon_title">
+                        <img src="{% static 'images/email.png'  %}" alt="">
+                        <span class="card_info_title">Email Id</span>
+                    </div>  
+                    <div class="card__info" id="email_div">Nimesh</div>
+                </div>
+                <div class="card_info_wrapper">
+                    <div class="icon_title">
+                        <img src="{% static 'images/address1.png'  %}" alt="">
+                        <span class="card_info_title">Address</span>
+                    </div>  
+                    <div class="card__info" id="address_div">Nimesh</div>
+                </div>
+                <div class="card_info_wrapper">
+                    <div class="icon_title">
+                        <img src="{% static 'images/Ringing.png'  %}" alt="">
+                        <span class="card_info_title">Whatsapp No.</span>
+                    </div>  
+                    <div class="card__info" id="whatsapp_div">Nimesh</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="main_card_wrapper main_card_wrapper2 ">
+        <div class="main_card history_card" style="position: relative;">
+            <header class="card__title">Customer History</header>
+            <div class="card__body">
+                <div class="card_info_wrapper">
+                    <div class="icon_title">
+                        <img src="{% static 'images/user.png'  %}" alt="">
+                        <span class="card_info_title">Agent Username</span>
+                    </div>
+                    <div class="card__info caller_name">{{caller_name|default:'&nbsp;'}}</div>
+                </div>
+                <div class="card_info_wrapper">
+                    <div class="icon_title">
+                        <img src="{% static 'images/pencil1.png'  %}" alt="">
+                        <span class="card_info_title">Sub-Disposition</span>
+                    </div>
+                    <div class="card__info sub_disposition">{{sub_disposition|default:'&nbsp;'}}</div>
+                </div>
+                <div class="card_info_wrapper">
+                    <div class="icon_title">
+                        <img src="{% static 'images/pencil1.png'  %}" alt="">
+                        <span class="card_info_title">Remark</span>
+                    </div>
+                    <div class="card__info remark">{{remark|default:'&nbsp;'}}</div>
+                </div>
+                <div class="card_info_wrapper">
+                    <div class="icon_title">
+                        <img src="{% static 'images/dis.png'  %}" alt="">
+                        <span class="card_info_title">Contacted Date & Time</span>
+                    </div>
+                    <div class="card__info contacted_dt">{{contacted_dt|default:'&nbsp;'}}</div>
+                </div>
+            </div>
+            <div class="historytitle" style="position:absolute;bottom:0px;"><span class="historyspan">See Call History</span><i class="fa-solid fa-arrow-right historyarrow" id="showcall" style="color:  #047BD5;cursor: pointer;"></i></div>
+        </div>
+        <div class="main_card history_card2 display-toggle" style="position: relative;">
+            <i class="fa-solid fa-arrow-left" id="back_btn" style="color:  #047BD5;cursor: pointer;"></i>
+            <div id="historyajax">
+
+            </div>
+            <div id="pagination-container"></div>
+        </div>
+        <div class="main_card">
+            <header class="card__title">Reference Details</header>
+        </div>
+    </section>
+
+    <section class="main_card_wrapper" style="display: flex;flex-direction: column;">
+        <div class="main_card3" id="main_card3" style="position: relative;">
+            <header class="card__title">Agent Action</header>
+            <div class="select_no_wrapper">
+                <select name="select_mobile_no" id="" class="np-select" style="width:100%">
+                </select>
+            </div>
+            <div class="agent_ac_icon_wrapper">
+                <img src="{% static 'images/callconnect.svg'  %}" class="callcontact"  alt="">
+                <img src="{% static 'images/whatsup.svg'  %}" alt="">
+                <img src="{% static 'images/msg.svg'  %}" alt="">
+            </div>
+            <div class="overlay">
+                <span class="ov-text">Placing Call...</span>
+                <span class="callto">727272727272</span>
+                <div class="call_features" style="display: flex;width: 100%;
+                justify-content: space-evenly;">
+                <div class="contact1 discon" id="mydisconnect"><i class="fa-solid fa-phone"></i></div>
+                  
+                </div>
+            </div>
+        </div>
+       
+       
+        
+        <div class="main_card" id="agent_tagging">
+            <header class="card__title">Agent Tagging</header>
+            <div class="add_detail_title">Add Details</div>
+            <div class="add_details_icon">
+                <img id="whatsapp_icon" src="{% static 'images/addwhats.svg'  %}" alt="">
+                <img id="mobile_icon" src="{% static 'images/mobile.svg'  %}" alt="">
+                <img id="address_icon" src="{% static 'images/home.svg'  %}" alt="">
+                <img id="email_icon" src="{% static 'images/email.png'  %}" alt="">
+                <img id="search__icon" src="{% static 'images/searchincms.svg'  %}" alt="">
+                <!-- <img src="{% static 'images/searchincms.svg'%}" alt="" class="addicon" id="search__icon"> -->
+            </div>
+            <!-- ////////////// addition start//////////////////////// -->
+
+            <div class="add_whatsapp_no display-toggle">
+                <div class="whatsappno_select2_wrapper ">
+                    <select name="whatsapp_no" class="np-select" id="" style="width:100%">
+                        <option value="select" selected disabled>Select</option>
+                        <option value="7972861253">7972861253</option>
+                        <option value="add_no">Add new no.</option>
+                    </select>
+                </div>
+                <div class="whatsapp_new_no_input display-toggle">
+                    <input type="text" name="whatsapp_no_inp" placeholder="Add new no." onkeypress="return isNumberKey(event)">
+                    <i class="fa-solid fa-caret-down whats_arrow"></i>
+                </div>
+                <button class="add_btn" id="add_whats_no">Add +</button>
+            </div>
+            <div class="add_mobile_no display-toggle">
+                <input type="text" name="contact_no"  placeholder="Add new no." onkeypress="return isNumberKey(event)" autofocus>
+                <div class="relation_select2_wrapper ">
+                    <select name="relation" class="np-select" id="" style="width:100%">
+                        <option value="Own">Own</option>
+                        <option value="Father">Father</option>
+                        <option value="Mother">Mother</option>
+                        <option value="Son">Son</option>
+                        <option value="Wife">Wife</option>
+                    </select>
+                </div>
+                <button class="add_btn" id="add_con_no">Add +</button>
+            </div>
+            <div class="add_address display-toggle">
+                <textarea name="address" id="" cols="30" rows="4" placeholder="Address" autofocus></textarea>
+                <button class="add_btn" id="add_address">Add +</button>
+            </div> 
+            <div class="add_email display-toggle">
+                <input type="text" name="email"  placeholder="Email Id" autofocus>
+                <button class="add_btn" id="add_email">Add +</button>
+            </div>
+            <!-- ////////////// addition enddddd//////////////////////// -->
+            <div class="select_dispo_wrapper">
+               <div class="disposition_wrapper">
+                  <select name="disposition" class="np-select" id="" style="width:100%">
+                    <option value="none"  selected disabled>Disposition</option>
+                  </select>
+               </div>
+               <div class="subdisposition_wrapper">
+                  <select name="subdisposition" class="np-select" id="" style="width:100%">
+                     <option value="none"  selected disabled>Sub-Dispostition</option>
+                  </select>
+               </div>
+            </div>
+            
+            <div class="callback_wrapper display-toggle">           
+            </div>
+
+            <div class="schedule_call_wrapper display-toggle">
+            </div>
+
+            <div class="paid_wrapper display-toggle">
+            </div>
+
+            <div class="ptp_wrapper display-toggle">    
+            </div>
+
+            <div class="ots_wrapper display-toggle">
+            </div>
+
+            <div class="remark_wrapper">
+                <textarea name="remark" id="" cols="30" rows="6" placeholder="Remark" ></textarea>
+                <button class="submit__btn" disabled>Submit</button>
+            </div>
+            
+        </div>
+    </section>
+</main>
+
+<script>
+    const aboveDiv = document.getElementById('main_card3');
+    const aboveDivHeight = aboveDiv.offsetHeight;
+    document.documentElement.style.setProperty('--above-div-height', aboveDivHeight + 'px');
+</script>
+
+{% include 'incomming/functions_inc_ajax.html'  %}
+{% include 'incomming/inc_ajax.html'  %}
+
+{% endblock content  %}

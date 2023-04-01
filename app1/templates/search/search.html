@@ -3,143 +3,68 @@
 {% block content  %}
 {% load static  %}
 {% csrf_token  %}
+
 <style>
-    .table-wrapper{
-        height: calc(100vh - 200px);
+    .st{
+        height: 17px;
+        width: 75px;
+        /* background: rgb(13 110 253 / 10%); */
+        border-radius: 20px;
+        position: relative;
+        margin: auto;
+        display: flex;
+        gap: 5px;
+        align-items: center;
+        justify-content: center;
+    }
+    .ball{
+        height: 4px;
+        width: 4px;
+        border-radius: 50%;
+        /* background: #0d6efd; */
+    }
+    .bat{
+        font-size: 10px;
     }
 </style>
 <main class="main-reminder main-ots">
     <div class="searchdiv flex-wrap">
         <div class="searchlabel">
             <span class="sl">Name</span>
-            <input type="text" name="borrowor_name"  autocomplete="off"  class="searchinput">
+            <input type="text" name="name"  autocomplete="off"  class="searchinput">
         </div>
              
 
         <div class="searchlabel" style="margin: 0;"> 
-            <span class="sl">Phone no</span>
-            <input  type="tel" name="mobile_number" autocomplete="off" class="searchinput">
+            <span class="sl">Mobile No.</span>
+            <input  type="tel" name="mobile_number" autocomplete="off" class="searchinput" onkeypress="return isNumber(event)" >
         </div>
            
         <div class="searchlabel"  style="margin: 0;">
             <span class="sl">Agreement No.</span>
-            <input  type="tel" name="loan_id"  autocomplete="off" class="searchinput">
+            <input  type="tel" name="agreement_no"  autocomplete="off" class="searchinput" >
         </div>
          
                 <button  type="button" class="searchbtn">Search</button>
             </div>
 
-            <div class="table-wrapper table-responsive" >
-                <table class="table table-borderless  rounded" >
-                  <thead class="sticky-top">
-                    <tr>
-                      <th  scope="col">Lead id</th>
-                      <th  scope="col">Borrower Name</th>
-                      <th  scope="col">Phone no.</th>
-                      <th  scope="col">Loan no.</th>
-                      <th  scope="col">Caller ID</th>
-                    </tr>
-                  </thead>
-                  <tbody style="cursor: pointer;">
-                  </tbody>
-        </div>    
+            <section class="table-wrapper">
+                <header>
+                    <span class="search_title">Status</span>
+                    <span class="search_title">Lead Id</span>
+                    <span class="search_title">Name</span>
+                    <span class="search_title">Phone No.</span>
+                    <span class="search_title">Agreement No.</span>
+                    <span class="search_title">Attachment</span>
+                </header>
+                <div class="table_body">
+                    <input type="hidden" value="{{request.user.module}}" name="user_module">
+                </div>
+            </section>
+
 </main>
 
-<script>
-function sajax(){
-    data = new FormData()
-    
-    data.append('borrowor_name',$('input[name="borrowor_name"]').val())
-    data.append('mobile_number',$('input[name="mobile_number"]').val())
-    data.append('loan_id',$('input[name="loan_id"]').val())
+{% include 'search/search_ajax.html'  %}
 
-
-    $.ajax({
-            method: 'POST',
-            headers: {
-                "X-CSRFToken": document.querySelector('[name=csrfmiddlewaretoken]').value,
-            },
-            url: "{% url 'sajax' %}",
-            data: data,
-            datatype:'json',
-            processData: false,
-            contentType: false,
-            beforeSend: function() {
-                $('.loader__wrapper').css({"display":"block"})
-            }, 
-            success: function (data) {
-               console.log(data.status)
-               let x = data.all_data
-                console.log(x)
-               
-                output = ""
-                if (x != undefined){
-                    for (var i in x){
-                        output += (`<tr class='clickable-row dashhover'data-href='/cms/${x[i].id}''  id="show">
-                        <input type="hidden" class="attempted" value="${x[i].attempted}">
-                        <td>${x[i].id}</td>
-                        <td>${x[i].name}</td>
-                        <td>${x[i].mobile_no}</td>
-                        <td>${x[i].agreement_no}</td>
-                        
-                        <td><img src="/static/Images/attachment1.svg"/></td>
-                        
-                    </tr>`)
-
-                    }
-                }
-
-                $('tbody').html(output)
-
-                $('.attempted').each(function(){
-                    if ($(this).val() != 0){
-                        $(this).parent().css({'color':'#047BD5','font-size': '12px', 'font-weight': 'bold'})
-                    }
-                })
-
-                $('.loader__wrapper').css({"display":"none"})
-            }
-        })
- }
-
- 
- function setsess(){
-        sessionStorage.setItem('bn',$('input[name="borrowor_name"]').val())
-        sessionStorage.setItem('mn',$('input[name="mobile_number"]').val())
-        sessionStorage.setItem('ld',$('input[name="loan_id"]').val())
-    }
-     
-    function getsess(){
-        let abn = sessionStorage.getItem('bn')
-        let amn = sessionStorage.getItem('mn')
-        let ald  = sessionStorage.getItem('ld')
-        $('input[name="borrowor_name"]').val(abn)
-        $('input[name="mobile_number"]').val(amn)
-        $('input[name="loan_id"]').val(ald)
-        console.log(abn,amn,ald)
-    }
-
-
-$(document).ready(function () {
-    $('.header-title').html("Search")
-
-
-  $(".sa").addClass("active-page")
-    getsess()
-    $('.searchbtn').click(function(){
-        setsess()
-        sajax()
-    })
-
-    $(document).on('click',".clickable-row",function() {
-    window.location = $(this).data("href");
-    })
-    
-    sajax()
-
-});
-
- 
-</script>
 
 {% endblock content  %}

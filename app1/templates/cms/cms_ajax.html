@@ -1,0 +1,346 @@
+<script>
+  get_additional_numbers()
+  get_dispositions2()
+  additional_details_get()
+  historyajax()
+
+  
+  $(document).ready(function () {
+    
+    // additional_details_post()
+
+    
+    console.log($('#selected_mobile_no').val(),"euegidgeideigdeig")
+
+    
+    $(document).on('click','#showcall',function(){
+      $('.history_card').addClass('display-toggle')
+      $('.history_card2').removeClass('display-toggle')
+    })
+    $(document).on('click','#back_btn',function(){
+      $('.history_card').removeClass('display-toggle')
+      $('.history_card2').addClass('display-toggle')
+    })
+
+
+    /////////////additional whatsapp detail toggle////////////
+    
+    $('#whatsapp_icon').click(function(){
+      $('.add_whatsapp_no').toggleClass('display-toggle')
+      add_class_ifnot('.add_mobile_no','display-toggle')
+      add_class_ifnot('.add_address','display-toggle')
+      add_class_ifnot('.add_email','display-toggle')
+    })
+
+    $('select[name=whatsapp_no]').on('change',function(){
+      let sel_val = this.value
+      if (sel_val == "add_no"){
+        $('.whatsappno_select2_wrapper').addClass('display-toggle')
+        $('.whatsapp_new_no_input').removeClass('display-toggle')
+      }
+    })
+
+    $('.whats_arrow').on('click',function(){
+      $('.whatsappno_select2_wrapper').toggleClass('display-toggle')
+      $('.whatsapp_new_no_input').toggleClass('display-toggle')
+    })
+    /////////////additional  whatsapp detail toggle////////////
+
+    /////////////additional  mobile no toggle////////////
+    $('#mobile_icon').click(function(){
+      $('.add_mobile_no').toggleClass('display-toggle')
+      add_class_ifnot('.add_whatsapp_no','display-toggle')
+      add_class_ifnot('.add_address','display-toggle')
+      add_class_ifnot('.add_email','display-toggle')
+      $('div:visible').find('input').focus();
+
+    })
+    /////////////additional  mobile no toggle////////////
+
+    /////////////additional address toggle////////////
+    $('#address_icon').click(function(){
+      $('.add_address').toggleClass('display-toggle')
+      add_class_ifnot('.add_whatsapp_no','display-toggle')
+      add_class_ifnot('.add_mobile_no','display-toggle')
+      add_class_ifnot('.add_email','display-toggle')
+      $('div:visible').find('textarea').focus();
+
+    })
+    /////////////additional address toggle////////////
+    /////////////additional address toggle////////////
+    $('#email_icon').click(function(){
+      $('.add_email').toggleClass('display-toggle')
+      add_class_ifnot('.add_whatsapp_no','display-toggle')
+      add_class_ifnot('.add_mobile_no','display-toggle')
+      add_class_ifnot('.add_address','display-toggle')
+      $('div:visible').find('input').focus();
+    })
+    /////////////additional address toggle////////////
+
+    //////////////////// disposition render dynamically  start  ///////////////////////////////////
+    $('select[name=disposition]').on('change',function(){
+      let current_val = this.value
+      console.log(current_val)
+      if (current_val != "none"){
+        get_dispositions(this.value)
+      }
+    })
+    //////////////////// disposition render dynamically end   ///////////////////////////////////
+    //////////////////// subdisposition option enb/disb start   ///////////////////////////////////
+    $('select[name=subdisposition]').on('change',function(){
+      let current_val = this.value.toLowerCase()
+      console.log(current_val)
+      if (current_val == "promise to pay"){
+        $('.ptp_wrapper').html(ptp_wrapper_html())
+        $('.ptp_wrapper').removeClass('display-toggle')
+      }else{
+        $('.ptp_wrapper').html('')
+        $('.ptp_wrapper').addClass('display-toggle')
+      }
+      if (current_val == "paid"){
+        $('.paid_wrapper').html(mode_wrapper_html())
+        $('.paid_wrapper').removeClass('display-toggle')
+      }else{
+        $('.paid_wrapper').html("")
+        $('.paid_wrapper').addClass('display-toggle')
+      }
+      if (current_val == "call back"){
+        $('.callback_wrapper').html(callback_wrapper_html())
+        $('.callback_wrapper').removeClass('display-toggle')
+      }else{
+        $('.callback_wrapper').html("")
+        $('.callback_wrapper').addClass('display-toggle')
+      }
+      if (current_val == "schedule call"){
+        $('.schedule_call_wrapper').html(schedule_wrapper_html())
+        $('.schedule_call_wrapper').removeClass('display-toggle')
+      }else{
+        $('.schedule_call_wrapper').html('')
+        $('.schedule_call_wrapper').addClass('display-toggle')
+      }
+      if (current_val == "ots request"){
+        $('.ots_wrapper').html(ots_wrapper_html())
+        $('.ots_wrapper').removeClass('display-toggle')
+      }else{
+        $('.ots_wrapper').html()
+        $('.ots_wrapper').addClass('display-toggle')
+      }
+    })
+   
+    //////////////////// subdisposition option enb/disb end   ///////////////////////////////////
+
+
+    $(document).on('click','input[name=mode]',function(){
+      let c_val= this.value
+      if(c_val == "Cheque"){
+        console.log(c_val)
+          $('input[name="cheque_no"]').toggleClass('display-toggle')
+          add_class_ifnot('input[name="online"]','display-toggle')
+        }
+      else if(c_val == "Online"){
+        $('input[name="online"]').toggleClass('display-toggle')
+        add_class_ifnot('input[name="cheque_no"]','display-toggle')
+      }else{
+        add_class_ifnot('input[name="online"]','display-toggle')
+        add_class_ifnot('input[name="cheque_no"]','display-toggle')
+      }
+    })
+    ///////////////////////// additional details validation start///////////////////
+    $('input[name=whatsapp_no_inp]').on('keyup',function(){
+      let curval = this.value
+      console.log(curval.length)
+      curval.length == 10 && $(this).removeClass('blinking-border')
+
+    })
+
+    $('input[name=contact_no]').on('keyup',function(){
+      let curval = this.value
+      console.log(curval.length)
+      curval.length == 10 && $(this).removeClass('blinking-border')
+    })
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    $('input[name="email"]').on('keyup',function(){
+      let curval = this.value
+      console.log(curval.length)
+      emailRegex.test(curval) && $(this).removeClass('blinking-border')    
+    })
+
+    $('#add_whats_no').on('click',function(){
+      let num_inp =$('input[name=whatsapp_no_inp]')
+      console.log("adasdihwghstststs",$('select[name="whatsapp_no"]').val())
+      let conf_val = num_inp
+      if($('select[name="whatsapp_no"]').val() == 'add_no'){
+        if (num_inp.val().length != 10){
+          num_inp.addClass('blinking-border')
+          return
+        }
+        // additional_details_post()
+      }
+      if($('select[name="whatsapp_no"]').val()){
+        conf_val = $('select[name="whatsapp_no"]').val()
+         // additional_details_post()
+        $('.modal__title').html('Mobile Confirmation')
+        $('.mobconfirm').html(conf_val)
+        $('.open-modal').click()
+
+      }
+    })
+
+    $('#add_address').on('click',function(){
+      let num_inp =$('textarea[name=address]')
+      if (num_inp.val().length < 1){
+        num_inp.addClass('blinking-border')
+        return
+      }
+      $('.modal__title').html('Address Confirmation')
+      $('.mobconfirm').html(num_inp.val())
+      $('.open-modal').click()
+    })
+
+    $('#add_con_no').on('click',function(){
+      let num_inp =$('input[name=contact_no]')
+      if (num_inp.val().length != 10){
+        num_inp.addClass('blinking-border')
+        return
+      }
+      $('.open-modal').click()
+      $('.modal__title').html('Mobile Confirmation')
+      console.log("callllllfunctionnnn",num_inp)
+      
+      $('.mobconfirm').html(num_inp.val())
+    })
+
+
+    $('#add_email').on('click',function(){
+      let num_inp =$('input[name=email]')
+      if (!emailRegex.test(num_inp.val())){
+        num_inp.addClass('blinking-border')
+        return
+      }
+      $('.modal__title').html('Email Confirmation')
+      $('.mobconfirm').html(num_inp.val())
+      $('.open-modal').click()
+      console.log("callllllfunctionnnn")
+    })
+
+    $('#submitme').click(function(){
+      additional_details_post()
+    })
+
+    ///////////////////////// additional details validation end/////////////////////
+
+    /////////////////////////////////  submit formmm startttt   //////////////////////////////
+    $('select[name=disposition]').on('change',function(){
+      $('.disposition_wrapper').find('.select2-selection--single').removeClass('blinking-border')
+    })
+    $('select[name=subdisposition]').on('change',function(){
+      $('.subdisposition_wrapper').find('.select2-selection--single').removeClass('blinking-border')
+    })
+    $('textarea[name=remark]').on('keyup',function(){
+      $(this).removeClass('blinking-border')
+    })
+
+    $('.submit__btn').on('click',function(){
+      let dispo = $('select[name=disposition]').val()
+      let subdispo = $('select[name=subdisposition]').val()
+      let remark= $('textarea[name=remark]').val()
+
+
+      // console.log(dispo,"dis",subdispo,"subdis",remark,"remark",ptp_date,"asdasd",ptp_amount,callback_time,"callback_time",schdatetime,"ots",ots_amount,mode)
+
+      if (!dispo){
+        console.log("Invalid")
+        $('.disposition_wrapper').find('.select2-selection--single').addClass('blinking-border')
+        return
+      }else if(!subdispo){
+        $('.subdisposition_wrapper').find('.select2-selection--single').addClass('blinking-border')
+        console.log("subinv")
+        return
+
+      }else if(remark.length < 1){
+        $('textarea[name=remark]').addClass('blinking-border')
+        return
+      }
+
+      $('.bts2').click()
+      
+    })
+    
+    $('#finalsubbtn').click(function(){
+      submit_form()
+    })
+    /////////////////////////////////  submit formmm enddddd   //////////////////////////////
+    
+    /////////////////////////////////  calling ajaxxxxxx start   //////////////////////////////
+    $(".callcontact").click(function(){
+
+      console.log("calllinf",)
+      pno = $('select[name=select_mobile_no]').val()
+      console.log(pno)
+      $('.sidebar__overlay').removeClass("display-toggle")
+      $('.callcontact').css({'pointer-events':"none"})
+      $('.ov-text').html("Call Placing...")
+      if (pno){
+        $('.overlay span:nth-child(2)').text($('select[name=select_mobile_no]').val().substring(0,11))
+      }
+      $('.overlay').addClass('visibility')
+      $('.Agent').addClass('notvisible')
+
+        dial_call()
+      // queue_paused()
+ 
+    })  
+
+
+    $(document).on('click','.contact1',function(){
+      call_hangup()
+      $('.submit__btn').removeAttr('disabled')
+      clearInterval(myInterval)
+      $('.overlay').removeClass('visibility')
+      $('.Agent').removeClass('notvisible')
+      $(".callmsg").css({"display":"none"})
+      $(".main-disposition-boxes").css({"display":"block"})
+      toast('Call Ended from outbound')
+      $('.sidebar').css({"background":"#047BD5"})
+      
+    })
+    /////////////////////////////////  calling ajaxxxxxx end  //////////////////////////////
+    
+
+    ///////////////////////////////////progressive//////////////////////////////////
+    
+ 
+    const progressive_status = `{{progressive}}`
+    console.log(progressive_status,"ststststststsystustsust")
+
+    var progressive = JSON.parse(sessionStorage.getItem('progressive'));
+    var get_id_list = JSON.parse(sessionStorage.getItem('non_attmp_ids'));
+
+    if (progressive == "on"){
+
+    $('.pro_confirm').html(`
+      <input type="checkbox"  value="yes" style="vertical-align: middle;" name="checking" id="checking">
+      <label class="finalmsg" for="checking">check if you want to quit progressive</label><br>`)
+      $('.callcontact').click()
+      $('.overlay span:nth-child(2)').text($('input[name="lastdial"]').val().substring(0,11))
+      // $('#finalsubbtn').prop('type',"button")
+      // $('#finalsubbtn').addClass('submit_ajax_form')
+
+
+    }
+
+    $(document).on('change','#checking',function(){
+      if($(this).is(':checked')){
+        sessionStorage.setItem('progressive', JSON.stringify("off"));
+        console.log("checkkkkkkkkeded")
+      }else{
+        sessionStorage.setItem('progressive', JSON.stringify("on"));
+        console.log('unchekeddddd')
+      }
+    })
+
+    ///////////////////////////////////progressive//////////////////////////////////
+  });
+</script>

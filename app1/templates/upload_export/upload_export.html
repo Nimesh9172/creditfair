@@ -18,6 +18,10 @@
 
 <div id="toast-container" class="toast-container">
 </div>
+<form action="{% url 'apr_report_export' %}" method="post" id="apr_export_form" style="width:100%">  
+    {% csrf_token  %}
+    <input type="hidden" name="username" value="">
+</form>
 <main class="upload_main">
     <section class="up_exp_section_wrapper">
         <section class="upload_section_1">
@@ -90,13 +94,12 @@
             </div>
             <div class="exfil" >
                <div class="supsel exsel">
-                <div class="dtitle">Select Criteria 1</div>
+                <div class="dtitle">Apr Report</div>
                     <div class="upsdiv">
-                        <select name="excampion" class="ups np-select" style="width: 100%;">
-                        <option value="">Select </option>
-                        {% for i in camp %}
-                        <option value="{{i.campaign_id}}">{{i.campaign_name}}</option>
-                        {% endfor %}
+                        <select name="apr_report_export" class="ups np-select" style="width: 100%;">
+                            <option value="">Select</option>
+                            <option value="all">all</option>
+                            <option value="admin">Admin</option>
                         </select>
                         <span class="error" id="campion-error"></span>
                     </div>
@@ -106,25 +109,7 @@
                     <div class="upsdiv">
                         <select name="sel" class="ups np-select" style="width: 100%;">
                           <option value="">Select </option>
-                          <option value="Paid">Paid</option>
-                          <option value="Promise To Pay">Promise To Pay</option>
-                          <option value="Call Back">Call Back</option>
-                          <option value="Schedule Call">Schedule Call</option>
-                          <option value="OTS Request">OTS Request</option>
-                          <option value="Send FE To collect">Send FE To collect</option>
-                          <option value="Settlement">Settlement</option>
-                          <option value="Broken Promise">Broken Promise To Pay</option>
-                          <option value="Refused To Pay">Refused To Pay</option>
-                          <option value="Busy">Busy</option>
-                          <option value="No-recall">No-recall</option>
-                          <option value="Ringing No Response">Ringing No Response</option>
-                          <option value="Call Waiting">Call Waiting</option>
-                          <option value="Switch OFF">Switch OFF</option>
-                          <option value="Not Reachable">Not Reachable</option>
-                          <option value="Wrong Contact">Wrong Contact</option>
-                          <option value="Language Not Communicable">Language Not Communicable</option>
-                          <option value="Not Available But Resides Here">Not Available But Resides Here</option>
-                          
+                         
                         </select>
                         <span class="error" id="campion-error"></span>
                       </div>

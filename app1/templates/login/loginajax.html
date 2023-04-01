@@ -2,16 +2,16 @@
        
     // image slider starts here
     let imgs = [     
-    "/static/Images/1.png",
-    "/static/Images/2.png",
-    "/static/Images/3.png",
-    "/static/Images/4.png",
-    "/static/Images/5.png",
-    "/static/Images/6.png",
-    "/static/Images/7.png",
-    "/static/Images/8.png",
-    "/static/Images/9.png",
-    "/static/Images/10.png",
+    "/static/images/1.png",
+    "/static/images/2.png",
+    "/static/images/3.png",
+    "/static/images/4.png",
+    "/static/images/5.png",
+    "/static/images/6.png",
+    "/static/images/7.png",
+    "/static/images/8.png",
+    "/static/images/9.png",
+    "/static/images/10.png",
     ];
 
     var i = 0;
@@ -26,6 +26,7 @@
     // image slider ends here
     const login_user = () =>{
         let data = new FormData()
+        data.append('extension',$('input[name=ext_id]').val())
         data.append('username',$('input[name=username]').val())
         data.append('password',$('input[name=password]').val())
 
@@ -77,8 +78,8 @@
       
     $("#eyechange").click(function(){
         $(this).toggleClass("fa-eye-slash")
-        attr = $(this).prev().attr('type')
-        attr == "password" ? $(this).prev().attr('type','text') :  $(this).prev().attr('type','password') 
+        attr = $(this).prev().prev().prev().attr('type')
+        attr == "password" ? $(this).prev().prev().prev().attr('type','text') :  $(this).prev().prev().prev().attr('type','password') 
     })
 
     $('#login_button').click(function(){

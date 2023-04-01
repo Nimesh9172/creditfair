@@ -18,9 +18,9 @@
             <li><a class="link_name" href="/dashboard">Dashboard</a></li>
            
             {% if request.user.user_level == 9 %}
-            <li><a href="/ptp">Team OverALL Report</a></li>
+            <li><a href="/lead_behaviour">Team OverALL Report</a></li>
             {% else %}
-            <li><a href="/ptp"> OverALL Report</a></li>
+            <li><a href="/lead_behaviour"> OverALL Report</a></li>
             {% endif %}
           </ul>
         </li>
@@ -53,12 +53,12 @@
           </ul>
         </li>
         {% if request.user.user_level == 9 %}
-        <li style="border-radius: 10px;" class="otspg">
+        <!-- <li style="border-radius: 10px;" class="otspg">
           <a href="/ots">
             <i><img src="{% static 'images/deal icon.svg' %}" style="height: 18px;"/></i>
             <span class="link_name">One Time Settlement</span>
           </a>
-        </li>
+        </li> -->
       
         {%else%}
         <li style="border-radius: 10px;" class="otspage">
@@ -70,7 +70,7 @@
         {% endif %}
         {% if request.user.user_level == 1 %}
         <li style="border-radius: 10px;" class="non-atmped">
-          <a href="non_attempted">
+          <a href="/non_attempted">
             <i><img src="{% static 'images/noncontacted.png' %}" style="height: 18px;"/></i>
             <span class="link_name">Non-Attempted</span>
           </a>
@@ -78,7 +78,7 @@
         {% endif %}
         {% if request.user.user_level == 9 %}
         <li style="border-radius: 10px;" class="non-atmp">
-          <a href="non_attempted">
+          <a href="/non_attempted">
             <i><img src="{% static 'images/noncontacted.png' %}" style="height: 18px;"/></i>
             <span class="link_name">Non-Attempted</span>
           </a>
@@ -111,6 +111,24 @@
             <li><a href="/upload_export">Data Upload</a></li>
             <li><a href="/leadupdate">Lead Update</a></li>
             <li><a href="/dnd">DNC</a></li>
+          </ul>
+        </li>
+        <li style="border-radius: 10px;" class="cmssel arrow2">
+          <div class="iocn-link">
+            <a href="#">
+              <i style="position: relative;">
+                <img class="cmsimg" src="/static/images/qualityanalysis.png" style="height: 18px;"/>
+              </i>
+              <span class="link_name ">Quality Score</span>
+            </a>
+            <i class='fa-solid fa-caret-down showno arrow' style="min-width: 6px; margin-right: 21px;font-size: 14px;"></i>
+          </div>
+          <ul class="sub-menu" style="border-radius: 10px;">
+            <li><a class="link_name" href="#">Quality Analysis</a></li>
+            <li><a href="/quality">Quality Analysis</a></li>
+            <li><a href="/qualityexport">Quality Export</a></li>
+  
+         
           </ul>
         </li>
         <li style="border-radius: 10px;">

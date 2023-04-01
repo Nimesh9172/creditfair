@@ -11,9 +11,10 @@
     color: #DC143C;
   }
 </style>
-{% csrf_token  %}
-<form  method="post" id="export_form">
+<form action="{% url 'exportrm'  %}" method="post" id="export_form">
   {% csrf_token  %}
+  {% include 'component/exportpages.html'  %}
+  
 <input type="hidden" value="" name="filterval">
 <main class="main-reminder">
   <div class="parent-filter-wrapper">
@@ -58,19 +59,27 @@
       <div class="menu-line__indicator"></div>
       <ul class="menu__list">
         <li class="menu__item">
-          
-          <a class="menu__link fall" href="#">All <span class="ct" id="allct" style="margin-left: 10px;">100</span></a>
+          <a class="menu__link fall" href="#" style="position: relative;">All 
+            <span class="ct" id="allct" style="position: absolute;top: 0px;
+            left: 20px;"></span>
+          </a>
         </li>
         <li class="menu__item">
-          <a class="menu__link cbk" href="#" >Callback <span class="ct" id="cbt" style="margin-left: 10px;">100</span></a>
+          <a class="menu__link cbk" href="#"  style="position: relative;">Callback 
+            <span class="ct" id="cbt" style="position: absolute;margin-left: 10px;"></span>
+          </a>
         </li>
         <li class="menu__item">
-          <a class="menu__link schc" href="#">Schedule Calls <span class="ct" id="sct" style="margin-left: 10px;
-            margin-top: -18px;">210</span></a>
+            <a class="menu__link scbk" href="#"  style="position: relative;">Schedule Calls 
+              <span class="ct" id="sct" style="position: absolute; left: 86px;
+              margin-top: -18px;"></span>
+            </a>
         </li>
         <li class="menu__item">
-          <a class="menu__link ptp" href="#">Promise To Pay(PTP) <span class="ct" id="pct" style="margin-left: 10px;
-            margin-top: -18px;">1</span></a>
+            <a class="menu__link ptp" href="#" style="position:relative">Promise To Pay(PTP) 
+              <span class="ct" id="pct" style="position: absolute;left: 119px;
+              margin-top: -18px;">1</span>
+            </a>
         </li>
       </ul>
       <!-- <hr /> -->

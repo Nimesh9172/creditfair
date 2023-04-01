@@ -11,7 +11,7 @@
     <!-- ////////////////////////////// main css link  //////////////////////////////// -->
     <link rel="stylesheet" href="{% static 'css/style.css'  %}">
     <!-- //////////////////////////fontawesom link /////////////////////// -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
     <!-- ///////////////////////////////////select 2 css link////////////////// -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" />
     <!-- ///////////////////////bootstrap 5 css link //////////////////////////////// -->
@@ -19,38 +19,214 @@
 
     <!-- ///////////////////////daterangepicker css link //////////////////////////////// -->
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+
+
+    
+    <style>
+      .tri-state-toggle {
+    background: rgba(165,170,174,0.25);
+    box-shadow: inset 0 2px 8px 0 rgba(165,170,174,0.25);
+    border-radius: 24px;
+    display: flex;
+    overflow: hidden;
+    transition: all 500ms ease; 
+}
+
+.tri-state-toggle-button {
+    border-radius: 22px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    background-color: transparent;
+    border: 0px solid transparent;
+    margin: 2px;
+    color: #727C8F;
+    cursor: pointer;
+  
+/*    -webkit-transition: all 0.5s ease-in-out;
+  -moz-transition:    all 0.5s ease-in-out;
+  -ms-transition:     all 0.5s ease-in-out;
+  -o-transition:      all 0.5s ease-in-out; */
+  transition:         all 0.5s ease;
+}
+
+.profile_filter_wrapper{
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+  gap: 10px;
+}
+
+.tri-state-toggle-button.active {
+    background-image: linear-gradient(-180deg, #fff 0%, #FAFAFA 81%, #F2F2F2 100%);
+    border: 1px solid rgba(207,207,207,0.6);
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.1);
+    color: #047BD5;
+    font-weight: 500;
+  transition: all .5s ease-in;
+}
+
+.tri-state-toggle-button:focus {
+  outline: none;
+}
+    </style>
 </head>
 <body>  
 
 
      <!-- ///////////////////jquery link////////////////////////// -->
-     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
 
     <!-- ///////////////////////daterangepicker  link //////////////////////////////// -->
-     <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
-     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
     <!-- ///////////////////select 2 js link//////////////////////// -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js" ></script>
     {% include 'loader_animation.html'  %}
-
+    
     {% include 'navbar.html'  %}
     
     <!-- ///////////////////main javascript  link////////////////////////// -->
     <script src="{% static  'js/main.js'  %}"></script>
+
+
+    
+    <div class="parent-main d-none" style="z-index: 1000;">
+      <div class="timer-main timer-back ">
+      </div>
+      <div class="cloud">
+        <div class="cloud1"></div>
+      </div>
+      <div style="position: absolute;width: 100vw; height: 100%; z-index: 10006; background-color: linear-gradient(0deg, rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.05));"></div>
+      <div style="position: absolute; width: 100vw; height: 100vh; z-index: 10008; padding: 70px 0;">
+        <div class="timer-img-div">
+          <img src="{% static 'images/skywhitelogo.png' %}" style="width: 130px;height: 130px; margin: auto;"  class="mimg" >
+          <img src="{% static 'images/skycmside.png' %}"  style="height: 40px;" alt="">
+        </div>
+      
+        
+        <div class="timer-popup-back">
+          <span class="timer-image"><img src="{%  static 'images/profile.png' %}" alt=""></span>
+          <span> {{request.user.username}}</span>
+          <span class="break__type"></span>
+          <div  class="timer">
+            <div class="ongoing-time">
+              <!-- <span id="hour" style="display: none;">00</span><span id="minute">00</span>:<span id="second">00</span><span id="millisecond" style="display: none;">000</span><span>min</span> -->
+              <span id="stopWatch">00 : 00 : 00</span>  
+            </div>
+          
+            <button type="button" name="start" id="start" style="display: none;">start</button>
+            <button type="button" name="pause" class="stop-time" id="stop">End Break</button>
+            <button type="button" name="reset" style="display: none;" id="reset">reset</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="back"></div>
     
     <div class="main-contents-card">
       <div class="top-header">
         <h4 class="header-title m-0"></h4>
+      <div class="profile_filter_wrapper">
+        <div class="profileimg" style="width: 40px;" >
+          <img src="{% static 'images/profile.png' %}"  class="showpro" style="width: 93%;padding:2px;">
+      <!-- profile pic html start -->
+          <div class="container_pro container__div d-none">
+          <div class="avatar-upload">
+          <div class="avatar-edit">
+              <input type='file' id="imageUpload" accept=".png, .jpg, .jpeg" disabled/>
+              <label for="imageUpload"></label>
+          </div>
+          <div class="avatar-preview">
+              <div id="imagePreview" style="background-image: url('/static/images/profile.png');">
+              </div>
+              <!-- <img src="{% static 'images/restic.png' %}" id="imagePreview"> -->
+          </div>
+          </div>
+          <div class="profile-name">
+          <span> {{request.user.username}}</span>
+          <span>Extension Number</span>
+          <span>{{request.user.extension}}</span>
+          <span></span> <span>Taking a Break ?</span>
+          <span>
+          <select name="selbreak" class="np-select" id="breakdrop">
+            <option value="">select</option>
+            <option value="Tea">Tea</option>
+            <option value="Lunch">Lunch</option>
+            <option value="Meeting">Meeting</option>
+            <option value="Office Work">Office Work</option>
+            <option value="Meeting">Meeting</option>
+            <option value="Training">Training</option>
+            <option value="WashRoom">Wash Room</option>
+          </select>
+          </span>
+          </div>
+          </div>
+          <!-- profile pic html end -->
+          
         </div>
+        <div class="dashboard-filter">
+
+        </div>
+      </div>
+      </div>
+      
         
         {% block content %}
         
         {% endblock content %}
+    </div>
+    
+    <!-- <div class="main-contents-card">
+      <div class="top-header">
+        <h4 class="header-title m-0"></h4>
       </div>
+        
+     
+    </div> -->
       
-      
-
       <!-- ///////////////////////////bootstrap 5 bundle cdn//////////////////////// -->
       <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
       
+      {% include 'base_ajax.html'  %}
+      <script>
+        
+      // toast Notification starts
+
+      const
+        FADE_DUR = 400,
+        MIN_DUR = 600;
+      let toastContain;
+
+      function toast(str, addClass) { 
+        console.log("toast")
+        console.log(str)
+        let duration = Math.max(MIN_DUR, str.length * 80);
+        
+        if (!toastContain) {
+          toastContain = document.createElement('div');
+          toastContain.classList.add('toastContain');
+          document.body.appendChild(toastContain);
+        }
+        
+        const EL = document.createElement('div');
+        EL.classList.add('toast', addClass);
+        EL.innerText = str;
+        toastContain.prepend(EL);
+        
+        setTimeout(() => EL.classList.add('open'));
+        setTimeout(
+          () => EL.classList.remove('open'),
+          duration
+        );
+        setTimeout(
+          () => toastContain.removeChild(EL),
+          duration + FADE_DUR
+        );
+      }
+
+      // Toast Notification ends
+      </script>
 </html>

@@ -9,6 +9,18 @@
   .table-wrapper{
     height:calc(100vh - 129px)
   }
+  .switch{
+    width: auto;
+    height: auto;
+  }
+  .progressive_wrapper{
+    display: grid;
+    grid-template-columns: .2fr 1fr;
+    align-items: center;
+    width: 200px;
+    font-size: 12px;
+    font-weight: 500;
+  }
 </style>
 <main class="main-non-attempted">
   <div class="non_attempt_select_wrapper">
@@ -34,6 +46,15 @@
         </select>
       </div>
     </div>
+    {% if request.user.user_level == 1 %}
+    <div class="progressive_wrapper" >
+      <label class="switch">
+        <input type="checkbox" id="togglepro">
+        <span class="slider round"></span>
+      </label>
+      <span class="pro_span">Progressive Dialing</span>
+    </div>
+    {% endif %}
   </div>
 
   <div class="table-wrapper table-responsive">
@@ -66,7 +87,7 @@
       headers: {
                 "X-CSRFToken": document.querySelector('[name=csrfmiddlewaretoken]').value,
             },
-      url: "/nonattempted",
+      url: "{% url 'non_attempted'  %}",
       data: data,
       datatype:'json',
       processData: false,
@@ -75,19 +96,17 @@
              $('.loader__wrapper').css({"display":"block"})
       }, 
       success: function (data) {
-        console.log(data.data)
         let v=data.data
         output=''
         $('tbody').empty()
         // if (v != undefined ){
         for(var i in v){
-          console.log("tbody",`${v[i].id}`)
-          $("tbody").append(`  <tr class='clickable-row dashhover' data-href="/cms/${v[i].id}/" style="cursor: pointer;">
-                    <td style="font-size: 12px;">${v[i].id}</td>
-                    <td style="font-size: 12px;">${v[i].borrowor_name}</td>
-                    <td style="font-size: 12px;">${v[i].mobile_number}</td>
-                    <td style="font-size: 12px;">${v[i].bank_loan_accountno}</td>
-                    <td style="font-size: 12px;text-transform: uppercase;">${v[i].callername}</td>
+          $("tbody").append(`  <tr class='clickable-row dashhover' data-href="/cms?id=${v[i].id}&render=non_attempted" style="cursor: pointer;">
+                    <td style="font-size: 12px;">${v[i].id}<input type="hidden" class="id22" value=${v[i].id}></td>
+                    <td style="font-size: 12px;">${v[i].name}</td>
+                    <td style="font-size: 12px;">${v[i].mobile_no}</td>
+                    <td style="font-size: 12px;">${v[i].agreement_no}</td>
+                    <td style="font-size: 12px;text-transform: uppercase;">${v[i].caller_name}</td>
                 </tr>`)
           }
 
@@ -100,20 +119,59 @@
       }
     $(document).ready(function () {
       agn()
-      $(".non-atmp").addClass("active-page")
-        $(document).on('click','.clickable-row',function() {
-        window.location = $(this).data("href");
+      
+    $(".non-atmp").addClass("active-page")
+      $(document).on('click','.clickable-row',function() {
+      window.location = $(this).data("href");
     });
-    $("select[name=np-select]").change(function(){
 
+    $("select[name=np-select]").change(function(){
       console.log("change",$("select[name=np-select]").val())
-         agn()
-            
-            })
+      agn()
+    })
 
     $("select[name=list-select]").change(function(){
          agn()
     })
+
+
+    
+///////////////////////////////////////////////progressive start///////////////////////////////////////
+  $('#togglepro').on('change', function() {
+    console.log("toggler")
+      if ($(this).is(':checked')) {
+
+        let ls = []
+        $('.id22').each(function(){
+          ls.push($(this).val())
+        })
+        console.log(ls)
+        sessionStorage.setItem('non_attmp_ids', JSON.stringify(ls));
+        sessionStorage.setItem('progressive', JSON.stringify("on"));
+        var progressive = JSON.parse(sessionStorage.getItem('progressive'));
+        var get_id_list = JSON.parse(sessionStorage.getItem('non_attmp_ids'));
+        console.log(get_id_list.length)
+
+        if (progressive == "on" && get_id_list.length > 0){
+          window.location.href = `/cms?id=${get_id_list[0]}&progressive=true&render=non_attempted`
+        }
+        
+        // Do something when the checkbox is checked
+        
+      }else{
+        sessionStorage.setItem('progressive', JSON.stringify("off"));
+        // sessionStorage.setItem('non_attmp_ids', JSON.stringify("off"));
+        sessionStorage.removeItem('non_attmp_ids');
+        var lsFromSession = JSON.parse(sessionStorage.getItem('non_attmp_ids'));
+        console.log(lsFromSession)
+        var progressive = JSON.parse(sessionStorage.getItem('progressive'));
+        console.log(progressive)
+
+      }
+  })
+///////////////////////////////////////////////progressive end///////////////////////////////////////
+
+
   })
 </script>
 {% endblock content  %}

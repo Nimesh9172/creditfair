@@ -1,0 +1,230 @@
+<script>
+  var csrf = `{{ csrf_token }}`
+    /////////////////break function start//////////////////////
+  function take_break(event){
+      let data = new FormData()
+      data.append('event',event)
+      data.append('type',$('select[name=selbreak]').val())
+          $.ajax({
+              method: 'POST',
+              headers: {
+                  "X-CSRFToken":csrf,
+              },
+              url: "{% url 'break_events' %}",
+              data: data,
+              datatype:'json',
+              processData: false,
+              contentType: false,
+              success: function (data) {
+                  console.log(data.status)
+          
+              }
+          })
+  }
+
+
+    
+    $.ajax({
+            type:"get",
+            url:'/notificationCount',
+            success: function(data){
+              $('.notification').html(data.value)
+              $('.cmsnotification').html(data.value)
+              console.log(data.value)
+            if (data.value == null || data.value == '0'){
+                  $(".notification").css({"display":"none"})
+                  $(".cmsnotification").css({"display":"none"})
+              }else {
+                $(".cmsnotification").css({"display":"block"})
+              }
+            }
+          })
+
+
+          $.ajax({
+            type:"get",
+            url:'/misscallednotiCount',
+            success: function(data){
+              console.log("count")
+              $('.missnotification').html(data.d)
+           
+            
+              console.log(data.d)
+            if (data.d == null || data.d == '0'){
+                  $(".missnotification").css({"display":"none"})
+                 
+              }else {
+                $(".missnotification").css({"display":"block"})
+              }
+            }
+          })
+
+      // timer start
+window.addEventListener("DOMContentLoaded", function () {
+  //  variables -->
+  const stopWatch = document.getElementById("stopWatch");
+  const startBtn = document.getElementById("start");
+  const stopBtn = document.getElementById("stop");
+  const resetBtn = document.getElementById("reset");
+
+  let startTimer = null;
+
+  let [hours, minutes, seconds] = [0, 0, 0];
+
+  // helper functions -->
+  function disabled(...elems) {
+    elems.forEach((elem) => elem.setAttribute("disabled", "true"));
+  }
+
+  function unDisabled(...elems) {
+    elems.forEach((elem) => elem.removeAttribute("disabled"));
+  }
+
+  // main Stopwatch function -->
+  function displayTime() {
+    seconds++;
+
+    if (seconds >= 60) {
+      minutes++;
+      seconds = 0;
+
+      if (minutes >= 60) {
+        hours++;
+        minutes = 0;
+
+        if (hours >= 24) {
+          hours = 0;
+        }
+      }
+    }
+
+    let h = hours < 10 ? "0" + hours : hours;
+    let m = minutes < 10 ? "0" + minutes : minutes;
+    let s = seconds < 10 ? "0" + seconds : seconds;
+
+    stopWatch.innerHTML = `${h} : ${m} : ${s}`;
+  }
+
+  // events -->
+  startBtn.addEventListener("click", () => {
+    if (startTimer !== null) {
+      clearInterval(startTimer);
+    }
+
+    startTimer = setInterval(displayTime, 1000);
+
+    disabled(startBtn);
+    unDisabled(stopBtn, resetBtn);
+  });
+
+  stopBtn.addEventListener("click", function () {
+    clearInterval(startTimer);
+
+    disabled(stopBtn);
+    unDisabled(startBtn);
+  });
+
+  resetBtn.addEventListener("click", function () {
+    clearInterval(startTimer);
+
+    disabled(resetBtn, stopBtn);
+    unDisabled(startBtn);
+
+    [hours, minutes, seconds] = [0, 0, 0];
+
+    stopWatch.innerHTML = "00 : 00 : 00";
+  });
+});
+// timer ends
+function realtime(){
+  $.ajax({
+          method: 'POST',
+          url:'/rt',
+          processData: false,
+          contentType: false,
+          datatype:'json',
+          success: function (e) {
+            console.log(e.status,"its real")
+          },
+          complete:function(){
+            check_incoming()
+          }
+        })
+}
+function check_incoming(){
+  $.ajax({
+          method: 'GET',
+          url:'/check_for_incoming',
+          processData: false,
+          contentType: false,
+          datatype:'json',
+          success: function (e) {
+            console.log(e.id,"check for incoming")
+            if (e.id != undefined){
+              window.location.href=`/inc_cms?id=${e.id}&render=dashboard`
+            }
+          },
+        })
+}
+
+
+    $(document).ready(function(){
+      // setInterval(function(){realtime()},2000)
+
+      $('.showpro').click(function(){$('.container__div').toggleClass("d-none")})
+        $('.showpro').click(function(){
+        $('.back').addClass('background')  
+      })
+      $('.stop-time').click(function(){
+              
+          console.log("itsssssss")
+          take_break("end")
+          $('.parent-main').addClass('d-none')
+          $('#reset').click()
+          location.reload()
+
+      })
+
+      $(document).on("change","select[name='selbreak']",function(){
+
+        $('.sb2').addClass('on')
+        $('.sb1').removeClass('on')
+        $('.parent-main').removeClass('d-none')
+        // start()
+        $('#start').click()
+
+        var breakval=$(this).val()
+        console.log('in console',breakval)
+        if (breakval=='Tea'){
+              $('.break__type').text('Is on Tea Break')
+        }else if(breakval=='Lunch'){
+              $('.break__type').text('Is on Lunch Break')
+        }else if(breakval=='Meeting'){
+              $('.break__type').text('Is in the Meeting')
+        }else if(breakval=='WR'){
+              $('.break__type').text('Is on the Washroom Break')
+        }else{
+          $('.break__type').text(`Is on the ${breakval} Break`)
+
+        }
+        
+        
+        console.log("pauseasdas")
+        
+        $(".container_pro").addClass("d-none")
+        $(".back").removeClass('background')
+
+        take_break("start") 
+     })
+
+        $(document).click(function(e){
+          let container = $(".container_pro");
+          let c2 = $('.profileimg')
+          if(!container.is(e.target) && container.has(e.target).length === 0 && !c2.is(e.target) && c2.has(e.target).length === 0) {
+            $('.container__div').addClass("d-none")
+            $('.back').removeClass('background')
+          }
+        })
+    })
+
+</script>

@@ -1,0 +1,128 @@
+<script>
+    const qsdata = () => {
+     let data = new FormData()
+     data.append("process",$('.process').val())
+     data.append('agn',$('.agn').val())
+     data.append('dispo',$('.dispo').val())
+     data.append('fdate',$('input[name=fdate]').val())
+     data.append('tdate',$('input[name=todate]').val())
+     data.append('phone_no',$('.phone_inp').val())
+   
+     $.ajax({
+       method: 'POST',
+       headers: {
+           "X-CSRFToken": document.querySelector('[name=csrfmiddlewaretoken]').value,
+       },
+       url: "/qsajax",
+       data: data,
+       datatype:'json',
+       processData: false,
+       contentType: false,
+       success: function (data) {
+         console.log(data.data)
+         const  x =  data.data
+         $('tbody').html('')
+         for (var i=0;i<x.length;i++){
+           let dtFormat = new Intl.DateTimeFormat('en-US',{
+               month:'short',
+               day:'2-digit',
+               year:'numeric',
+               hour: 'numeric',
+               minute:'numeric',
+               second:'numeric',
+               hour12:false
+           })
+           let d = x[i].start
+           d = new Date(d);
+           d = dtFormat.format(d)
+          $('tbody').append(`
+          <tr>
+           <td>${x[i].agentname ? x[i].agentname : "" }</td>
+           <td>${x[i].direction}</td>
+           <td>${ x[i].direction == "Outbound" ? x[i].dst : x[i].src}</td>
+           <td>${x[i].sub_dispos ? x[i].sub_dispos:  ""}</td>
+           <td>${d ? d : ""}</td>
+           <td class="aud">
+             <img src="/static/Images/pause.png" class="playnow"  height="20px" id="playBtn" alt="">
+             <audio id="audio" class="track1"  src="http://122.15.134.73/${x[i].recordfile}" controls="1" controls="download"></audio>
+             </td>
+             <td>
+               <a download href="http://122.15.134.73/${x[i].recordfile}"  class="hideme download_arrow" target="_blank">
+                 <i class="fa-solid fa-arrow-down" style="color: white;"></i></a>
+                 <div class="loader" style="display: none;"></div></td>
+                 </td>
+                 
+             <td><input type="hidden" class="hidden_id" value=${x[i].id}><a  class="downloadbtn viewbtn" >View</a></td>
+           </tr>
+          `)
+         }
+       }
+     })
+    }
+   
+    $(document).ready(function(){
+     qsdata()
+     $('.agn').change(function(){
+       console.log("changes done from agent",$(".agn").val())
+     qsdata()
+   
+   
+     })
+     $(".dispo").change(function(){
+       console.log("changes done from dispo",$(".dispo").val())
+     qsdata()
+    })
+  
+    $(".process").change(function(){
+       console.log("changes done from process",$(".process").val())
+     qsdata()
+    })
+     $(".datepick").change(function(){
+      console.log("changes done from date",$(".datepick").val())
+     qsdata()
+     })
+     $(".phone_inp").click(function(){
+      console.log($(this).val(),"from phone input")
+      qsdata()
+     })
+     
+   $(document).on('click','.viewbtn',function(){
+     var id =  $(this).prev().val()
+     var agn = $(this).parent().parent().children().first().html()
+     var phno=$(this).parent().prev().prev().prev().prev().prev().html()
+     var dispo = $(this).parent().prev().prev().prev().prev().prev().prev().html()
+     var sub = $(this).parent().prev().prev().prev().prev().html()
+     var contact = $(this).parent().prev().prev().prev().html()
+     var rec =$(this).parent().parent().find(".aud").children().next().attr("src")
+     var fdata=new FormData()
+     console.log(phno,"Asdadasdsad")
+     fdata.append('agn',agn)
+     fdata.append('phno',phno)
+     fdata.append('dispo',dispo)
+     fdata.append('sub',sub)
+     fdata.append('contact',contact)
+     fdata.append("rec",rec)
+     fdata.append("id",id)
+     console.log(id,"idddddddddddddddddddddddd",agn,"jkshdksf",phno,"syufugf",dispo,"ddlj",rec,"dydgyey",sub,contact)
+     $.ajax({
+       method: 'POST',
+       headers: {
+           "X-CSRFToken": document.querySelector('[name=csrfmiddlewaretoken]').value,
+       },
+       url: "/scoredata",
+       data: fdata,
+       datatype:'json',
+       processData: false,
+       contentType: false,
+       success: function (data) {
+         
+         console.log(data.id,data.status,"its ssssssssss an id hello",data)
+         // Window.location.href=`/score/${data.id}`
+         window.location.href=`/score_card/${data.id}`
+       }
+     })
+   })
+   
+   
+    })
+   </script>

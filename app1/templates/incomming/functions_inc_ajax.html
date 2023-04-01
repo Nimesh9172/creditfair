@@ -1,0 +1,624 @@
+<script>
+    let myInterval
+     const call_response_interval = () => {
+       myInterval = setInterval(function(){
+         callresponse()
+       },1000)
+     } 
+ 
+     function add_class_ifnot(element,addclass){
+         if (!$(element).hasClass(addclass)) {
+             $(element).addClass(addclass);
+         }
+     }
+
+     
+/////////////////queue paused unpaused starts///////////////////
+
+
+const queue_paused = () => {
+  console.log("queue paused called")
+  $.ajax({
+          method: 'POST',
+          headers: {
+          "X-CSRFToken": document.querySelector('[name=csrfmiddlewaretoken]').value,
+          },
+          url: "/queue_paused",
+          processData: false,
+          contentType: false,
+          success: function (e) {
+           
+          }
+    })
+
+}
+
+const queue_unpaused = () => {
+  console.log("queue unpaused called")
+  $.ajax({
+          method: 'POST',
+          headers: {
+          "X-CSRFToken": document.querySelector('[name=csrfmiddlewaretoken]').value,
+          },
+          url: "/queue_unpaused",
+          processData: false,
+          contentType: false,
+          success: function (e) {
+           
+          }
+    })
+
+}
+
+
+////////////////queue paused unpaused ends
+
+
+     function incomming_publish(){
+      let data = new FormData()
+      data.append('number',$('input[name=lastdial]').val())
+      data.append('per_id',$('input[name="lead_id"]').val())
+      $.ajax({
+        method:'POST',
+        headers: {
+          "X-CSRFToken": document.querySelector('[name=csrfmiddlewaretoken]').value,
+          },
+        url: "/incomming_response",
+        data: data,
+        datatype:'json',
+        processData: false,
+        contentType: false,
+        success:function(data){
+          console.log(data)
+        }
+      })
+    }
+
+ 
+     let lead_id = $('input[name="lead_id"]').val()
+     const render =`{{render}}`
+ 
+   const dial_call = () => {
+     let data = new FormData()
+     data.append('number',$('select[name=select_mobile_no]').val())
+     data.append('per_id',lead_id)
+ 
+     // data.append('ext',$('.ext').val())
+ 
+     $.ajax({
+           method: 'POST',
+           headers: {
+           "X-CSRFToken": document.querySelector('[name=csrfmiddlewaretoken]').value,
+           },
+           url: "/publish",
+           data: data,
+           datatype:'json',
+           processData: false,
+           contentType: false,
+           success: function (data) {
+             console.log("itssssssssssssss called ")
+             call_response_interval()
+           }
+     })
+   }
+   
+   
+
+ const callresponse = () => {
+   const data = new FormData()
+   $.ajax({
+           method: 'POST',
+           headers: {
+           "X-CSRFToken": document.querySelector('[name=csrfmiddlewaretoken]').value,
+           },
+           url: "/call_response",
+           data: data,
+           datatype:'json',
+           processData: false,
+           contentType: false,
+           success: function (data) {
+             console.log(data.response[0].status,"responseeeeeeeeeeeeeeeeeeeee")
+             let response = data.response[0].status
+             
+             if(response == 'InUse'){
+               $('.ov-text').html("On going call...")
+             
+               
+               // $('.ov-text').html("On going call...")
+             }else if (response == 'Ringing'){
+               console.log(response)
+               $('.ov-text').html("Ringing...")
+             }else if (response == 'Idle'){
+               // $('.overlay').removeClass('visibility')
+               // $('.Agent').removeClass('notvisible')
+               // $(".callmsg").css({"display":"none"})
+               // $(".main-disposition-boxes").css({"display":"block"})
+               $('.ov-text').html("Call Disconnected...")
+ 
+               toast('Call disconnected')
+               // $('.sidebar').css({"background":"#047BD5"})
+               // $('.ov-text').html("")
+               // $('.subbtn').css({'pointer-events':""})
+ 
+               clearInterval(myInterval)
+ 
+             }
+             
+             else if (response == "Failed"){
+               $('.overlay').removeClass('visibility')
+               $('.Agent').removeClass('notvisible')
+               $(".callmsg").css({"display":"none"})
+               $(".main-disposition-boxes").css({"display":"block"})
+               toast('Can\'t place the call') 
+               $('.sidebar').css({"background":"#047BD5"})
+               
+ 
+               clearInterval(myInterval)
+             }
+             else{
+               // $('.overlay').removeClass('visibility')
+               // $('.Agent').removeClass('notvisible')
+               // $(".callmsg").css({"display":"none"})
+               // $(".main-disposition-boxes").css({"display":"block"})
+               // toast('Can\'t place the call') 
+               // $('.sidebar').css({"background":"#047BD5"})
+               // $('.subbtn').css({'pointer-events':""})
+               // $('.sidebar__overlay').addClass("d-none")
+               // $('.callcontact').css({'pointer-events':""})
+ 
+               
+               // clearInterval(myInterval)
+ 
+ 
+             }
+           }
+     })
+ }
+ 
+ 
+ 
+ 
+   const call_hangup = () => {
+     let fdata = new FormData()
+     fdata.append('number',$('select[name=select_mobile_no]').val())
+     fdata.append('per_id',lead_id)
+ 
+     $.ajax({
+           method: 'POST',
+           headers: {
+           "X-CSRFToken": document.querySelector('[name=csrfmiddlewaretoken]').value,
+           },
+           url: "/incoming_hangup",
+           datatype:'json',
+           data:fdata,
+           processData: false,
+           contentType: false,
+           success: function (data) {
+             console.log("response")
+             $('.subbtn').css({'pointer-events':""})
+           }
+     })
+   }
+ 
+     function mode_wrapper_html(){
+         return  `  <div class="amount_div">
+                     <span class="add_detail_title">Enter Amount:</span>
+                     <input type="text" name="paid_amt"  onkeypress="return isNumberKey(event)">
+                 </div>
+                 <div class="mode_wrapper">
+                     <input type="radio" id="cash"name="mode" value="Cash"/>
+                     <label for="cash">Cash</label>
+                     <input type="radio" id="cheque" name="mode" value="Cheque"/>
+                     <label for="cheque">Cheque No.</label>
+                     <input type="text" class="display-toggle" name="cheque_no" placeholder="Cheque No." >
+                     <input type="radio" id="Online"name="mode" value="Online"/>
+                     <label for="Online">Online Payment</label>
+                     <input type="text"class="display-toggle"  name="online" placeholder="Transaction ID">
+                 </div>`
+     }
+ 
+     function ptp_wrapper_html(){
+         return `  <input name="ptp_date"  type="date">
+                 <div class="amount_div">
+                     <span class="add_detail_title">Enter Amount:</span>
+                     <input type="text" name="ptp_amount" onkeypress="return isNumberKey(event)">
+                 </div>`
+     }
+ 
+     function ots_wrapper_html(){
+         return `<div class="amount_div">
+                     <span class="add_detail_title">Enter Amount:</span>
+                     <input type="text" name="ots_amount" onkeypress="return isNumberKey(event)">
+                 </div>`
+     }
+     
+     function schedule_wrapper_html(){
+         return `<input name="schdatetime"  type="datetime-local" >`
+     }
+ 
+     function callback_wrapper_html(){
+         return ` <input type="radio" id="calltest1" name="callback_time" value="15min"/>
+                 <label for="calltest1">15 Min</label>
+                 <input type="radio" id="calltest2" name="callback_time" value="30min"/>
+                 <label for="calltest2">30 Min</label>
+                 <input type="radio" id="calltest3" name="callback_time" value="45min"/>
+                 <label for="calltest3">45 Min</label>
+                 <input type="radio" id="calltest4 "name="callback_time" value="60min"/>
+                 <label for="calltest4">60 Min</label>`
+     }
+ 
+   function get_dispositions(sub_val){
+ 
+     $.ajax({
+         method: 'get',
+         url: `/get_dispositions?dispo=${sub_val}`,
+         datatype:'json',
+         processData: false,
+         contentType: false,
+         success: function (data) {
+           let subdis = data.subdisposition
+           $('select[name=subdisposition]').html(`<option value="none" selected disabled>Sub-Dispostition</option>`)
+           for (i in subdis){
+             $('select[name=subdisposition]').append(`<option value='${subdis[i].sub_dispo}'>${subdis[i].sub_dispo}</option>`)
+           }
+         }
+     })
+   }
+ 
+   function get_dispositions2(sub_val){
+     $.ajax({
+       method: 'get',
+       url: `/get_dispositions`,
+       datatype:'json',
+       processData: false,
+       contentType: false,
+       success: function (data) {
+         let dis = data.disposition
+         $('select[name=disposition]').html(`<option value="none" selected disabled>Disposition</option>`)
+         $('select[name=subdisposition]').html(`<option value="none" selected disabled>Sub-Dispostition</option>`)
+         for (i in dis){
+           $('select[name=disposition]').append(`<option value='${dis[i].dispo}'>${dis[i].dispo}</option>`)
+         }
+       }
+     })
+   }
+ 
+   function additional_details_post(){
+     let fdata = new FormData()
+ 
+     let contact_no = $('input[name="contact_no"]').val()
+ 
+     fdata.append('id',$('input[name="lead_id"]').val())
+     fdata.append('wap_no',$('select[name="whatsapp_no"]').val())
+     fdata.append('wap_no_inp',$('input[name="whatsapp_no_inp"]').val())
+     fdata.append('relation',$('select[name="relation"]').val())
+     fdata.append('address',$('textarea[name="address"]').val())
+     fdata.append('email',$('input[name="email"]').val())
+     fdata.append('contact_no',contact_no)
+     $.ajax({
+       method: 'post',
+         headers: {
+                     "X-CSRFToken": document.querySelector('[name=csrfmiddlewaretoken]').value,
+                 },
+       url: `/addition_details_ajax`,
+       datatype:'json',
+       data:fdata,
+       processData: false,
+       contentType: false,
+       success: function (data) {
+         console.log(data)
+         additional_details_get()
+         add_class_ifnot('.add_mobile_no','display-toggle')
+         add_class_ifnot('.add_address','display-toggle')
+         add_class_ifnot('.add_email','display-toggle')
+         add_class_ifnot('.add_whatsapp_no','display-toggle')
+         
+         $('select[name="select_mobile_no"]').append(`<option>$</option>`)
+ 
+         $('input[name="whatsapp_no_inp"]').val("")
+         $('select[name="relation"]').val("")
+         $('select[name="wap_no"]').select2('val','select')
+         $('textarea[name="address"]').val("")
+         $('input[name="email"]').val("")
+         $('input[name="contact_no"]').val("")
+       }
+     })
+   }
+   function additional_details_get(){
+    id = $('input[name="lead_id"]').val()
+     $.ajax({
+       method: 'get',
+       url: `/get_additional_info?id=${id}`,
+       datatype:'json',
+       processData: false,
+       contentType: false,
+       success: function (data) {
+         console.log(data)
+         let x = data.data
+         $('#contact_div').html("")
+         $('#email_div').html("")
+         $('#whatsapp_div').html("")
+         $('#address_div').html("")
+         for (i in x){
+             if (x[i].email){
+                 $('#email_div').append(`<span>${x[i].email}</span></br>`)
+             }
+             if (x[i].phone_no){
+                 $('#contact_div').append(`<span>${x[i].phone_no}</span></br>`)
+             }
+             if (x[i].whatsapp_no){
+                 $('#whatsapp_div').append(`<span>${x[i].whatsapp_no}</span></br>`)
+             }
+             if (x[i].address){
+                 $('#address_div').append(`<span>${x[i].address}</span></br>`)
+ 
+             }
+         }
+       }
+     })
+   }
+ 
+   function get_additional_numbers(){
+     $.ajax({
+       method: 'get',
+       url: `/get_additional_numbers?id=${lead_id}`,
+       datatype:'json',
+       processData: false,
+       contentType: false,
+       success: function (data) {
+         console.log(data)
+         x = data.data
+         y = data.data2
+         $('select[name=select_mobile_no]').html("")
+         for (i in y){
+           console.log("ajsajds",y[i].mobile_no)
+           y[i].last_dial_no && $('select[name=select_mobile_no]').append(`<option class="${y[i].last_dial_no}">${y[i].last_dial_no}</option>`)
+           y[i].mobile_no && $('select[name=select_mobile_no]').append(`<option class="${y[i].mobile_no}">${y[i].mobile_no}</option>`)
+         }
+         for (i in x){
+           x[i].phone_no && $('select[name=select_mobile_no]').append(`<option class="${x[i].phone_no}">${x[i].phone_no}&nbsp;&nbsp;&nbsp;${x[i].relation}</option>`)
+           console.log()
+         }
+       }
+     })
+   }
+ 
+   function submit_form(){
+ 
+     let lead_id = $('input[name="lead_id"]').val()
+ 
+     let dispo = $('select[name=disposition]').val()
+     let subdispo = $('select[name=subdisposition]').val()
+     let remark= $('textarea[name=remark]').val()
+ 
+     let lastdial= $('select[name="select_mobile_no"]').val()
+ 
+     let ptp_date = $('input[name="ptp_date"]').val()
+     let ptp_amount = $('input[name="ptp_amount"]').val()
+ 
+     let callback_time = $('input[name="callback_time"]:checked').val()
+     
+     let schdatetime = $('input[name="schdatetime"]').val()
+ 
+     let ots_amount = $('input[name="ots_amount"]').val()
+     
+     let paid_amt = $('input[name="paid_amt"]').val()
+     let mode = $('input[name="mode"]:checked').val()
+     let cheque_no = $('input[name="cheque_no"]').val()
+     let online = $('input[name="online"]').val()
+ 
+     let fdata = new FormData()
+     
+     fdata.append('dispo',dispo)
+     fdata.append('subdispo',subdispo)
+     fdata.append('remark',remark)
+     fdata.append('ptp_date',ptp_date)
+     fdata.append('ptp_amount',ptp_amount)
+     fdata.append('callback_time',callback_time)
+     fdata.append('schdatetime',schdatetime)
+     fdata.append('ots_amount',ots_amount)
+     fdata.append('paid_amt',paid_amt)
+     fdata.append('mode',mode)
+     fdata.append('cheque_no',cheque_no)
+     fdata.append('online',online)
+     fdata.append('lead_id',lead_id)
+     fdata.append('lastdial',lastdial)
+ 
+     $.ajax({
+       method: 'post',
+       headers: {"X-CSRFToken": document.querySelector('[name=csrfmiddlewaretoken]').value,},
+       url: `/cms_submit_ajax`,
+       datatype:'json',
+       data:fdata,
+       processData: false,
+       contentType: false,
+       success: function (data) {
+        queue_unpaused()
+
+         window.location.href = `/${render}`
+       }
+     })
+   }
+ 
+   function historyajax(){
+     lead_id = $('input[name="lead_id"]').val()
+     console.log(lead_id,"lead id")
+     $.ajax({
+       method:'get',
+       url:`/customer_history?id=${lead_id}`,
+       datatype:'json',
+       processData: false,
+       contentType: false,
+       success:function(data){
+         console.log(data)
+         x = data.data
+         console.log(lead_id,"incomminggggggggg",x)
+         $('#historyajax').html(' ')
+         for (i in x ){
+           $('#historyajax').append(`
+           <div class="list_wrapper" style="margin-top:13px">
+          
+          <div style="font-size: 11px; margin-left:5px;margin-right:3px;text-align: center;">${x[i].contacted_dt}</div>
+          
+         <div class="historycontent" style="margin-top: 5px;">
+          <div id="info" style="margin-top: 0px;">Agent Name</div>
+          <div class="data" style="margin-top: 0px;margin-left: 7px;">
+            
+            <div><i class="fa-solid fa-phone-volume" style="font-size: 12px;color:  #047BD5; margin-right: 9px;"></i>${x[i].caller_name}</div>
+          </div>
+          <div id="info" style="margin-top: 2px;">Sub dispostion</div>
+          <div class="data" style="margin-top: 2px;margin-left: 3px;">
+            <div>${x[i].sub_disposition}</div>
+          </div>
+  
+          <div id="info" style="margin-top: 1px;">Remark</div>
+          <div class="historyremark">
+            ${x[i].remark}
+          </div>
+          </div>
+  
+        </div>
+           `)
+         }
+         callpage()
+       }
+     })
+ 
+   }
+   
+   function callpage(){
+     var items = $(".list_wrapper");
+     var numItems = items.length;
+     var perPage = 1;
+ 
+     items.slice(perPage).hide();
+ 
+     $('#pagination-container').pagination({
+         items: numItems,
+         itemsOnPage: perPage,
+         prevText: "&laquo;",
+         nextText: "&raquo;",
+         onPageClick: function (pageNumber) {
+             var showFrom = perPage * (pageNumber - 1);
+             var showTo = showFrom + perPage;
+             items.hide().slice(showFrom, showTo).show();
+         }
+     });
+ 
+     }
+
+// incoming functionality starts
+     function updatefield(global_in_value,global_list_id){
+      let fdata = new FormData()
+      // fdata.append('update_val',$('input[name=``]'))
+      let input_value  = $('input[name='+global_in_value+']').val()
+      fdata.append('update_val',input_value) // will get the value of input 
+      fdata.append('name_val',global_in_value) // will get the name of input 
+      fdata.append('id',global_list_id)// will get the user id
+      $.ajax({
+        method: 'post',
+         headers: {
+                     "X-CSRFToken": document.querySelector('[name=csrfmiddlewaretoken]').value,
+                 },
+       url: `/updatefield`,
+       datatype:'json',
+       data:fdata,
+       processData: false,
+       contentType: false,
+       success:function(){
+        console.log('success')
+        inputvalue = $('input[name='+global_in_value+']').val() // will get the edited input value
+        $('input[name='+global_in_value+']').parent().prev().toggleClass('hide_content').toggleClass('show_content') // will hide and show the inputs
+        $('input[name='+global_in_value+']').parent().toggleClass('show_content').toggleClass('hide_content')
+        $('input[name='+global_in_value+']').parent().prev().text(inputvalue)
+        global_in_value = '' // will empty the value of global variable
+        global_list_id = '' // will empty the value of global variable
+        console.log(global_in_value,global_list_id,'hhdhdhdh')
+       }
+      })
+     }
+ 
+
+function incoming_search_ajax(){
+    data = new FormData()
+    data.append('search',$('#myInput').val())
+
+    $.ajax({
+            method: 'POST',
+            headers: {
+                "X-CSRFToken": document.querySelector('[name=csrfmiddlewaretoken]').value,
+            },
+            url: "{% url 'incoming_search_ajax' %}",
+            data: data,
+            datatype:'json',
+            processData: false,
+            contentType: false,
+            // beforeSend: function() {
+            //     $('.loader__wrapper').css({"display":"block"})
+            // }, 
+            success: function (data) {
+              let x = data.all_data
+              console.log(data.all_data)
+              $('.table__data__wrapper').html(" ")
+              $('.searchtable').html(" ")
+                for (var i in x){
+                    $('.table__data__wrapper').append(`
+                    <span class="table__data clickable-row">
+                      <span class='lead_id' hidden >${x[i].id}</span>
+                      
+                      <span>${x[i].name}</span>
+                      <span>${x[i].mobile_no}</span>
+                      <span>${x[i].agreement_no}</span>
+                    </span>   
+                    `
+                    )
+                }
+            }
+        })
+  }
+
+
+
+  // update after incoming cms comes starts
+  function card1update(id){
+    // console.log(id,"Asdasasasdasdas")
+    data = new FormData()
+    data.append('id',id)
+    
+    $.ajax({
+      method: 'POST',
+      headers: {
+          "X-CSRFToken": document.querySelector('[name=csrfmiddlewaretoken]').value,
+      },
+      url: "{% url 'card1update' %}",
+      data: data,
+      datatype:'json',
+      processData: false,
+      contentType: false,
+      success: function(data){
+        let x=data.card1
+        // console.log(x,"its   jdhk")
+        for (var i in x){
+        $('input[name="lead_id"]').val(id)
+        console.log(id,'iddddddd')
+          console.log(Object.keys(x[i]).length ,"ASdsad")
+          for (key in x[i]){
+            // console.log(x[i][key],key)
+            $(`.${key}`).html(`${x[i][key]}`)
+          }
+        
+          additional_details_get()
+          get_additional_numbers()
+          historyajax()
+
+      }
+      }
+    })
+  }
+
+
+
+  
+//  incomming functionaltity ends
+ 
+ </script>

@@ -245,6 +245,14 @@ $(document).ready(function(){
         }
     })
 
+    $('select[name=apr_report_export]').change(function(){
+        let current_val = $(this).val()
+        console.log("hello")
+        $('input[name="username"]').val(current_val)
+        // if 
+        $('#apr_export_form').submit()
+    })
+
 
 })
 

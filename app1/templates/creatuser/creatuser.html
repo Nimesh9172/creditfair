@@ -1,0 +1,600 @@
+{% extends 'base.html'%}
+{% block content %}
+{% load static %}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+<style>
+  /* ////////////////////////  switch button  start  ///////////////////////////////// */
+.switch {
+  position: relative;
+  display: inline-block;
+  width:20px;
+  height:20px;
+}
+.switch input { 
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right:0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+  border-radius: 24px;
+  height: 14px;
+  width: 25px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 8px;
+  width: 8px;
+  left: 3px;
+  bottom: 3.5px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+  border-radius: 50%;
+}
+
+input:checked + .slider {
+  background-color: #047BD5;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #047BD5;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(15px);
+  -ms-transform: translateX(15px);
+  transform: translateX(11px);
+}
+
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+/* ////////////////////////  switch button  end  ///////////////////////////////// */
+  .detailsdiv{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 10px;
+  }
+  .detailsdiv > input{
+    height: 30px;
+    padding: 0 8px;
+    border-radius: 5px;
+    border: 1px solid #E0E0E0;
+    color: #818181;
+    background: #E0E0E0;
+  }
+  .detailsdiv > span{
+    color: #000000;
+    font-weight: 400;
+  }
+  #updateuserpopup{
+    background-color: #047BD5;
+  }
+  input[type=date]{
+    color: #818181;
+    font-size: 12px;
+  }
+
+#examplee tbody tr:nth-of-type(even){
+  background: #F6F6F6;
+}
+
+.sticky-top{
+  z-index: 50;
+}
+  .card1 input::placeholder{
+    color: #818181;
+    font-size: 12px;
+  }
+  #examplee>thead>tr>th {
+    background-color: #047BD5 !important;
+    color: #ffffff;
+    font-size: 11px;
+  }
+
+  tbody td{
+    font-size: 11px;
+  }
+ 
+  .form-check .form-check-input {
+  float: none !important;
+  
+}
+
+  .showsearch{
+  display: none !important;
+}
+
+.createuser{
+  width: calc(100% - 2rem);
+    margin: auto;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+    /* margin-left: 75px; */
+    margin-top: 2%;
+    height: auto;
+    background-color: #FFFFFF;
+    border-radius: 8px;
+    margin-top: 21px;
+}
+
+
+.mytitle{
+
+  width: calc(100% - 2rem);
+    border-radius: 8px 8px 8px 8px;
+    z-index: 103;
+    background: #fff;
+    color: #FFFFFF;
+  
+    margin: auto;
+  
+    overflow: auto;
+    height: calc(100vh - 14em);
+ 
+
+}
+
+
+.table>:not(:last-child)>:last-child>*{
+vertical-align: middle;
+}
+
+
+.table thead>tr>th {
+font-family: 'Roboto';
+font-weight: 600;
+font-size: 12px;
+letter-spacing: 1px;
+color: #FFF;
+vertical-align: bottom;
+border-bottom: 0px solid hsl(0, 0%, 87%);
+}
+
+.table tbody>tr>td{
+text-align: center;
+font-family: 'Roboto';
+font-weight: 400;
+font-size: 11px;
+padding-left: 0;
+padding-top: 14px;
+}
+
+
+.assititle{
+  width: calc(100% - 6rem);
+  /* height: 50px; */
+  /* background-color: #047BD5 !important; */
+  border-radius: 8px 8px 0px 0px;
+  z-index: 103;
+  background: #fff;
+  color: #FFFFFF;
+  margin-left: 76px;
+  margin-top: 21px;
+  overflow: auto;
+
+    height: calc(100vh - 5em);
+
+}
+.userinfo{
+  width: calc(100% - 5.5rem);
+ 
+margin-left: 74px;
+height: 424px;
+
+background-color: #FFFFFF;
+
+z-index: 102;
+}
+
+
+
+  .error__in{
+  display: flex;
+  font-size: 10px;
+  color: red;
+  display: none;
+  position: absolute;
+  margin-top: 70px;
+}
+
+
+ 
+.error__border{
+  border: 1px solid red !important;
+}
+  .pass_error{
+    font-size: 10px;
+    color: red;
+  }
+  .hide_element {
+    display: none;
+  }
+
+
+  .buttons___wrapper {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 13px;
+  }
+
+  .modal-backdrop {
+   background-color: rgba(114,116,121) !important;
+   opacity:0; transition:opacity .2s;
+}
+.modal-backdrop.in {
+    opacity: 0.5;
+}
+
+  .modal-content.modal_body_contents {
+    font-family: "roboto";
+    border-radius: 10px;
+    padding: 10px;
+  }
+
+  .dismiss__btn,
+  .Submit__btn {
+    border: 0;
+    padding: 6px 15px;
+    font-size: 12px;
+    border-radius: 6px;
+  }
+
+  .Submit__btn {
+    background-color: #1D5CFF;
+    color: #fff;
+  }
+
+  .modal__title {
+    text-align: center;
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 18px;
+    color: #1D5CFF;
+  }
+
+  .modal__message {
+    font-size: 12px;
+    text-align: center;
+    margin: 10px 0;
+    color: #919191;
+  }
+
+  .modal-content.modal_body_contents .modal-body {
+    font-size: 12px;
+  }
+
+  .dataTables_filter {
+    float: right;
+
+
+    /* &:after{
+    clear:both;
+  }  */
+  }
+
+  .dt-buttons a .glyphicon {
+    visibility: hidden;
+  }
+
+  .dt-buttons a:hover .glyphicon {
+    visibility: visible;
+  }
+
+  .card1 > label{
+    font-weight: 500;
+  }
+
+  .card1 >  input{
+    padding-left: 5px;
+  }
+
+  .checkcircle{
+  width: 126px;
+height: 35px;
+
+font-family: 'Roboto';
+font-style: normal;
+font-weight: 600;
+font-size: 24px;
+line-height: 144%;
+margin-left: 45px;
+
+
+color: #047BD5;
+
+  }
+.card1 > .select2-container .select2-selection--single{
+  height: 34px;
+  min-width: 218px;
+}
+
+.card1 > .select2-container--default .select2-selection--single .select2-selection__rendered{
+  line-height: 32px;
+}
+
+.card1 > .select2-container--default .select2-selection--single .select2-selection__arrow{
+  top: 4px;
+}
+</style>
+
+<form>
+  
+  {% csrf_token %}
+  <div class="createuser">
+   
+    <input type="hidden" name="n_idd" value="{{i.id}}" />
+
+    <span style="display: flex; margin: 6px;    flex-wrap: wrap; align-items: end;">
+      <span style="display: grid; margin: 10px; gap: 10px; " class="card1">
+        <label for="username" style="font-size: 13px;">Name</label>
+        <input type="text" name="username" id="username"
+          style="width: 220px;height: 34.8px; background: #F3F5F9;border: 1.2px solid #E0E0E0;border-radius: 4.8px;font-size:13px;" placeholder="Enter Name">
+        
+
+      </span>
+      <span style="display: grid;  margin:  10px; gap: 10px; " class="card1">
+        <label for="userpassword" style="font-size: 13px;" >Password</label>
+        <input type="text" name="userpassword" id="userpassword" class="userpasss" maxlength="6"
+          style="width: 220px;height: 34.8px; background: #F3F5F9;border: 1.2px solid #E0E0E0;border-radius: 4.8px;font-size:13px;" placeholder="Enter Password">
+          <span id="lblError" class="error__in">Minimum 6 charachter</span>
+        </span>
+      <span style="display: grid;  margin:  10px; gap: 10px;" class="card1">
+        <label for="usedatetime" style="font-size: 13px;">Join Date</label>
+        <input type="date" name="usedatetime" id="usedatetime"
+          style="width: 220px;height: 34.8px; background: #F3F5F9;border: 1.2px solid #E0E0E0;border-radius: 4.8px; ">
+          
+          
+      </span>
+      <!-- <span style="display: grid;  margin: 10px; gap: 10px;" class="card1">
+        <label for="userprocess" style="font-size: 13px;"> Process</label>
+        <select name="userprocess" id="userprocess"
+          style="width: 220px;height: 34.8px; background: #F3F5F9;border: 1.2px solid #E0E0E0;border-radius: 4.8px; ">
+          <option value="">select</option>
+          <option value="motor">Motor</option>
+          <option value="health">Health</option>
+          <option value="life">Life</option>
+
+        </select>
+
+      </span> -->
+      <span style="display: grid; margin: 10px;">
+        <button type="button" value="button" style="width: 134.53px;height: 34.81px; background: #047BD5;border-radius: 
+                    7.13999px; color: #ffffff;border: none; pointer-events: none;font-size: 12px;" id="cratebtn">Create</button>
+                    
+
+        <button type="button" value="button" style="width: 134.53px;height: 34.81px; background: #047BD5;border-radius: 
+                    7.13999px; color: #ffffff; display: none;" data-bs-toggle="modal" data-bs-target="#examplemodal2"
+        id="confirm"></button>
+
+        <button type="button" value="button" style="width: 134.53px;height: 34.81px; background: #047BD5;border-radius: 
+        7.13999px; color: #ffffff; display: none;" data-bs-toggle="modal" data-bs-target="#examplemodal3"
+        id="confirmcon3"></button>
+      </span>
+    </span>
+
+  </div>
+</form>
+<div class="mytitle" >
+  <table class="table table-borderless" id="examplee">
+
+    <thead class="sticky-top">
+      <tr style="text-align: center;">
+        <th style="text-align: center;">NAME</th>
+        <th style="text-align: center;">USERID</th>
+        <th style="text-align: center;">PASSWORD</th>
+        <th style="text-align: center;">JOIN DATE</th>
+       
+
+        <th style="width: 178px; position: relative;">
+          <div>
+            <input type="text" name="search" id="myInput" class="showsearch" placeholder="Name,User ID" style="width: 123px;
+            height: 33px;
+            margin-top: 8px;
+            display: flex;
+            position: absolute;
+            right: 60px;
+            top: 1px;
+            background: #F3F5F9;
+            border: 1px solid #E0E0E0;
+            border-radius: 8px;
+            text-align: center;" >
+            <img src="{% static 'images/Vectorsearch.svg' %}" class="searchshow" style="float:right; margin-right: 20px;" >
+          </div>
+        </th>
+</div>
+</tr>
+</thead>
+<tbody id="myTable" style="overflow-y: auto;">
+  {% for i in userdata %}
+  <tr style="height: 48px;">
+    <td >
+      <input type="text" maxlength="6" minlength="6" value="{{i.first_name}}" class="name__input hide_element"
+        style="width: 120px;
+        height: 28px;
+        background: #F3F5F9;
+        border: 1.2px solid #E0E0E0;
+        border-radius: 5px;"
+        name="editusername" id=""><span class="name_output">{{i.first_name}}</span></td>
+    <td  class="useriddd">{{i.username}}</td>
+    <td > 
+        <input type="text" name="edituserpass" maxlength="6" minlength="6"
+        style="width: 120px;
+        height: 28px;
+        background: #F3F5F9;
+        border: 1.2px solid #E0E0E0;
+        border-radius: 5px;"
+        id="" class="name__input hide_element" value="{{i.display_pass}}" >
+
+      <span class="name_output togglepass" style="display: none;" id="passwordd">{{i.display_pass}}</span> <span
+        class="showpass">******</span>
+      <i class="fas fa-eye-slash" id="eye" style="height: 15px; width: 15px;color: #047BD5; "></i>
+    </td>
+    <td >{{i.date_joined}}</td>
+    
+  
+
+    <td  style="text-align:end;">
+      <!-- <div style="margin: 0 12px 0 0;"> -->
+      <i class="fa-solid fa-circle-check" style="color: #047BD5; display: none; margin-right: 10px; font-size: 18px;"></i>
+      <button type="button" value="button" style=" display: none;" data-bs-toggle="modal" data-bs-target="#exampleModal"
+        id="confirm2"></button>
+
+      <img src="{% static 'images/drive_file_rename_outline.svg'%}" style="height: 15px; width: 15px; margin-right: 10px;" class="edituser">
+
+      <!-- <img src="{% static 'images/delete.svg'%}" style="height: 15px; width: 15px;" class="deleteuser"> -->
+
+      <div class="form-check form-switch" style="display: inline !important;">
+        <input type="hidden" class="list_id" name="n_id" value="{{i.id}}" />
+        <!-- <input class="form-check-input" type="checkbox" role="switch" {% if i.status == "1" %}checked{% endif %}
+          id="flexSwitchCheckDefault" style="width: 36px;
+          height: 18px;
+          margin-right: 20px;"> -->
+          <label class="switch">
+            <input type="checkbox" id="flexSwitchCheckDefault" {% if i.status == '1'  %}checked{% endif %}>
+            <span class="slider round"></span>
+          </label>
+        <input type="hidden" class="chk_status" value="{{i.status}}">
+        <label class="form-check-label" for="flexSwitchCheckDefault"></label>
+      </div>
+
+      </div>
+      <!-- </div> -->
+    </td>
+  </tr>
+  {% endfor %}
+</tbody>
+
+</table>
+
+
+
+
+<div>
+  <div class="modal fade" id="examplemodal3" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-sm">
+      <div class="modal-content modal_body_contents">
+  
+        <div class="modal-body">
+          <div class="modal__title" style="margin-top: -23px; font-size: 14px; text-align: initial;" > Edit</div>
+          <div class="modal__message">
+            <input type="hidden" name="" id="user_id" value="{{i.id}}">
+            <div class="detailsdiv">
+              <span>Username</span>
+              <input type="text" name="editusername" id="edit_user"  value="{{i.first_name}}">
+            </div>
+            <div class="detailsdiv">
+              <span>Password</span>
+              <input type="text" name="edituserpass" id="edit_pass" value="{{i.password}}" maxlength="6" >
+            </div>
+            <!-- <h6>User name: <input type="text" name="editusername" id="edit_user"  value="{{i.first_name}}"  ></h></span> -->
+            <!-- <h6>Password: <input type="text" name="edituserpass" id="edit_pass" value="{{i.password}}"maxlength="6" ></h6>
+            <span class="hide_element pass_error"></span> -->
+          </div>
+        </div>
+  
+        <button class="confirmcon3" id="confirmcon3" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal"
+          style="display: none;"></button>
+
+          <div class="buttons___wrapper">
+            <a href="" class="dismiss__btn" data-bs-dismiss="modal" style="margin-left: 120px; margin-top: -15px;">cancel</a> 
+            <!-- <button type="button" class="dismiss__btn" data-bs-dismiss="modal" style="margin-left: 50px;">cancel</button> -->
+            <button type="button" class="Submit__btn yesconf" id="updateuserpopup" data-bs-dismiss="modal" style="margin-top: -17px; margin-right: 40px;" >update</button>
+          </div>
+    
+      </div>
+    </div>
+  </div>
+  
+  </div>
+  
+
+  
+  
+
+
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-sm">
+    <div class="modal-content modal_body_contents">
+
+      <div class="modal-body">
+        <div class="modal__title">Details Confirmation</div>
+        <div class="modal__message">
+          Are you sure you want to Change <span class="exsist_field"></span> to <span class="userinput"></span>
+          <span><span style="display: none;" class="hideand">and your password</span> <span class="pass1"></span> <span
+              class="hideand" style="display: none;">To</span> <span class="pass2"></span></span> ?
+        </div>
+      </div>
+      <div class="buttons___wrapper"> <button type="button" class="dismiss__btn" data-bs-dismiss="modal">No</button>
+        <button type="button" class="Submit__btn yesconf" id="update_noww" data-bs-dismiss="modal">Yes</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+<div class="modal fade" id="examplemodal2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-sm">
+    <div class="modal-content modal_body_contents">
+
+      <div class="modal-body">
+        <div class="modal__title"> <img src="{% static 'images/check_circle.svg'%}" ></div>
+        <div class="modal__message">
+        <p class="checkcircle">User Added </p><h6>Name: <span class="username"> </span> </h6>
+          <h6>User Id: <span class="userid"></h6></span>
+          <h6>password:<span class="passwrd"></span></h6>
+        </div>
+      </div>
+
+      <button class="confirmcon2" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal"
+        style="display: none;"></button>
+    </div>
+  </div>
+</div>
+
+
+{% include 'creatuser/creatuser_ajax.html'  %}
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+
+<script>
+
+
+  $(document).ready(function () {
+    $("#myInput").on("keyup", function () {
+      var value = $(this).val().toLowerCase();
+      $("#myTable tr").filter(function () {
+        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        console.log(value,"hiiiiiiii")
+       
+      });
+    });
+  });
+</script>
+{% endblock%}

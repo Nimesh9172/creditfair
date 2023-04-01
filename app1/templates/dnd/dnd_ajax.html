@@ -60,5 +60,70 @@
       // Do something with the file (e.g., read its contents)
       }
   })
+
+
+    // messages templates
+    const success_msg =(msg) =>  `<div class="message_wrapper success_usid display-toggle">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none">
+                    <path d="M6.99992 13.6667C3.31792 13.6667 0.333252 10.682 0.333252 7.00001C0.333252 3.31801 3.31792 0.333344 6.99992 0.333344C10.6819 0.333344 13.6666 3.31801 13.6666 7.00001C13.6666 10.682 10.6819 13.6667 6.99992 13.6667ZM6.22925 9.99001L10.9426 5.27601L9.99992 4.33334L6.22925 8.10468L4.34325 6.21868L3.40058 7.16134L6.22925 9.99001Z" fill="#2BAC47"/>
+                    </svg> 
+                    <span class="message_text">${msg}</span>
+                </div>`
+
+const error_msg =  (msg) => {  return ` <div class="message_wrapper error_usid display-toggle">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none">
+                        <path d="M6.99992 13.6666C3.31792 13.6666 0.333252 10.682 0.333252 6.99998C0.333252 3.31798 3.31792 0.333313 6.99992 0.333313C10.6819 0.333313 13.6666 3.31798 13.6666 6.99998C13.6666 10.682 10.6819 13.6666 6.99992 13.6666ZM6.33325 8.99998V10.3333H7.66659V8.99998H6.33325ZM6.33325 3.66665V7.66665H7.66659V3.66665H6.33325Z" fill="#C83532"/>
+                    </svg>
+                    <span class="message_text error_msg">${msg}</span>
+                </div>`}
+    // messages templates
+
+
+// ajax for excel upload starts
+const upload_excelfile = () => {
+
+let data = new FormData()
+data.append('excel_file',$('input[name="excel_file"]')[0].files[0])
+
+$.ajax({
+    method: 'POST',
+    headers: {
+        "X-CSRFToken": document.querySelector('[name=csrfmiddlewaretoken]').value,
+    },
+    url: "/uploadajax_dnd",
+    data: data,
+    datatype:'json',
+    processData: false,
+    contentType: false,
+    beforeSend: function() {
+        $('.loader__wrapper').css({"display":"block"})
+    }, 
+    success: function (data) {
+        console.log(data)
+        if (data.status == 200){
+            showToast("Successfully Uploaded",1);
+        }else{
+            showToast("Something wrong in Excel File",0);
+        }
+        $('.loader__wrapper').css({"display":"none"})
+        setTimeout(function(){window.location.reload(1);},3000);
+
+    }
+})
+}
+
+// ajax for excel upload ends
+
+
   
+$(document).ready(function(){
+    $('#upload_btn').click(function(){
+        upload_excelfile()
+    })
+
+$('#format_select').on('change',function(){
+    window.location.href = '/media/formats/dnc_formate.csv'
+})
+})
+
   </script>

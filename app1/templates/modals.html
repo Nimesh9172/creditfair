@@ -1,0 +1,431 @@
+<style>
+    .modal-content.modal_body_contents{
+  font-family: "roboto";
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.dismiss__btn,.Submit__btn{
+  border: 0;
+  padding: 6px 15px;
+  font-size: 12px;
+  border-radius: 6px;
+}
+
+.Submit__btn{
+  background-color: #1D5CFF;
+  color: #fff;
+}
+
+.modal__title{
+  text-align: center;
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 18px;
+    color: #1D5CFF;
+}
+
+.modal__message{
+  font-size: 12px;
+  text-align: center;
+  margin: 10px 0;
+  color: #919191;
+}
+
+.modal-content.modal_body_contents .modal-body{
+  font-size: 12px;
+}
+
+.buttons___wrapper{
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 13px;
+}
+.popup {
+visibility: hidden;
+transition: visibility 0ms linear 0.3s;
+}
+.popup--visible {
+visibility: visible;
+transition: visibility 0ms;
+}
+.popup__background {
+position: fixed;
+top: 0;
+left: 0;
+z-index: 10000;
+height: 100%;
+width: 100%;
+background: rgba(0, 0, 0, 0.4);
+opacity: 0;
+transition: opacity 0.3s ease-in-out;
+}
+.popup--visible .popup__background {
+opacity: 1;
+}
+.button--success {
+  background: #1D5CFF;
+}
+.button--error {
+border: 1px solid #1D5CFF;
+background: #1D5CFF;
+border-radius: 5px;
+}
+.popup__content {
+position: fixed;
+  top: 50%;
+  left: 50%;
+  z-index: 10001;
+  min-width: 365px;
+  width: 227px;
+  height: 248px;
+  padding: 12px 47px;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  text-align: center;
+  -webkit-animation: hide-popup 0.3s forwards;
+  animation: hide-popup 0.3s forwards;
+/**
+* Popup types.
+*/
+}
+.popup--visible .popup__content {
+-webkit-animation: show-popup 0.3s forwards;
+        animation: show-popup 0.3s forwards;
+}
+.popup--icon .popup__content {
+padding-top: 97px;
+/**
+* Animations on opened popups.
+*
+* We need to prepend ".popup--visible" with no space to "&" to match the
+* an opened popup: ".popup--visible.popup--icon".
+*
+* Therefore we need the "at-root" function to break out of nesting as well as the
+* "selector-append" function to append parent selectors without space.
+*
+* Details:
+*  - https://css-tricks.com/the-sass-ampersand/
+*  - http://sass-lang.com/documentation/Sass/Script/Functions.html#selector_append-instance_method
+*/
+/**
+* Different popup icon styles
+*
+* E.g. selector for type question: ".popup--icon.-question" to match class="popup--icon -question"
+*
+* To have an easier selector in SCSS we use a little workaround and rearrange the selectors:
+*  ".-question.popup--icon" is also matching class="popup--icon -question"
+*/
+}
+.popup--icon .popup__content:before, .popup--icon .popup__content:after {
+position: absolute;
+  top: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: block;
+  height: 60px;
+  color: white;
+  width: 60px;
+}
+.popup--icon .popup__content:before {
+content: "";
+  border: 3px solid currentColor;
+  border-radius: 50%;
+  transform: translateX(-50%) scale(1, 0);
+  opacity: 0;
+  color: #00A912;
+  background: #00A912;
+}
+.popup--icon .popup__content:after {
+content: "\f00c";
+  line-height: 62px;
+  font-size: 30px;
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
+  /* color: #00A912; */
+  /* background: #00A912; */
+  transform: translateX(-50%) scale(0);
+  opacity: 0;
+}
+.-error.popup--icon .popup__content:before {
+border-color: red;
+}
+.-error.popup--icon .popup__content:after {
+font-family: "Font Awesome 5 Free";
+content: "\f3dd";
+font-weight: 900;
+transform: translateX(-50%) scale(1, 0);
+color: red;
+}
+.-question.popup--icon .popup__content:before {
+border-color: red;
+}
+.-question.popup--icon .popup__content:after {
+content: "\f095";
+color: red;
+font-family: "Font Awesome 6 Free";
+  font-weight: 900;
+  transform: rotate(136deg);
+  font-size: 43px;
+}
+.popup--visible.popup--icon .popup__content:before {
+-webkit-animation: show-icon-cirlce 0.3s forwards 0.15s;
+        animation: show-icon-cirlce 0.3s forwards 0.15s;
+}
+.popup--visible.popup--icon .popup__content:after {
+-webkit-animation: show-icon 0.3s forwards 0.3s;
+        animation: show-icon 0.3s forwards 0.3s;
+}
+.popup__content__title {
+  font-size: 20px;
+  font-weight: 100;
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 18px;
+  color: #00B84A;
+  margin-top: 4px;
+}
+.finalmsg {
+    font-size: 12px;
+    margin-bottom: 8px;
+    color: #909090;
+    font-weight: 400;
+}
+p button {
+    margin-bottom: 4px;
+    padding: 5px 15px;
+    font-size: 12px;
+    border: 1px solid #75B9E1;
+    border-radius: 3px;
+    background: #4FA0D0;
+    cursor: pointer;
+    font-family: inherit;
+    color: #fff;
+}
+/**
+* Popup animations.
+* Based on Sweet Alert: "https://t4t5.github.io/sweetalert/"
+*/
+@-webkit-keyframes show-popup {
+0% {
+  transform: translate(-50%, -50%) scale(0.7);
+  opacity: 0;
+}
+45% {
+  transform: translate(-50%, -50%) scale(1.05);
+  opacity: 1;
+}
+80% {
+  transform: translate(-50%, -50%) scale(0.95);
+}
+100% {
+  transform: translate(-50%, -50%) scale(1);
+}
+}
+@keyframes show-popup {
+0% {
+  transform: translate(-50%, -50%) scale(0.7);
+  opacity: 0;
+}
+45% {
+  transform: translate(-50%, -50%) scale(1.05);
+  opacity: 1;
+}
+80% {
+  transform: translate(-50%, -50%) scale(0.95);
+}
+100% {
+  transform: translate(-50%, -50%) scale(1);
+}
+}
+@-webkit-keyframes hide-popup {
+0% {
+  transform: translate(-50%, -50%) scale(1);
+  opacity: 1;
+}
+100% {
+  transform: translate(-50%, -50%) scale(0.5);
+  opacity: 0;
+}
+}
+@keyframes hide-popup {
+0% {
+  transform: translate(-50%, -50%) scale(1);
+  opacity: 1;
+}
+100% {
+  transform: translate(-50%, -50%) scale(0.5);
+  opacity: 0;
+}
+}
+/**
+* Icon animations.
+*/
+@-webkit-keyframes show-icon {
+0% {
+  transform: translateX(-50%) scale(0);
+  opacity: 0;
+}
+100% {
+  transform: translateX(-50%) scale(1);
+  opacity: 1;
+}
+}
+@keyframes show-icon {
+0% {
+  transform: translateX(-50%) scale(0);
+  opacity: 0;
+}
+100% {
+  transform: translateX(-50%) scale(1);
+  opacity: 1;
+}
+}
+@-webkit-keyframes show-icon-cirlce {
+0% {
+  transform: translateX(-50%) scale(1, 0);
+  opacity: 0;
+}
+100% {
+  transform: translateX(-50%) scale(1, 1);
+  opacity: 1;
+}
+}
+@keyframes show-icon-cirlce {
+0% {
+  transform: translateX(-50%) scale(1, 0);
+  opacity: 0;
+}
+100% {
+  transform: translateX(-50%) scale(1, 1);
+  opacity: 1;
+}
+}
+</style>
+
+{% load static  %}
+
+<!-- modal call Successfully connected starts -->
+<button type="button" class="btn btn-primary open-modal"  hidden data-bs-toggle="modal" data-bs-target="#additional_confirm_modal">
+    Launch demo modal
+    </button>
+    
+    <!-- Modal -->
+    <div class="modal fade" id="additional_confirm_modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-sm">
+          <div class="modal-content modal_body_contents">
+            <!-- <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Mobile Confirmation</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div> -->
+            <div class="modal-body">
+              <div class="modal__title">Mobile Confirmation</div>
+              <div class="modal__message">
+                Are you sure you want to add the <span class="mobconfirm"></span> with the ID {{agreement_id}}?
+              </div>
+            </div>
+             <div class="buttons___wrapper"> <button type="button" class="dismiss__btn" data-bs-dismiss="modal">No</button>
+              <button type="submit"  class="Submit__btn" id="submitme" data-bs-dismiss="modal">Yes</button></div>
+            <!-- <div class="modal-footer">
+            </div> -->
+          </div>
+        </div>
+      </div>
+    <!-- modal call Successfully connected ends -->
+    <!-- modal incomming add details starts -->
+<button type="button" class="btn btn-primary detail_conf_btn" data-bs-toggle="modal" data-bs-target="#adddetailsmodal" style="display: none;">
+  Launch demo modal
+</button>
+  
+  <!-- Modal -->
+  <div class="modal fade" id="adddetailsmodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-sm">
+      <div class="modal-content modal_body_contents">
+        <!-- <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Mobile Confirmation</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div> -->
+        <div class="modal-body">
+          <div class="modal__title confirm_for">Details Confirmation</div>
+          <div class="modal__message">
+            Are you sure you want to Change <span class="exsist_field"></span> to <span class="userinput"></span>?
+          </div>
+        </div>
+         <div class="buttons___wrapper"> <button type="button" class="dismiss__btn" data-bs-dismiss="modal">No</button>
+          <button type="button"  class="Submit__btn" id="update_now" data-bs-dismiss="modal">Yes</button></div>
+        <!-- <div class="modal-footer">
+        </div> -->
+      </div>
+    </div>
+  </div>
+<!-- modal incomming add details ends -->
+
+<!-- modal for searching the existing customer -->
+<div>
+  <div class="modal fade" id="searchcustomer" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content modal_body_contents search_lead_modal">
+  
+        <div class="modal-body">
+          <div class="modal__title" style="font-size: 14px; text-align: initial;" > Existing Customer</div>
+          <div style="display: flex;gap: 10px;">
+          <input type="text" id="myInput" class="searchinput" placeholder="search by name/mobile no">
+          <img src="{% static 'images/search_icon2.svg'%}" style="margin-top: 8px;" id="serach__icon2">
+          </div>
+          <div class="table__wrapper">
+              <span>Name</span>
+              <span>Contact no.</span>
+              <span>Patient Id</span>
+          </div>
+          <div class="table__data__wrapper">
+                 
+          </div>     
+
+        </div>
+  
+        <!-- <button class="confirmcon3" id="searchcustomer" type="button" data-bs-toggle="modal" data-bs-target="#searchcustomer"
+          style="display: none;"></button> -->
+
+      </div>
+    </div>
+  </div>
+  
+</div>
+
+<button class="btn btn-primary searchcust" type="button" value="button" hidden data-bs-toggle="modal" data-bs-target="#searchcustomer"
+id="confirmcon4"></button>
+<!-- modal for searching the existing customer -->
+<!--modal  submit Data successfully starts -->
+<div class="popup popup--icon -success js_success-popup">
+  <div class="popup__background"></div>
+  <div class="popup__content">
+    <h3 class="popup__content__title">
+     Response Recorded
+    </h1>
+    <p class="finalmsg">Your Disposition & Subdisposition Response has been Recorded Successfully</p>
+    <div class="pro_confirm">
+     
+    </div>
+    <p>
+      <button class="button button--success" id="finalsubbtn" type="submit" data-for="js_success-popup">OK</button>
+    </p>
+  </div>
+  </form>
+  </div>
+  <!--modal  submit Data successfully ends -->
+  <button class="button button--success bts2" type="button" data-for="js_success-popup" hidden></button>
+<script>
+  const addButtonTrigger = (el) => {
+      console.log("done")
+      el.addEventListener('click', () => {
+      const popupEl = document.querySelector(`.${el.dataset.for}`);
+      popupEl.classList.toggle('popup--visible');
+      console.log("its")
+    });
+};
+Array.from(document.querySelectorAll('button[data-for]')).forEach(addButtonTrigger);
+</script>

@@ -1,0 +1,440 @@
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+<script>
+    $('[type="radio"]').click(function () {
+
+if ($(this).attr('checked')) {
+
+    $(this).removeAttr('checked');
+    $(this).prop('checked',false);
+
+} else {
+
+    $(this).attr('checked', 'checked');
+
+}
+});
+
+var by_idd;  
+var inp1;  
+var inp2;  
+function save_details(name,password,joindate,process,Csr){
+
+mydata ={name:name,password:password,joindate:joindate,process:process,csrfmiddlewaretoken:Csr }
+
+$.ajax({
+    url:"/save",
+    method:"POST",
+    data: mydata,
+  
+    
+    success: function(data){
+        console.log(data.idd,"iddddddddddd")
+        
+    
+    $(".username").html(`${name}`)
+    $(".userid").html(`${data.idd}`)
+    $(".passwrd").html(`${password}`) 
+    $("#confirm").click()
+
+    // setTimeout(window.location.reload,3000)
+    window.setTimeout(function(){location.reload()},3000)
+        if(data.status==0){
+        console.log("unable to save form")
+        }
+    },
+});
+
+} 
+
+
+
+
+  $('.edituser').click(function(){
+    $("#confirmcon3").click()
+
+    // let idd=$(this).parent().prev().prev().prev().prev().prev().val()
+    let idd = $(this).parent().parent().find('.list_id').val()
+    let username=$(this).parent().parent().children().find('.name_output').html()
+    let userpass=$(this).parent().parent().children().next().next().find('.name_output').html()
+    by_idd = idd
+    inp1 = username
+    inp2 = userpass
+
+
+    console.log(idd,username,userpass,"before edittttt user")
+    $('#user_id').val(idd)
+    $('#edit_user').val(username)
+    $('#edit_pass').val(userpass)
+  
+
+   }) 
+
+
+
+
+   $('#updateuserpopup').click(function(){
+    console.log("you click update")
+   
+   console.log(by_idd,'iddd')
+   
+   popup_username = $('#edit_user').val()
+   popup_password=$("#edit_pass").val()
+   
+    console.log(by_idd,inp1,inp2 ,"hiiiiiiiiiiiiii")
+   
+     if(popup_password.length!=6 && popup_password!=""){
+
+       alert("pass must be 6 char")
+      // $('.pass_error').toggleClass('hide_element')
+      // $('.pass_error').html("Please enter 6 character password")
+ 
+     }
+  
+     $(this).parent().children().next(".edituser").css({display:"none"})
+ 
+  
+
+ 
+ 
+     
+     if ( inp1 != popup_username && inp2 != popup_password){
+         $("#confirm2").click()
+         $(".exsist_field").html(`${popup_username}`)
+         $(".userinput").html(`${inp1}`)
+         $(".pass1").html(`${inp2}`)
+         $(".pass2").html(`${popup_password}`)
+         $(".hideand").css({ display: "block"})
+         console.log(inp1, popup_username,inp2, popup_password," both else ifffffffff")
+     }
+   
+ 
+     else if (inp1 !=popup_username ){
+       $("#confirm2").click()
+        console.log(inp1, popup_username,"in ifffffffffff")
+       $(".exsist_field").html(`${inp1}`)
+       $(".userinput").html(`${popup_username}`)
+       console.log(inp1, popup_username,"in end ifffffffffff")
+         
+     }
+      
+     else if(inp2 != popup_password && inp2.length == popup_password.length){
+         $("#confirm2").click()
+         $(".exsist_field").html(`${inp2}`)
+         $(".userinput").html(`${popup_password}`)
+         console.log(inp2, popup_password,"else ifffffffff")
+ 
+     }else if (inp1 == popup_username && inp2 == popup_password){
+         alert("No changes found")
+     }
+      
+ 
+  
+    
+ 
+    })
+
+
+
+$("#cratebtn").click(function(){
+
+console.log("button clicked")
+   
+  
+  let name =$("#username").val()
+  let password=$("#userpassword").val()
+  let joindate=$("#usedatetime").val()
+  let process=$("#userprocess").val()
+  let Csr=$("input[name=csrfmiddlewaretoken").val()
+  console.log(password.length)
+  if (name !="" && password!="" && password.length == 6  && joindate!="" && process!=""){
+      console.log("you click")
+      
+   
+      console.log(name,password,joindate,process)
+      save_details(name,password,joindate,process,Csr);
+
+  }
+
+  
+  
+  
+});
+
+$('#update_noww').click(function(){
+console.log('updateuserrrrrrrrr click')
+let userid = $('#user_id').val()
+let username=$('#edit_user').val()
+let user_pass = $('#edit_pass').val()
+
+console.log(userid,username,user_pass,'in updateuser')
+
+
+
+
+updateuserd(userid,username,user_pass)
+
+    
+})
+
+
+function updateuserd(by_idd,inp1,inp2){
+  
+  fdata=new FormData()
+  
+
+  fdata.append('id',by_idd)
+  fdata.append('userrname', inp1)
+  fdata.append("userpass",inp2)
+
+  console.log(by_idd,inp1,inp2,"asasdasasassad")
+  $("#confirm2").click()
+  // if(userrname==userrname){
+      
+  // }
+
+
+  
+
+
+  $.ajax({
+    url: "/updateuser/",
+      type:'post',    
+      headers: {
+          "X-CSRFToken": document.querySelector('[name=csrfmiddlewaretoken]').value,
+          },
+      data:fdata,
+      processData: false,
+      contentType: false,
+      
+      
+      datatype:'json',
+      success: function (data) {
+    
+    
+        window.location.reload()
+  }
+  })
+}
+
+
+$(document).ready(function(){
+  console.log($("#user_id").val(),"yteststststst")
+  $('.header-title').html("Create User")
+})
+$(document).on("click","#flexSwitchCheckDefault",function(){
+  console.log("hiiiiiiiiiiiiiiiiiiii")
+  var lstid=$(this).parent().parent().find(".list_id").val()
+  console.log("switch",lstid)
+  if($(this).prop('checked')){
+     showstatus("1",lstid)
+  }else{
+    showstatus("0",lstid)
+  }
+
+})
+$("#userpassword").keyup(function(){
+console.log("testing")
+})
+
+function showstatus(an,lstid){
+  console.log("its",an,lstid,"from create user panel" )
+  var data=new FormData()
+        data.append("an",an)
+        data.append("lstid",lstid)
+        
+        $.ajax({
+            method: 'POST',
+            headers: {
+                "X-CSRFToken": document.querySelector('[name=csrfmiddlewaretoken]').value,
+            },
+            url: "/delete/",
+            data: data,
+            datatype:'json',
+            processData: false,
+            contentType: false,
+            
+            success: function (data) {
+                console.log(data)
+              }
+})
+}
+
+
+
+
+
+$(".dismiss__btn").click(function(){
+  console.log("Hhhhhhhhhhhhhhhhhhhhhhhh")
+
+  
+
+  $(".name_output").css({ display: "block"})
+  $('.name__input').css({display:"none"})
+  $(".fa-circle-check").css({ display: "none"})
+  $(".edituser").css({ display: "inline-block"})
+  
+})
+
+
+$('.fas').click(function(){
+     
+      if($(this).hasClass('fa-eye-slash')){
+         
+        $(this).removeClass('fa-eye-slash');
+        
+        $(this).addClass('fa-eye');
+        
+        let v_s = $(this).prev().prev("span").html()
+        console.log(v_s,"change")
+
+        // $(this).$(".showpass").html(`${v_s}`)
+        $(this).prev(".showpass").html(`${v_s}`)
+       
+        // console.log($(this).prev(".showpass").html(),'hiiiiiiiiii')
+
+        
+          
+      }else{
+       
+        $(this).removeClass('fa-eye');
+        
+        $(this).addClass('fa-eye-slash');  
+        
+        let spannn = $(this).prev("span").html()
+        console.log(spannn,'elsssssssss')
+        $(this).prev("span").html("******")
+        
+        $(this).prev(".name_output").html(`${spannn}`)
+       
+       
+
+       
+        
+      }
+  });
+
+
+
+
+
+
+$(".searchshow").click(function(){
+  console.log('hiiiiiiii search')
+  let sea=$(this).prev("input")
+  console.log(sea)
+  // (".showsearch").toggleClass()
+  sea.toggleClass('showsearch')
+
+})
+
+
+
+
+
+
+
+
+$(".checkuser").click(function(){
+
+let assign_id=$(this).parent().parent().prev("input").val()
+let secondary_value;
+if ($(this).prop('checked')){
+  secondary_value = $(this).val()
+}else{
+  secondary_value = ""
+}
+let fdata = new FormData()
+fdata.append("id",assign_id)
+fdata.append('secondary_value',secondary_value)
+
+    $.ajax({
+      method: 'POST',
+      headers: {
+          "X-CSRFToken": document.querySelector('[name=csrfmiddlewaretoken]').value,
+      },
+      url: "/savechacked/",
+      data: fdata,
+      datatype:'json',
+      processData: false,
+      contentType: false,
+      
+      success: function (data) {
+          console.log(data)
+        }
+})
+
+
+
+// $()
+
+// let liis=$(this).parent().parent().prev("input").val()
+// console.log(liis)
+// // let liis=$(this).parent().prev().prev().prev("input").val()
+// // $('input:checkbox[name=assign]:checked').each(function(){
+//   // let pro= $(this).val()
+//   let pro =$(this).parent().parent().children().find("input:checkbox:checked").val()
+
+
+//   console.log(liis,"process",pro,"data")
+
+
+//     data=new FormData()
+  
+
+//     data.append('liis',liis)
+//     data.append('pro', pro)
+
+
+  
+
+})
+
+
+// })
+
+$(".name__input").keyup(function(){
+var text_input = $(this).val()
+console.log('texttttttttttt',text_input)
+if (text_input.length < 6){
+  console.log('length is less than six')
+}
+})
+
+$(".userpasss").keyup(function(){
+console.log("hi")
+
+var pass = $(this).val()
+$("input[name=userpassword]").addClass("error__border")
+$(".error__in").css({ display: "block"})
+$("#cratebtn").css('pointer-events','none')
+var lblError =$(this).next("span").html()
+
+
+
+console.log(pass,lblError)
+
+if (pass.length == 6) {
+
+$(".error__in").css({ display: "none"})
+$("input[name=userpassword]").removeClass("error__border")
+$("#cratebtn").css('pointer-events','')
+
+}
+else if(pass.length == 0){
+$(".error__in").css({ display: "none"})
+// $("input[name=userpassword]").removeClass("error__border")
+}
+else{
+// $(".error__in").css({ display: "none"})
+}
+
+});
+
+
+
+
+
+
+</script>

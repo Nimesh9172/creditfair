@@ -1,0 +1,84 @@
+{% extends 'base.html'  %}
+
+{% block content  %}
+{% load static  %}
+{% csrf_token  %}
+
+<main class="main-reminder main-ots">
+
+  <div class="sicdiv">
+    <input type="text" class="osd" placeholder="Search">
+    <img  src="{% static 'images/Vector.png'%}" class="searchicon" alt="" >
+    {% include 'component/exporttable.html'  %}
+  </div>
+  <div class="overcarddiv">
+    <a href="/lead_behaviour" class="linkme" style="text-decoration: none;">
+    <div class="overcard">
+        <img  src="{% static 'images/nfolder.svg'%}" class="cimg" alt="" >
+        <span class="crdhead">Lead PTP Behaviour</span>
+    </div>
+    </a>
+    <a href="/ptp_status" class="linkme" style="text-decoration: none;">
+    <div class="overcard">
+        <img  src="{% static 'images/npaid.svg'%}" class="cimg" alt="" >
+        <span class="crdhead" >PTP Status</span>
+    </div>
+  </a>
+    <a href="/paid_status" class="linkme" style="text-decoration: none;">
+    <div class="overcard clicked">
+        <img  src="{% static 'images/nptp.svg'%}" class="cimg" alt=""  style="filter:brightness(100)" >
+        <span class="crdhead" style="color: #FFFFFF;">Paid Status</span>
+    </div>
+    </a>
+    <a href="/dispo_status" class="linkme" style="text-decoration: none;">
+    <div class="overcard">
+        <img  src="{% static 'images/ngrp.svg'%}" class="cimg" alt="" >
+        <span class="crdhead">Disposition Status</span>
+    </div>
+    </a>
+    <a class="overcard" href="/non_attempted" style="text-decoration: none;">
+        <img  src="{% static 'images/nnc.svg'%}" class="cimg" alt="" >
+        <spa class="crdhead">Non Attempted</span>
+    </a>
+
+  </div>
+
+  <div class="table-wrapper table-responsive" style="margin: auto;margin-top: 12px;">
+    <table id="exportthis"  class="table table-borderless  rounded" style="width: 100%;">
+      <thead class="sticky-top">
+        <tr>
+          <th  scope="col">Agent Name</th>
+          <th  scope="col">Today's Paid</th>
+          <th  scope="col">Week's Paid</th>
+          <th  scope="col">Month's Paid</th>
+          <th  scope="col">Overall Amount(Amount)</th>
+          <th  scope="col">Overall Amount(Paid)</th>
+          <th  scope="col">Paid % on Amount</th>
+        </tr>
+      </thead>
+      <tbody style="font-size: 12px;font-style:'Roboto';">
+        {% for i,j in d.items %}
+        <tr>
+          <td>{{i}}</td>
+          <td>{{j.td}}</td>
+          <td>{{j.tw}}</td>
+          <td>{{j.tm}}</td>
+          <td>{% if j.tos == None %}0{% else %}{{j.tos}}{% endif %}</td>
+          <td>{% if j.ptp == None %}0{% else %}{{j.ptp}}{% endif %}</td>
+          <td>{{j.paidontos}}%</td>
+
+        </tr>
+    {% endfor %}
+        
+      </tbody>
+    </table>
+  </div>
+
+</main>
+
+<script>
+  $(document).ready(function(){
+    $('.header-title').html("Team Overall Report")
+  })
+</script>
+{% endblock content  %}

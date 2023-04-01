@@ -43,28 +43,25 @@
             <table class="table table-borderless rounded">
               <thead class="sticky-top">
                 <tr>
-                    <th scope="col">List id</th>
                     <th scope="col">Entry date</th>
-                    <th scope="col">List name</th>
                     <th scope="col">File</th>
                     <th scope="col">Count</th>
-                    <th scope="col">Status</th>
+                    <th scope="col">Uploaded By</th>
                   </tr>
               </thead>
               <tbody>  
                   {% for i in obj  %}
                         <tr>
-                            <td class="listid">{{i.list_id}}</td>
-                            <td>{{i.added_date_time}}</td>
-                            <td>{{i.list_name}}</td>
-                            <td>{{i.excel_file}}</td>
+                            <td>{{i.entry}}</td>
+                            <td>{{i.file}}</td>
                             <td>{{i.count}}</td>
-                            <td>
+                            <td>{{i.uploaded_by}}</td>
+                            <!-- <td>
                                 <label class="switch">
                                     <input type="checkbox" {% if i.status == '1'  %}checked{% endif %}>
                                     <span class="slider round"></span>
                                 </label>
-                            </td>
+                            </td> -->
                         </tr>
                     {% endfor  %}
                 </tbody>

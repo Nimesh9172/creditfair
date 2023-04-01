@@ -1,0 +1,366 @@
+{% extends 'base.html'  %}
+
+{% block content  %}
+{% load static  %}
+{% csrf_token  %}
+
+<style>
+    
+    .select2-container--default .select2-selection--single {
+    box-shadow: none;
+    background: #E4F3FF;
+    border: 0;
+
+}
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+  color: #047BD5;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__arrow b {
+    left: 89%;
+}
+
+.campaignq{
+    background: #E4F3FF;
+    border: none;
+    color: #047BD5;
+}
+
+</style>
+<input type="hidden" class="user_level"  value="{{request.user.user_level}}">
+<main class="main-reminder main-ots">
+         <div class="sicdiv">
+            <input type="text" class="osd" placeholder="Search">
+            <img  src="{% static 'images/Vector.png'%}" class="searchicon" alt="" >
+            <div>{% include 'component/exporttable.html'  %}</div>
+        </div>
+        <div class="overcarddiv">
+            <div class="overcard clicked">
+                <img  src="{% static 'images/nfolder.svg'%}" class="cimg" alt="" style="filter:brightness(100)">
+                 <span class="crdhead" style="color: #FFFFFF;">Lead PTP Behaviour</span>
+            </div>
+            <a href="/ptp_status" class="linkme" style="text-decoration: none;">
+            <div class="overcard">
+                <img  src="{% static 'images/npaid.svg'%}" class="cimg" alt="" >
+                <span class="crdhead">PTP Status</span>
+            </div>
+            </a>
+            <a href="/paid_status" class="linkme" style="text-decoration: none;">
+            <div class="overcard">
+                <img  src="{% static 'images/nptp.svg'%}" class="cimg" alt="" >
+                <span class="crdhead">Paid Status</span>
+            </div>
+            </a>
+            <a href="/dispo_status" class="linkme" style="text-decoration: none;">
+            <div class="overcard">
+                <img  src="{% static 'images/ngrp.svg'%}" class="cimg" alt="" >
+                <span class="crdhead">Disposition Status</span>
+            </div>
+            </a>
+            <a class="overcard" href="/non_attempted" style="text-decoration: none;">
+                <img  src="{% static 'images/nnc.svg'%}" class="cimg" alt="" >
+                <spa class="crdhead">Non Attempted</span>
+            </a>
+
+        </div>
+
+        <div class="table-wrapper table-responsive" style="margin: auto;margin-top: 15px;">
+            <table id="exportthis"  class="table table-borderless  rounded">
+              <thead class="sticky-top">
+                <tr>
+                  <th>id</th>
+                  <th scope="col"> {% if request.user.user_level == 9 %}
+                    <div class="agentname_th"  style="width: 100px;margin: auto;">
+                      <select class="campaignq agn" name="ptpagent">
+                        <option value="">Agent Name</option>
+                        <option value="all">ALL</option>
+                      {% for i in u %}
+                        <option value="{{i.username}}">{{i.username}}</option>
+                        {% endfor %}
+                      </select>
+                     </div>
+                     {% else %}
+                     Agent name
+                     {% endif %}
+                     <span class="agentname_th2 d-none">Agent name</span>
+                    </th>
+                  <th scope="col">LAN</th>
+                  <th scope="col"><div class="bankname_th1"  style="width: 100px;margin: auto;">
+                    <select class="campaignq agn" name="bankname">
+                      <option value="">Bank</option>
+                      <option value="all">ALL</option>
+                    {% for items in bnk %}
+                      <option value="{{items}}">{{items}}</option>
+                      {% endfor %}
+                    </select>
+                   </div>
+                   <span class="bankname_th2 d-none">Bank</span>
+                  </th>
+                  <th  scope="col">Amount</th>
+                  <th  scope="col">Status</th>
+                  <th  scope="col">PTP Amount</th>
+                  <th  scope="col">Date</th>
+                  <th  scope="col">Next Status</th>
+                  <th  scope="col">Next Date</th>
+                </tr>
+              </thead>
+              <tbody class="tablebody">
+              </tbody>
+                </table>
+    </div>
+</main>
+
+<script>
+  // table design starts
+   function ptp(){
+      var data=new FormData()
+      data.append("ptpagent",$("select[name=ptpagent]").val())
+      data.append("bankname",$("select[name=bankname]").val())
+      data.append("statusn",$("select[name=statusn]").val())
+      $.ajax({
+          method: 'POST',
+          headers: {
+              "X-CSRFToken": document.querySelector('[name=csrfmiddlewaretoken]').value,
+          },
+          url: "{% url 'ptpajax' %}",
+          data: data,
+          datatype:'json',
+          processData: false,
+          contentType: false,
+          success: function (data) {
+            $(".tablebody").html(" ")
+            let x = data.b
+            console.log(data.msg,"test")
+            console.log("s",x)
+            for (var i=0;i<x.length;i++){
+               let dtFormat = new Intl.DateTimeFormat('en-US',{month:'short',day:'2-digit',year:'numeric'})
+                console.log("ygqydfqudfwq",x[i].first_date)
+                let d = x[i].first_date
+                d = new Date(d);
+                d = dtFormat.format(d)
+
+                let d2 = x[i].next_contact_datetime
+                if (d2 != null){
+                  d2 = new Date(d2);
+                  d2 = dtFormat.format(d2)
+                }
+
+              console.log(x[i].id)
+              $('tbody').append(`
+                <tr class="dashhover">
+                  <td>${x[i].id}</td>  
+                  <td>${x[i].callerid}</td>  
+                  <td>${x[i].agreement_no}</td>  
+                  <td>${x[i].lender_name}</td>  
+                  <td>${x[i].main_amount}</td>  
+                  <td>${x[i].first_status}</td>  
+                  <td>${x[i].ptp_amount}</td>  
+                  <td>${d}</td>  
+                  <td class="nxtstat">${x[i].next_status}</td>  
+                  <td class="nxtdt">${d2}</td>  
+                  </tr>
+                  `)
+                }
+
+            // for (var i=0;i){
+
+            // }
+
+            // for (i=0;i<x.length;i++){
+            //   html = "" 
+            //   for (j=0;j<x[i].length;j++){
+            //     let dtFormat = new Intl.DateTimeFormat('en-US',{
+            //                       month:'short',
+            //                       day:'2-digit',
+            //                       year:'numeric',
+                                 
+            //                   })
+
+            //       let d = x[i][j][0].callbacktime
+            //       d = new Date(d);
+            //       d = dtFormat.format(d)
+            //     if (j==0){
+                 
+            //       html += (` <tr class="dashhover">
+            //          <td>${x[i][j][0].personalForkey_id}</td>  
+            //          <td>${x[i][j][0].caller_name}</td>  
+            //          <td>${x[i][j][0].bank_loan_accountno}</td>
+            //          <td>${x[i][j][0].bankname}</td>    
+            //          <td>${x[i][j][0].TOS}</td>  
+            //          <td class="subdispo">${x[i][j][0].sub_dispossitions}</td>  
+            //          <td>${x[i][j][0].amount}</td>  
+            //          <td>${d}</td>
+            //       `)
+            //     }else{
+            //       html += (`<td>${x[i][j][0].sub_dispossitions}</td><td>${d}</td>`)
+            //     }
+                
+                
+                
+               
+            // }
+            
+
+            // for (i=0;i<x.length;i++){
+            //   for (j=0;j<x[i].length;j++){
+            //     if (j == 0){
+            //       let dtFormat = new Intl.DateTimeFormat('en-US',{
+            //                       month:'short',
+            //                       day:'2-digit',
+            //                       year:'numeric',
+                                 
+            //                   })
+
+            //       let d = x[i][j].callbacktime
+            //       d = new Date(d);
+            //       d = dtFormat.format(d)
+
+            //       output += (`
+            //     <tr class="dashhover">
+            //       <td>${x[i][j].personalForkey_id}</td>  
+          
+            //     <td>${x[i][j].caller_name}</td>  
+               
+            //     <td>${x[i][j].bank_loan_accountno}</td>
+            //     <td>${x[i][j].bankname}</td>    
+            //     <td>${x[i][j].TOS}</td>  
+            //     <td class="subdispo">${x[i][j].sub_dispossitions}</td>  
+            //     <td>${x[i][j].amount}</td>  
+            //     <td>${d}</td>  
+            //     <td class='modes'>${x[i][j].mode}</td>  
+
+            // `)
+            //     }
+            //     else{
+            //       let dtFormat = new Intl.DateTimeFormat('en-US',{
+            //                       month:'short',
+            //                       day:'2-digit',
+            //                       year:'numeric',
+                                 
+            //                   })
+
+            //       let d = x[i][j].callbacktime
+            //       d = new Date(d);
+            //       d = dtFormat.format(d)
+            //       output += (`
+                  
+ 
+            //       <td class='sub'>${x[i][j].sub_dispossitions}</td>  
+            //       <td>${d}</td>  
+            //       <td>${x[i][j].personalForkey_id}</td> 
+            //       `)
+            //     }
+
+            //   }
+            // }
+            // $('.tablebody').html(output)
+              $(".nxtstat").each(function(){
+                let next_stat = $(this).text()
+                if( next_stat != "Broken Promise" || next_stat == "null")  {
+                  $(this).html(" ")
+                  $(this).next().html("")
+                }
+              })
+            
+
+          }
+          
+      })
+  }
+
+      $(document).ready(function () {
+
+        if ($('.user_level').val() == "9"){
+          $('.header-title').html("Team Overall Report")
+        }else {
+          $('.header-title').html("Overall Report")
+        }
+
+        ptp()
+        
+        $("select[name=ptpagent]").change(function(){
+          console.log("change",$("select[name=ptpagent]").val())
+          ptp()
+      })
+
+      $("select[name=bankname]").change(function(){
+          console.log("change",$("select[name=bankname]").val())
+          ptp()
+      })
+
+      $("select[name=statusn]").change(function(){
+        console.log("status",$("select[name=statusn]").val())
+        ptp()
+      })
+        
+
+    
+      $('.dashsearch').keyup(function() {
+          search(this.value);
+      });
+    
+  
+
+
+
+$('.show').click(function() {
+$('.logdiv').toggle('slow');  
+console.log("hiii")      
+});
+
+$(".ptp").click(function(){
+console.log("ptp")
+$(".ptp").addClass("clicked")
+$("#paid").removeClass("clicked")
+$("#ptps").removeClass("clicked")
+$("#ptpsc").removeClass("clicked")
+$("#dispostatus").removeClass("clicked")
+$("#notattempt").removeClass("clicked")
+})
+});
+$("#paid").click(function(){
+$("#paid").addClass("clicked")
+$("#ptp").removeClass("clicked")
+$("#ptps").removeClass("clicked")
+$("#ptpsc").removeClass("clicked")
+$("#dispostatus").removeClass("clicked")
+$("#notattempt").removeClass("clicked")
+});
+$("#ptps").click(function(){
+$("#ptps").addClass("clicked")
+$("#ptp").removeClass("clicked")
+$("#paid").removeClass("clicked")
+$("#ptpsc").removeClass("clicked")
+$("#dispostatus").removeClass("clicked")
+$("#notattempt").removeClass("clicked")
+});
+$("#ptpsc").click(function(){
+$("#ptpsc").addClass("clicked")
+$("#ptp").removeClass("clicked")
+$("#ptps").removeClass("clicked")
+$("#paid").removeClass("clicked")
+$("#dispostatus").removeClass("clicked")
+$("#notattempt").removeClass("clicked")
+});
+$("#dispostatus").click(function(){
+$("#dispostatus").addClass("clicked")
+$("#ptp").removeClass("clicked")
+$("#ptps").removeClass("clicked")
+$("#ptpsc").removeClass("clicked")
+$("#paid").removeClass("clicked")
+$("#notattempt").removeClass("clicked")
+});
+$("#notattempt").click(function(){
+$("#notattempt").addClass("clicked")
+$("#ptp").removeClass("clicked")
+$("#ptps").removeClass("clicked")
+$("#ptpsc").removeClass("clicked")
+$("#dispostatus").removeClass("clicked")
+$("#paid").removeClass("clicked")
+})
+
+
+
+</script>
+
+{% endblock content  %}

@@ -2,208 +2,1234 @@
 {% load static %}
 {% block content %}
 
-
 <style>
-.maindiv{
-  display: grid;
-  grid-template-columns: 1.7fr 0.9fr 1fr;
-  overflow-y: hidden;
-  height: 90vh;
+.main-contents-card {
+    height: 100%;
+}
+.maincard{
+    display: grid;
+    grid-template-columns: 3fr 2fr 2fr;
+    height: calc(100vh - 67px);
+    margin: 10px;
+    gap: 10px;
+
+}
+.main-first-div{
+    display: flex;
+    width: 100%;
+    gap: 10px;
 }
 
-
-
-.four_cards{
-  display: grid;
-    flex-wrap: wrap;
-    grid-template-columns: 1fr 1fr;
-    gap: 15px;
-    padding: 15px;
+.main-sec-div{
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
 }
-
-.div1 > .maingraph{
-  height: 43%;
-    padding: 15px;
-}
-
-.div1 > .maingraph > img{
-  width: 99%;
-  height: 100%;
-}
-
-
-.cards{
-  width: 297px;
-    height: 125px;
-    background-color: #E4E8F2 !important;
+.mcard{
+    width: 49%;
+    height: 100%;
+    background: #FFFFFF;
     border-radius: 8px;
 }
-
-.cards > img{
-  width: 100%;
-  height: 100%;
+.c_heading{
+    width: 100%;
+    height: 25px;
+    color: #FFFFFF;
+    padding-left: 12px;
+    background: #047BD5;
+    border-radius: 8px 8px 0px 0px;
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
 }
-
-.div2{
-  height: 84vh;
+.card_parent_wrapper{
     display: grid;
-    /* grid-template-columns: 1fr; */
-    margin-top: 15px;
-}
-
-
-
-.graph > img{
-  height: 234px;
-}
-
-
-
-.div3{
-  height: 88vh;
-}
-
-
-
-.div3 > img{
-  height: calc(100vh - 90px);
-  margin-top: 15px;
-}
-
-.three_card{
-  display: flex;
-}
-
-
-@media only screen and (max-width: 1029px) {
-  .maindiv {
     grid-template-columns: 1fr 1fr;
-    overflow-y: auto;
-  }
-  .div3{
-    margin-left: 12px;
-  }
+    gap: 6px;
+    height: calc(100% - 28px);
+    margin-top: 0;   
+}
+.card_content_title{
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 13.0518px;
 }
 
-@media only screen and (max-width: 962px) {
-  .maindiv {
-    grid-template-columns: 1fr;
-  }
-  .div2{
-    margin-left: 12px;
-  }
-  .div3{
-    margin-left: 12px;
-  }
+.card_content_detail{
+    font-family: 'Roboto';
+    font-weight: 600;
+    font-size: 21.1987px;
+    text-align: center;
+    color: #3B3B3E;
+}
+.card_content_wrapper{
+    display: grid;
+    align-items: center;
+    justify-content: center;
+}
+.card_parent_wrapper2{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+    height: calc(100% - 28px);
+    margin-top: 0;
 }
 
-
-@media only screen and (max-width: 724px) {
-  .maindiv {
-    grid-template-columns: 1fr;
-  }
-  .div2{
-    margin-left: 12px;
-  }
-  .div3{
-    margin-left: 12px;
-  }
-  .div1 > .maingraph{
-    width: calc(100vw - 73px);
-    height: 24%;
-  }
-  .four_cards{
+.dispo_main_div{
+    width: 100%;
+    height: 100%;
+    background: #FFFFFF;
+    border-radius: 8px;
+}
+.top_dispo_div{
+    text-align: center;
+}
+.top_two_div_wrapper{
     display: flex;
+    gap: 10px;
+}
+.div_wrapper{
+    display: grid;
+    gap: 12px;
+    width: 100%;
+}
+
+.call_div_wrapper{
+    width: 100%;
+    height:85%;
+    background: #FFFFFF;
+    border-radius: 5.02608px;
+
+}
+.top_dispo_wrapper{
+    display: flex;
+    width: 100%;
+    height: 100%;
+    justify-content: space-around;
+    margin-top: 14px;
+}
+.chart1,.chart2,.chart3,.chart4,.chart5{
+    position: relative;
+    display: grid;
+    justify-content: center;
+}
+.innerper{
+    position: absolute;
+    bottom: 50%;
+    transform: translate(50%,50%);
+    right: 50%;
+    border-radius: 50%;
+    font-size: 12px;
+    padding: 5px 4px;
+    color: #fff;
+}
+.top_dispo_div_title{
+    font-family: 'Roboto';
+font-style: normal;
+font-weight: 400;
+font-size: 13.0518px;
+line-height: 15px;
+
+color: #292B3F;
+
+}
+.doughnut_chart_div{
+    background: #FFFFFF;
+    border-radius: 8.69173px;
+    height: 47%;
+    position: relative;
+}
+.dougnut_frame{
+    height: calc(100% - 25px);
+}
+.overview_div_wrapper{
+    height: 100%;
+    background: #FFFFFF;
+    overflow-y: scroll;
+    border-radius: 10px;
+}
+.overview_div{
+    width: 100%;
+    height: 14%;
+    position: relative;
+    
+}
+.aht_div , .not_ready_div , .tos_div ,.wrap_div{
+    background: #F1F1F1;
+}
+.card_overview_wrapper{
+    display: grid;
+    grid-template-columns: .7fr .7fr .7fr;
+    gap: 6px;
+
+}
+.overview_first_title{
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 12.4405px;
+    line-height: 15px;
+    color: #047BD5;
+}
+.overview_first_detail{
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 12px;
+    line-height: 15px;
+    color: #FF8878;
+}
+.overview_title{
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 8.54494px;
+    line-height: 10px;
+    color: #292B3F;
+
+}
+.overview_details{
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 600;
+    font-size:16px;
+    line-height: 25px;
+    color: #292B3F;
+}
+.over_two_details{
+    display: grid;
+    align-items: center;
+    justify-content: center;
+    margin-top: 10px;
+}
+.whole_overview{
+    height: 89vh;
+    background: #FFFFFF;
+    border-radius: 10px 10px 10px 10px;
+}
+
+/* progressbar styling starts */
+
+.progress_container {
+  max-width: 1140px;
+  width: calc(100% - 2rem);
+  padding: 0 1rem;
+  margin: 0 auto;
+}
+.progress {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
+  justify-content: center;
+}
+.progress_item {
+    margin: 0;
+    position: absolute;
+    bottom: 15px;
+    left: 16px;
+}
+.progress_title {
+  color: #fff;
+  padding: 1rem 0;
+}
+.progress_bar {
+  position: relative;
+  width: 197px;
+  height: 8px;
+  border-radius: 2rem;
+}
+@media (max-width: 768px) {
+  .progress_bar {
+    width: 12rem;
+  }
+}
+@media (max-width: 440px) {
+  .progress_bar {
+    width: 200px;
+  }
+}
+@media (max-width: 340px) {
+  .progress_bar {
+    width: 200px;
+  }
+}
+.bar {
+  border-radius: inherit;
+  background: linear-gradient(90deg, #5b4dda, #6546ee, #575afc);
+  position: absolute;
+  transition: width 1.5s cubic-bezier(0.1, 0.42, 0.85, 1);
+  width: 0;
+  height: 100%;
+  left: 0;
+
+}
+.bar::after {
+
+  content: attr(data-text);
+    position: absolute;
+    left: 196px;
+    top: -1rem;
+    font-weight: bold;
+    }
+  
+
+@keyframes text {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
   }
 }
 
+
+
+/* progressbar styling ends */
+
+/* Agent score board styling starts */
+.agent_score_div{
+    background: #FFFFFF;
+    border-radius: 8.69173px;
+    height:44%;
+}
+
+.wrapper{
+    position: relative; 
+    height: calc(100% - 25px);
+ 
+}
+.high_score_agent{
+    top: 47px;
+    position: absolute;
+    left: 74px;
+    font-family: 'Roboto';
+    font-size: 13px;
+}
+.low_score_agent{
+    position: absolute;
+    right: 72px;
+    bottom: 69px;
+    font-size: 13px;
+}
+.profile_div{
+    height: 100% ;
+    width: 100%;
+}
+
+.pro_div{
+    width: 80%;
+    height: 80%;
+    margin: auto;
+    text-align: center;
+}
+.pro_title{
+    font-family: "Roboto";
+    font-weight: 600;
+    font-size: 21.1987px;
+    text-align: center;
+    color: #3B3B3E;
+
+}
+.profile_img{
+    margin-top: 5%;
+    width: 85%;
+    height: 100%;
+}
+#myChart5{
+    position: relative;
+    box-sizing: border-box;
+    height: calc(100% - 25px) !important;
+    width: 100% !important;
+}
+
+#myChart2{
+    display: block; 
+    box-sizing: border-box;
+    height: calc(100% - 25px ) !important ;
+    width: 100% !important; 
+}
+
+#myChart{
+    display: block;
+    box-sizing: border-box;
+    height: 100%;
+    margin: auto;
+    width: 100%;
+}
+/* Agent score board styling ends */
 
 </style>
+<div class="maincard">
+    <div class="main-first-div" style="">
+       <div class="div_wrapper">
+        <div class="top_two_div_wrapper">
+            <div class="mcard">
+                <header class="c_heading">Total Calls</header>
+                 <div class="card_parent_wrapper">
+                    <div class="card_content_wrapper">
+                        <div class="card_content_title">upload</div>
+                        <div class="card_content_detail" id="up_val"></div>
+                     </div>
+                     <div class="card_content_wrapper">
+                        <div class="card_content_title">Available</div>
+                        <div class="card_content_detail" id="avail_val"></div>
+                     </div>
+                     <div class="card_content_wrapper">
+                        <div class="card_content_title">Contacted</div>
+                        <div class="card_content_detail" id="con_val"></div>
+                     </div>
+                     <div class="card_content_wrapper">
+                        <div class="card_content_title">Non-Contacted</div>
+                        <div class="card_content_detail" id="noncon_val"></div>
+                     </div>
+                 </div>
+               </div>
+               <div class="mcard">
+                <header class="c_heading">Agents Available</header>
+                <div class="card_parent_wrapper card_parent_wrapper2">
+                    <div class="card_content_wrapper">
+                        <div class="card_content_title">Total</div>
+                        <div class="card_content_detail" id="total_agn"></div>
+                     </div>
+                     <div class="card_content_wrapper">
+                        <div class="card_content_title">Logged in</div>
+                        <div class="card_content_detail" id="login_agn"></div>
+                     </div>
+                     <div class="card_content_wrapper">
+                        <div class="card_content_title">On call</div>
+                        <div class="card_content_detail" id="on_call"></div>
+                     </div>
+                     <div class="card_content_wrapper">
+                        <div class="card_content_title">Paused</div>
+                        <div class="card_content_detail" id="on_paused"></div>
+                     </div>
+                 </div>       
+                </div>
+            </div>
+            <div class="dispo_main_div">
+             <header class="c_heading">Top 5 Disposition</header>
+                <div class="top_dispo_wrapper">
+                    <div class="top_dispo_div" id="test_div">
+                        
+                      </div>
+                      
+                     <div class="top_dispo_div" id="test_div2">
+                       
+                      </div>
 
-{% csrf_token %}
+                     <div class="top_dispo_div" id="test_div3">
+                         
+                      </div>
 
-{% if request.user.user_level == 9 %}
+                     <div class="top_dispo_div" id="test_div4">
+                       
+                      </div>
 
+                     <div class="top_dispo_div" id="test_div5">
+                         
+                      </div>
+             
+             
 
-<div class="maindiv">
-  <div class="div1">
-    <div class="maingraph">
-      <img src="{% static 'Images/HorizontalBarGraph.png'%}">
+                </div>
+            </div>
+            <div class="call_div_wrapper">
+                <header class="c_heading">Call</header>
+                <canvas id="myChart2" ></canvas>
+        
+                
+               </div>
+       </div>
     </div>
-    <div class="four_cards">
-      <div class="cards">
-        <img src="{% static 'Images/card1.png'%}">
-      </div>
-      <div class="cards">
-        <img src="{% static 'Images/card2.png'%}">
-      </div>
-      <div class="cards">
-        <img src="{% static 'Images/card3.png'%}">
-      </div>
-      <div class="cards">
-        <img src="{% static 'Images/card4.png'%}">
-      </div>
+    <div class="main-sec-div" style="">
+            <div class="doughnut_chart_div">
+                <header class="c_heading">Paid vs PTP Status</header>
+                <div class="dougnut_frame">
+                    <canvas id="myChart"></canvas>
+                </div>
+            </div>
+                <div class="agent_score_div">
+                <header class="c_heading">Best Employee Of The Month</header>
+                    <div class="wrapper">
+                        <div class="profile_div">
+                            <div class="pro_div">
+                                <img src="{% static 'images/profile.png' %}" alt="" class="profile_img">
+                                <div class="pro_title">CRF001</div>
+                            </div>
+                        </div>
+                      <!-- <div class="high_score_agent">
+                         <div>Rakesh</div>
+                          <div>Ravi</div>
+                          <div>Aditya</div>
+                    
+                      </div> -->
+                      <!-- <div class="low_score_agent" >
+                        <div>jayesh</div>
+                        <div>aalam</div>
+                        <div>shubhum</div>
+                      </div> -->
+                      <!-- <canvas id="myChart5"></canvas> -->
+                    </div>
+                </div>
+       
     </div>
-  </div>
-  <div class="div2">
-    <div class="graph">
-      <img src="{% static 'Images/paidvsptp.png'%}">
-    </div>
-    <div class="graph">
-      <img src="{% static 'Images/scorecard.png'%}" style="width: 258px;">
-    </div>
-  </div>
-  <div class="div3">
-    <img src="{% static 'Images/overview.png'%}">
-  </div>
-</div>
-
-{% endif %}
-
-{% if request.user.user_level == 1 %}
-
-<div class="maindiv">
-  <div class="div1">
-    <div class="maingraph">
-      <img src="{% static 'Images/HorizontalBarGraph.png'%}">
-    </div>
-    <div class="four_cards">
-      <div class="cards" style="height:249px">
-        <img src="{% static 'Images/nonattempted.png'%}">
-      </div>
-      <div>
-        <div class="cards">
-          <img src="{% static 'Images/card2.png'%}" style="height: 114px;">
-        </div>
+    <div class="main-third-div" style="">
+        <div class="whole_overview">
+            <div class="overview_div_wrapper">
+                <header class="c_heading">Overview</header>
+                <div class="aht_div overview_div">
+                    <div class="card_overview_wrapper">
+                        <div class="over_two_details">
+                            <div class="overview_first_title">
+                                Avg. HT 
+                            </div>
+                            <div class="overview_first_detail">
+                                - 1.0%
+                            </div>
+                        </div>
+                       <div class="over_two_details">
+                        <div class="overview_title">
+                            Today
+                        </div>
+                        <div class="overview_details">
+                            02:00 mins
+                        </div>
+                       </div>
+                        <div class="over_two_details">
+                            <div class="overview_title">
+                                Previous
+                            </div>
+                            <div class="overview_details">
+                                01:50 mins
+                            </div>
+                        </div>
+                    </div>
+                </div>
     
-        <div class="cards">
-          <img src="{% static 'Images/break.png'%}">
-        </div>
-      </div>
-    </div>
-    <!-- <div class="three_card">
-      <div class="onecard">
-        <img src="{% static 'Images/nonattempted.png'%}">
-      </div>
-      <div class="twocard">
-        <img src="{% static 'Images/card2.png'%}">
-        <img src="{% static 'Images/break.png'%}">
-      </div>
-    </div> -->
-  </div>
-  <div class="div2">
-    <div class="graph">
-      <img src="{% static 'Images/paidvsptp.png'%}">
-    </div>
-    <div class="graph">
-      <img src="{% static 'Images/notification.png'%}" style="width: 258px;">
-    </div>
-  </div>
-  <div class="div3">
-    <img src="{% static 'Images/overview.png'%}">
-  </div>
-</div>
-{% endif %}
+                <div class="login_div overview_div">
+                    <div class="card_overview_wrapper">
+                        <div class="over_two_details">
+                            <div class="overview_first_title"  >
+                                Login Hours
+                            </div>
+                            <div class="overview_first_detail" style="color: #1BD8BA;">
+                                - 1.0%
+                            </div>
+                        </div>
+                       <div class="over_two_details">
+                        <div class="overview_title">
+                            Today
+                        </div>
+                        <div class="overview_details">
+                            02:00 mins
+                        </div>
+                       </div>
+                        <div class="over_two_details">
+                            <div class="overview_title">
+                                Avg
+                            </div>
+                            <div class="overview_details">
+                                01:50 mins
+                            </div>
+                        </div>
+                    </div>
+    
+                    <div class="progress_item">
+                        <div class="progress_bar" style="background: #CCF8FE;;">
+                          <div class="bar" data-value="98" data-text="96"
+                            style="background: #02A0FC; color: #02A0FC;"></div>
+                        </div>
+                    </div>
+                </div>
+    
+                <div class="not_ready_div overview_div">
+                    <div class="card_overview_wrapper">
+                        <div class="over_two_details">
+                            <div class="overview_first_title">
+                               Not Ready 
+                            </div>
+                            <div class="overview_first_detail">
+                                - 1.0%
+                            </div>
+                        </div>
+                       <div class="over_two_details">
+                        <div class="overview_title">
+                            Today
+                        </div>
+                        <div class="overview_details">
+                            02:00 mins
+                        </div>
+                       </div>
+                        <div class="over_two_details">
+                            <div class="overview_title">
+                               Avg
+                            </div>
+                            <div class="overview_details">
+                                01:50 mins
+                            </div>
+                        </div>
+                    </div>
 
+                    <div class="progress_item">
+  
+                        <div class="progress_bar" style="background: #FFF8CE;">
+                          <div class="bar" data-value="80" data-text="96"
+                            style="background: #FFDC13; color: #FFDC13;"></div>
+                        </div>
+                      </div>
+                </div>
+    
+                <div class="wait_hrs_div overview_div">
+                    <div class="card_overview_wrapper">
+                        <div class="over_two_details">
+                            <div class="overview_first_title">
+                                Wait Hours
+                            </div>
+                            <div class="overview_first_detail" style="color: #1BD8BA;">
+                                - 1.0%
+                            </div>
+                        </div>
+                       <div class="over_two_details">
+                        <div class="overview_title">
+                            Today
+                        </div>
+                        <div class="overview_details">
+                            02:00 mins
+                        </div>
+                       </div>
+                        <div class="over_two_details">
+                            <div class="overview_title">
+                                Avg
+                            </div>
+                            <div class="overview_details">
+                                01:50 mins
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="progress_item">
+  
+                        <div class="progress_bar" style="background: #FFBBCB;">
+                          <div class="bar" data-value="30" data-text="96"
+                            style="background: #FF2E60;color: #FF2E60;"></div>
+                        </div>
+                      </div>
+                </div>
+    
+                <div class="tos_div overview_div">
+                    <div class="card_overview_wrapper">
+                        <div class="over_two_details">
+                            <div class="overview_first_title">
+                                TOS Hour 
+                            </div>
+                            <div class="overview_first_detail" style="color: #1BD8BA;">
+                                - 1.0%
+                            </div>
+                        </div>
+                       <div class="over_two_details">
+                        <div class="overview_title">
+                            Today
+                        </div>
+                        <div class="overview_details">
+                            02:00 mins
+                        </div>
+                       </div>
+                        <div class="over_two_details">
+                            <div class="overview_title">
+                                Avg
+                            </div>
+                            <div class="overview_details">
+                                01:50 mins
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="progress_item">
+  
+                        <div class="progress_bar" style="background: #FFEBCC;">
+                          <div class="bar" data-value="10" data-text="96"
+                            style="background: #FF9900; color: #FF9900;"></div>
+                        </div>
+                      </div>
+                </div>
+    
+                <div class="talk_div overview_div">
+                    <div class="card_overview_wrapper">
+                        <div class="over_two_details">
+                            <div class="overview_first_title" >
+                               Talk Hours
+                            </div>
+                            <div class="overview_first_detail" style="color: #1BD8BA;">
+                                - 1.0%
+                            </div>
+                        </div>
+                       <div class="over_two_details">
+                        <div class="overview_title">
+                            Today
+                        </div>
+                        <div class="overview_details">
+                            02:00 mins
+                        </div>
+                       </div>
+                        <div class="over_two_details">
+                            <div class="overview_title">
+                               Avg
+                            </div>
+                            <div class="overview_details">
+                                01:50 mins
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="progress_item">
+  
+                        <div class="progress_bar" style="background: #CDCAFF;">
+                          <div class="bar" data-value="45" data-text="96"
+                            style="background:  #4339F2; color: #4339F2;"></div>
+                        </div>
+                      </div>
+                </div>
+    
+                <div class="wrap_div overview_div">
+                    <div class="card_overview_wrapper">
+                        <div class="over_two_details">
+                            <div class="overview_first_title">
+                              Wrap Hours
+                            </div>
+                            <div class="overview_first_detail">
+                                - 1.0%
+                            </div>
+                            
+                        </div>
+                       <div class="over_two_details">
+                        <div class="overview_title">
+                            Today
+                        </div>
+                        <div class="overview_details">
+                            02:00 mins
+                        </div>
+                       </div>
+                        <div class="over_two_details">
+                            <div class="overview_title">
+                                Avg
+                            </div>
+                            <div class="overview_details">
+                                01:50 mins
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="progress_item">
+  
+                        <div class="progress_bar" style="background: #D3FFDA;">
+                          <div class="bar" data-value="90" data-text="96"
+                            style="background: #54FF6F; color: #54FF6F;"></div>
+                        </div>
+                      </div>
+                </div>
+    
+                <div class="hold_div overview_div">
+                    <div class="card_overview_wrapper">
+                        <div class="over_two_details">
+                            <div class="overview_first_title">
+                                Hold Hours
+                            </div>
+                            <div class="overview_first_detail" style="color: #1BD8BA;">
+                                - 1.0%
+                            </div>
+                        </div>
+                       <div class="over_two_details">
+                        <div class="overview_title">
+                            Today
+                        </div>
+                        <div class="overview_details">
+                            02:00 mins
+                        </div>
+                       </div>
+                        <div class="over_two_details">
+                            <div class="overview_title">
+                                Avg
+                            </div>
+                            <div class="overview_details">
+                                01:50 mins
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="progress_item">
+  
+                        <div class="progress_bar" style="background: #FFC4F9;">
+                          <div class="bar" data-value="75" data-text="96"
+                            style="background: #FE5CEE;;color: #FE5CEE;"></div>
+                        </div>
+                      </div>
+                </div>
+    
+            </div>
+        </div>
+       
+    </div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.2.1/chart.min.js"></script> -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/easy-pie-chart/2.1.6/jquery.easypiechart.min.js"></script>
+
+<script>
+let chart1;
+let mychart2;
+
+
+// function special_chart(){
+//     const ctx = document.getElementById('myChart5');
+    
+//  chart = new Chart(ctx, {
+//     type: 'bar',
+//     data: {
+//       labels: ['R', 'B', 'Y', 'G', 'P', 'O'],
+//       datasets: [{
+//         label: '# of Votes',
+
+//         data: [12, 19, 3, 5, 2, 3],
+//         backgroundColor: [
+//       'rgba(255, 99, 132, 0.2)',
+//       'rgba(255, 159, 64, 0.2)',
+//       'rgba(255, 205, 86, 0.2)',
+//       'rgba(75, 192, 192, 0.2)',
+//       'rgba(54, 162, 235, 0.2)',
+//       'rgba(153, 102, 255, 0.2)',
+
+//     ],
+//         borderWidth: 1,
+//         barThickness: 15,
+//       }]
+//     },
+   
+//     options: {
+//        scales: {
+//             x: {
+//                grid: {
+//                   display: false,
+//                   barPercentage: 0.4, // set the width of the bars relative to the available space
+//                   categoryPercentage: 0.6
+//                }
+//             },
+//             y:{
+//                grid: {
+//                   display: false
+//                }
+//             }
+//        }
+//     }
+    
+// });
+
+// }
+function totalcalls(id){
+      $.ajax({
+            type:"get",
+            url:`/total_calls?time=${id}`,
+            success: function(data){
+              console.log("todays",data.upload,"avail",data.available,"contacted",data.contacted,"noncontacted",data.noncontacted,"all values")
+             let upload=0
+             let available=0
+             let contacted=0
+             let noncontacted=0
+             
+              $("#up_val").html(data.upload)
+              $("#avail_val").html(data.available)
+              $("#con_val").html(data.contacted)
+              $("#noncon_val").html(data.noncontacted)
+
+
+            }
+          })
+    }
+
+function agent_available(id){
+    $.ajax({
+        type:"get",
+            url:`/agent_available?time=${id}`,
+            success: function(data){
+            console.log(data.total_agent,data.logged_in_agent,data.on_call,data.on_paused)
+            $("#total_agn").html(data.total_agent)
+            $("#login_agn").html(data.logged_in_agent)
+            $("#on_call").html(data.on_call)
+            $("#on_paused").html(data.on_paused)
+            }
+    })
+}
+
+function top5(id){
+        console.log("top 5")
+        // var fdata=new FormData()
+        // fdata.append("time",)
+        $.ajax({
+            method: 'get',
+            url:`/top_five_dispo?time=${id}`,
+            // data:fdata,
+            success: function(data){
+              console.log(data.ls,"top 5")
+              let x=data.ls
+              let val1,val2,val3,val4,val5,sub1,sub2,sub3,sub4,sub5
+                try{ val1 = parseInt(x[0]['percent']) 
+                     sub1 = x[0]['Sub_disposition']
+                }catch{
+                    val1 = 0 
+                    sub1 = "Empty" 
+                }
+                try{val2 = parseInt(x[1]['percent']) 
+                    sub2 = x[1]['Sub_disposition']
+                }catch{
+                    val2 = 0 
+                    sub2 = "Empty" 
+                }
+                try{val3 = parseInt(x[2]['percent']) 
+                    sub3 = x[2]['Sub_disposition']
+                }catch{
+                    val3 = 0 
+                    sub3 = "Empty" 
+                }
+                try{val4 = parseInt(x[3]['percent']) 
+                    sub4 = x[3]['Sub_disposition']
+                }catch{
+                    val4 = 0 
+                    sub4 = "Empty" 
+                }
+                try{val5 = parseInt(x[4]['percent']) 
+                    sub5 = x[4]['Sub_disposition']
+                }catch{
+                    val5 = 0 
+                    sub5 = "Empty" 
+                }
+             
+                
+            //   console.log(x)  
+                $('#test_div').html(`
+                <div class="chart1 dispo_chart" data-percent="${val1}" data-color="#FF0000" >
+                    <span class="innerper" style="background-color:#FF0000 ;">${val1+"%"}</span>
+                </div>
+                <span class="top_dispo_div_title">${sub1}</span> `)
+
+                $('#test_div2').html(` <div class="chart2 dispo_chart" data-percent="${val2}" data-color="#4339F2" >
+                            <span class="innerper" style="background-color:#4339F2 ;">${val2+"%"}</span>
+                        </div>
+                        <span class="top_dispo_div_title">${sub2}</span> `)
+
+                $("#test_div3").html(`
+                <div class="chart3 dispo_chart" data-percent="${val3+"%"}" data-color="#34B53A" >
+                            <span class="innerper" style="background-color:#34B53A ;">${val3+"%"}</span>
+                        </div>
+                        <span class="top_dispo_div_title">${sub3}</span>
+                `)
+
+                $('#test_div4').html(` <div class="chart4 dispo_chart" data-percent="${val4+"%"}" data-color="#FFB200" >
+                            <span class="innerper" style="background-color:#FFB200 ;">${val4+"%"}</span>
+                        </div>
+                        <span class="top_dispo_div_title">${sub4}</span> `)
+                
+                $('#test_div5').html(`<div class="chart5 dispo_chart" data-percent="${val4+"%"}" data-color="#FE5CEE" >
+                            <span class="innerper" style="background-color:#FE5CEE ;">${val4+"%"}</span>
+                        </div>
+                        <span class="top_dispo_div_title">${sub5}</span>
+                `)
+          
+              $(function() {
+                $('.chart1').each(function() {
+                    var color = $(this).data('color');
+                    $(this).easyPieChart({
+                    scaleLength:0,
+                    size: 75,
+                    lineWidth: 4,
+                    trackColor: "#FFE5D3",
+                    lineCap: "circle",
+                    animate: 2000,
+                    barColor: color
+                    
+                    });
+                });
+                });
+
+                    
+                $(function() {
+                $('.chart2').each(function() {
+                    var color = $(this).data('color');
+                    $(this).easyPieChart({
+                    scaleLength:0,
+                    size: 75,
+                    lineWidth: 4,
+                    trackColor: "#E4E2FF",
+                    lineCap: "circle",
+                    animate: 2000,
+                    barColor: color
+                    
+                    });
+                });
+                });
+
+                    
+                $(function() {
+                $('.chart3').each(function() {
+                    var color = $(this).data('color');
+                    $(this).easyPieChart({
+                    scaleLength:0,
+                    size: 75,
+                    lineWidth: 4,
+                    trackColor: "#E1FFE3",
+                    lineCap: "circle",
+                    animate: 2000,
+                    barColor: color
+                    
+                    });
+                });
+                });
+
+                    
+                $(function() {
+                $('.chart4').each(function() {
+                    var color = $(this).data('color');
+                    $(this).easyPieChart({
+                    scaleLength:0,
+                    size: 75,
+                    lineWidth: 4,
+                    trackColor: "#FFF5DD",
+                    lineCap: "circle",
+                    animate: 2000,
+                    barColor: color
+                    
+                    });
+                });
+                });
+
+                    
+                $(function() {
+                $('.chart5').each(function() {
+                    var color = $(this).data('color');
+                    $(this).easyPieChart({
+                    scaleLength:0,
+                    size: 75,
+                    lineWidth: 4,
+                    trackColor: "#FFECFD",
+                    lineCap: "circle",
+                    animate: 2000,
+                    barColor: color
+                    
+                    });
+                });
+});
+
+            //   for(var i in x){
+            //     console.log("ids ddsf",x[i]['Sub_disposition'])
+            //   }
+
+            }
+    })
+}
+
+
+
+function paid_ptp(id){
+    $.ajax({
+        type:"get",
+            url:`/paid_ptp_status?time=${id}`,
+            success: function(data){
+              console.log(data.paid,data.ptp,"paid ptp")
+            //  try{ 
+            //     var grapharea = document.getElementById("myChart").getContext("2d");
+
+            //     grapharea.clear();
+            //     }
+            //     catch(error){
+            //         console.log(error)
+            //     }
+    // ##################doughnut chart function starts#####################
+    const ctx = document.getElementById('myChart');
+    
+ chart1 = new Chart(ctx, {
+    type: 'doughnut',
+    data:data = {
+labels: [
+  'Paid',
+  'PTP',
+  // 'Not visited'
+],
+datasets: [{
+    label: '',
+    data: [data.paid,data.ptp],
+    backgroundColor: [
+        '#FAE154',
+        '#FF5446',
+        // 'rgb(54, 162, 235)'
+    ],
+    
+    
+    hoverOffset: 4
+}]
+},
+
+});
+
+// chart1.destroy()
+  // ##################doughnut chart function ends#####################
+        // if (chart1) {
+        //     console.log("in destroy")
+        //     chart1.destroy();
+        //     }
+              
+            }
+    })
+}
+function call_status(id){
+    $.ajax({
+        type:"get",
+        url:`/call_status?time=${id}`,
+        success: function(data){
+        console.log("out_call_9_10",data.out_call_9_10)
+        let out1 =data.out_call_9_10
+        let out2=data.out_call_10_11
+        let out3=data.out_call_11_12
+        let out4 = data.out_call_12_1
+        let out5 =data.out_call_1_2
+        let out6 = data.out_call_2_3
+        let out7 =data.out_call_3_4
+        let out8=data.out_call_4_5
+        let out9=data.out_call_5_6
+        let out10=data.out_call_6_7
+        let in1=data.In_call_9_10
+        let in2=data.In_call_10_11
+        let in3=data.In_call_11_12
+        let in4=data.In_call_12_1
+        let in5=data.In_call_1_2
+        let in6=data.In_call_2_3
+        let in7=data.In_call_3_4
+        let in8=data.In_call_4_5
+        let in9=data.In_call_5_6
+        let in10=data.In_call_6_7
+        let drop1=data.drop_call_9_10
+        let drop2=data.drop_call_10_11
+        let drop3=data.drop_call_11_12
+        let drop4=data.drop_call_12_1
+        let drop5=data.drop_call_1_2
+        let drop6=data.drop_call_2_3
+        let drop7=data.drop_call_3_4
+        let drop8=data.drop_call_4_5
+        let drop9=data.drop_call_5_6
+        let drop10=data.drop_call_6_7
+
+      
+        // window.mychart2=new Chart(cxt)
+        console.log("////////////////////",out1,out2,out3,out4,out5,out6,out7,out8,out9,out10,in1,in2,in3,in4,in5,in6,in7,in8,in9,in10,drop1,drop2,drop3,drop4,drop5,drop6,drop7,drop8,drop9,drop10,"////////////////////")
+            
+// #################Call graph starts##############################
+var xValues = ["9am","10 am","11 am","12 am","1 pm","2 pm" ,"3 pm","4 pm","5 pm","6 pm","7 pm"];
+
+ mychart2=new Chart("myChart2", {
+  type: "line",
+  data: {
+    labels: xValues,
+    datasets: [{ 
+      data: [out1,out2,out3,out4,out5,out6,out7,out8,out9,out10],
+      label: 'Outgoing',
+      borderColor: "red",
+      fill: false,
+    }, { 
+      // data: [40,80,120,180,180,140,160,170,200,40],
+      data: [in1,in2,in3,in4,in5,in6,in7,in8,in9,in10],
+      label: 'incoming',
+      borderColor: "green",
+      fill: false
+    }, { 
+      // data: [30,70,100,140,100,100,140,70,90,60],
+      data: [drop1,drop2,drop3,drop4,drop5,drop6,drop7,drop8,drop9,drop10],
+      label: 'Drop',
+      borderColor: "blue",
+      fill: false
+    }]
+  },
+  options: {
+    legend: {display: true},
+    
+  }
+  
+});
+
+
+
+    //##################call graph ends ###############################
+
+   
+        }
+
+        
+    })
+    
+}
+$(document).ready(function(){
+
+    $(".header-title").html("Dashboard")
+    $(".dashboard-filter").html(`<div class="tri-state-toggle">
+        <div class="tri-state-toggle-button" id="today">T</div>
+        <div class="tri-state-toggle-button" id="week">W</div>
+        <div class="tri-state-toggle-button" id="month">M</div>
+        </div>`)
+        
+    $("#today").addClass("active")
+        agent_available("today")
+        totalcalls("today")
+        top5("today")
+        call_status("today")
+        paid_ptp("today")
+        
+window.onload = function () {
+  let bar = document.querySelectorAll('.bar');
+  bar.forEach((progress) => {
+    let value = progress.getAttribute('data-value');
+    progress.style.width = `${value}%`;
+    let count = 0;
+    let progressAnimation = setInterval(() => {
+      count++;
+      progress.setAttribute('data-text', `${count}%`);
+      if (count >= value) {
+        clearInterval(progressAnimation);
+      }
+    }, 15);
+  });
+};
+    
+
+    // ####################Top 5 disposition chart ends ##############################
+
+    $(".tri-state-toggle-button").click(function(){
+            $(".tri-state-toggle-button").removeClass("active");
+            var id = $(this).attr('id');
+            $("#" + id).addClass("active");
+            console.log(id)
+            agent_available(id)
+            totalcalls(id)
+            top5(id)
+            if (mychart2) {
+                mychart2.destroy();
+            }
+            call_status(id)
+            
+            if (chart1) {
+                chart1.destroy();
+            }
+            paid_ptp(id)
+          
+
+
+          });
+        
+
+    })
+</script>
 
 {% endblock content %}

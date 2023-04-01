@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>zas
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    {% csrf_token %}
+    <button class="login">login</button>
+    <button class="call">Call</button>
+    <button class="hangup">hangup</button>
+    <button class="dispose">dispose</button>
+    <button class="logout">logout</button>
+<br>
+<br>
+<br>
+    <button class="st">break start</button>
+    <button class="en">break end</button>
+    <select name="b_type" id="">
+        <option value="Tea">Tea</option>
+        <option value="Lunch">Lunch</option>
+        <option value="Meet">Meet</option>
+    </select>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js" integrity="sha512-STof4xm1wgkfm7heWqFJVn58Hm3EtS31XFaagaa8VMReCXAkQnJZ+jEy8PCC/iT18dFy95WcExNHFTqLyp72eQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+        function take_break(event){
+            let data = new FormData()
+            data.append('event',event)
+            data.append('type',$('select[name="b_type"]').val())
+                $.ajax({
+                    method: 'POST',
+                    headers: {
+                        "X-CSRFToken": document.querySelector('[name=csrfmiddlewaretoken]').value,
+                    },
+                    url: "{% url 'break_events' %}",
+                    data: data,
+                    datatype:'json',
+                    processData: false,
+                    contentType: false,
+                    success: function (data) {
+                        console.log(data.status)
+                    }
+                })
+        }
+
+        $(document).ready(function(){
+            $('.st').click(function(){
+                take_break("start")
+            })
+            $('.en').click(function(){
+                take_break("end")
+            })
+
+
+            $(".call").click(function(){
+                let data = new FormData()
+                $.ajax({
+                    method: 'POST',
+                    headers: {
+                        "X-CSRFToken": document.querySelector('[name=csrfmiddlewaretoken]').value,
+                    },
+                    url: "{% url 'call_apr' %}",
+                    data: data,
+                    datatype:'json',
+                    processData: false,
+                    contentType: false,
+                    success: function (data) {
+                        console.log(data.status)
+                    }
+                })
+            })
+            $(".hangup").click(function(){
+                console.log("hangup")
+                let data = new FormData()
+                $.ajax({
+                    method: 'POST',
+                    headers: {
+                        "X-CSRFToken": document.querySelector('[name=csrfmiddlewaretoken]').value,
+                    },
+                    url: "{% url 'hangup_apr' %}",
+                    data: data,
+                    datatype:'json',
+                    processData: false,
+                    contentType: false,
+                    success: function (data) {
+                        console.log(data.status)
+                    }
+                })
+            })
+            $(".dispose").click(function(){
+                // console.log("dispose")
+                let data = new FormData()
+                $.ajax({
+                    method: 'POST',
+                    headers: {
+                        "X-CSRFToken": document.querySelector('[name=csrfmiddlewaretoken]').value,
+                    },
+                    url: "{% url 'dispose_apr' %}",
+                    data: data,
+                    datatype:'json',
+                    processData: false,
+                    contentType: false,
+                    success: function (data) {
+                        console.log(data.status)
+                    }
+                })
+            })
+            $(".login").click(function(){
+                // console.log("dispose")
+                let data = new FormData()
+                $.ajax({
+                    method: 'POST',
+                    headers: {
+                        "X-CSRFToken": document.querySelector('[name=csrfmiddlewaretoken]').value,
+                    },
+                    url: "{% url 'login_apr' %}",
+                    data: data,
+                    datatype:'json',
+                    processData: false,
+                    contentType: false,
+                    success: function (data) {
+                        console.log(data.status)
+                    }
+                })
+            })
+            $(".logout").click(function(){
+                // console.log("dispose")
+                let data = new FormData()
+                $.ajax({
+                    method: 'POST',
+                    headers: {
+                        "X-CSRFToken": document.querySelector('[name=csrfmiddlewaretoken]').value,
+                    },
+                    url: "{% url 'logout_apr' %}",
+                    data: data,
+                    datatype:'json',
+                    processData: false,
+                    contentType: false,
+                    success: function (data) {
+                        console.log(data.status)
+                    }
+                })
+            })
+        })
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,424 @@
+{% extends 'base.html' %} {% load static %}
+
+  {% block content %}
+  
+  <style>
+    .form-control {
+    width: 100%;
+    color: black;
+    height: 28px;
+}
+.cal-icon {
+    position: absolute;
+    right: 4%;
+    top: 8px;
+    height: 13px;
+}
+    .spinner {
+  margin: auto;
+  border: 2px solid #dbf2ff; 
+  /*
+  change to dotted for something cool.
+  change width to 1px for tapered bar
+  */
+  width: 26px;
+  height: 26px;
+ 
+
+  border-radius: 50%;
+  border-right: 2px solid #04E00D;
+  text-align:center;
+  animation-name: spin;
+  animation-duration: 900ms;
+  animation-iteration-count: infinite;
+  /*animation-timing-function: linear; /*linear spin */
+  animation-timing-function: cubic-bezier(0.53, 0.21, 0.29, 0.67);
+}
+.loader {
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #04E00D;
+    border-radius: 50%;
+    width: 23px;
+    height: 23px;
+    animation: spin 1s linear infinite;
+}
+
+wave{
+  height: 16px !important;
+  overflow: hidden !important;
+}
+.playbtn{
+  border-radius: 100px;
+  border:1px;
+  background-color: #047BD5;
+  height: 23px;
+  width: 23px;
+  position: absolute;
+  padding-left: 2px;
+  padding-top: 3px;
+  margin-top: -3px;
+}
+.downloadbtn{
+  padding: 3px 7px;
+  font-size: 10px;
+  border-radius: 19px;
+  cursor: pointer;
+  background: #047BD5;
+    height: 41px;
+    /* width: 25%;
+    font-size: 12px;
+    border: none;
+    border-radius: 7px; */
+    color: white;
+    width: 170px;
+    margin-top: 1%;
+    border: none;
+    /* padding-top: 12px; */
+    margin-left: 10px;
+}
+
+
+#playBtn{
+  position: absolute;
+  z-index: 3;
+  margin-left: 16px;
+  margin-top: 2px;
+}
+#playBtn:hovre{
+  pointer-events:cursor;
+}
+.aud{
+  position: relative;
+}
+
+.download_arrow{
+    border-radius: 20px;
+    height: 23px;
+    width: 23px;
+    background: #04E00D;
+    margin-left: 29px;
+    display: grid;
+    align-items: center;
+    justify-content: center;
+    padding-right: 1px;
+  }
+
+.table-wrapper{
+  height:  calc(100vh - 8em);
+  padding: 0;
+  width: calc(100% - 2em);
+}
+
+.table thead>tr>th,.table tbody>tr>td{
+  padding-left: 0;
+  padding-right : 0;
+  text-align: center;
+}
+
+.phone_inp {
+    font-size: 12px;
+    padding: 4px 9px;
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    width: 100%;
+}
+.date-wrapper input {
+  border-radius: 5px;
+  border: 1px solid #aaa;
+  box-shadow: none;
+  }
+
+
+audio{
+  width: 300px;
+  height: 22px;
+}
+
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  /*50% {width:24px;height:24px} /*shrinking effect*/
+  100% { -webkit-transform: rotate(360deg); }
+}
+@keyframes spin {
+  0% { -webkit-transform: rotate(0deg);}
+ /*50% {width:24px;height:24px} /*shrinking effect*/
+  100% { -webkit-transform: rotate(360deg); }
+}
+  </style>
+
+
+  <main class="main-reminder">
+    <form action="/export_qualityscore" method="post" id="export_form">
+    {% include 'component/exportpages.html'  %}  
+    {% csrf_token %}
+  <div class="row">
+      <div style="display:flex;flex-wrap: wrap;width: 100%; gap: 8px;;">
+        
+        <div style="width: 16%;">
+          <div class="date-wrapper" style="width: 100%;">
+            <svg class="cal__icon" width="18" height="13" viewBox="0 0 18 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M6 9V11H4V9H6ZM10 9V11H8V9H10ZM14 9V11H12V9H14ZM16 2C16.5304 2 17.0391 2.21071 17.4142 2.58579C17.7893 2.96086 18 3.46957 18 4V18C18 18.5304 17.7893 19.0391 17.4142 19.4142C17.0391 19.7893 16.5304 20 16 20H2C0.89 20 0 19.1 0 18V4C0 3.46957 0.210714 2.96086 0.585786 2.58579C0.960859 2.21071 1.46957 2 2 2H3V0H5V2H13V0H15V2H16ZM16 18V7H2V18H16ZM6 13V15H4V13H6ZM10 13V15H8V13H10ZM14 13V15H12V13H14Z" fill="#575757"/>
+              </svg>
+            <input type="text" class="datepick" name="fdate" autocomplete="off">
+          </div>
+         </div>
+
+         <div style="width: 16%;">
+         
+            <div class="date-wrapper" style="width: 100%;">
+              <svg class="cal__icon" width="18" height="13" viewBox="0 0 18 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M6 9V11H4V9H6ZM10 9V11H8V9H10ZM14 9V11H12V9H14ZM16 2C16.5304 2 17.0391 2.21071 17.4142 2.58579C17.7893 2.96086 18 3.46957 18 4V18C18 18.5304 17.7893 19.0391 17.4142 19.4142C17.0391 19.7893 16.5304 20 16 20H2C0.89 20 0 19.1 0 18V4C0 3.46957 0.210714 2.96086 0.585786 2.58579C0.960859 2.21071 1.46957 2 2 2H3V0H5V2H13V0H15V2H16ZM16 18V7H2V18H16ZM6 13V15H4V13H6ZM10 13V15H8V13H10ZM14 13V15H12V13H14Z" fill="#575757"/>
+              </svg>
+              <input type="text" class="datepick" name="todate" autocomplete="off">
+            </div>
+   
+         </div>
+
+        <div style="width: 16%;">
+          <select class="campaignq process np-select" name="process" style="width: 100%;">
+            <option value="">Process</option>
+            <option value="all">All</option>
+          <!-- {% for i in u %}
+            <option value="{{i.username}}">{{i.username}}</option>
+            {% endfor %} -->
+          </select>
+         </div>
+
+         <div style="width: 16%;">
+          <select class="campaignq np-select agn" name="agent" style="width: 100%;">
+            <option value="">Agent Name</option>
+            <option value="all">All</option>
+          {% for i in u %}
+            <option value="{{i.username}}">{{i.username}}</option>
+            {% endfor %}
+          </select>
+         </div>
+
+         <div style="width: 16%;">
+          <select class="campaignq dispo np-select" name="dispo" style="width: 100%;">
+            <option value="">Disposition</option>
+            <option value="all">All</option>
+          {% for i in d %}
+            <option value="{{i.sub_dispo}}">{{i.sub_dispo}}</option>
+            {% endfor %}
+
+          </select>
+         </div>
+
+       
+    
+         <div style="width: 16%;">
+            <div class= "cal-con" style="position: relative;width: 100%;">
+              <img class="cal-icon c2 search_by_phone" src="{% static 'images/Vector.png' %}" alt="">
+              <input type="text" class="phone_inp" onkeypress="return isNumber(event)" placeholder="Phone no." name="phone_num">
+            </div>
+         </div>
+      </div> 
+     
+   
+
+        <div class="table-wrapper table-responsive" style="margin: auto;margin-top: 12px;">
+          <table id="exportthis"  class="table table-borderless  rounded" style="width: 100%;">
+            <thead class="sticky-top">
+              <tr>
+                <th class="th-sm">Agent Name</th>
+                <th class="th-sm">Type</th>
+                <th class="th-sm" >Phone no.</th> 
+                <th class="th-sm" >Disposition</th> 
+                <th class="th-sm">Date & Time</th>
+                <th class="th-sm">Call Recording</th>
+                <th class="th-sm">Download</th>
+                <th class="th-sm">View</th>
+              </tr>
+            </thead>
+            <tbody style="font-size: 12px;font-style:'Roboto';">
+        
+              
+            </tbody>
+          </table>
+        </div>
+     
+      
+         
+</div>
+</form>
+</main>
+
+  
+{% include 'quality/qsajax.html' %}
+<script>
+  $('.datepick').daterangepicker({
+    singleDatePicker:true,
+    autoApply:true,
+    locale: {
+            format: 'DD-MM-YYYY'
+        }
+  });
+  function isNumber(evt) {
+    evt = (evt) ? evt : window.event;
+    var charCode = (evt.which) ? evt.which : evt.keyCode;
+    if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+        return false;
+    }
+    return true;
+}
+
+//   from =  "1990-04-01"
+//     var today = new Date();
+//     var dd = String(today.getDate()-1).padStart(2, '0');
+//     var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+//     var yyyy = today.getFullYear();
+
+//     today = yyyy + '-' +mm + '-' + dd;
+//     console.log("its saturday",today)
+
+//       config={
+//       enableTime: true,
+//       dateFormat: "d-m-Y ",
+//       altInput: true,
+//       altFormat: "F j, Y",
+//       disable: [
+//         {
+//             from:from,
+//             to: today
+//         }
+//     ]
+// }
+
+// flatpickr("input[type=datetime-local]",config);
+  $(document).ready(function(){
+	
+    $('.cal__icon').click(function () {
+      console.log("click here")
+    $(this).next().click()
+  })
+
+	$('.header-title').html("Quality Score")
+
+  $('.phone_inp').keyup(function(){
+    let phone_no = $(this).val().length
+    if (phone_no >= 10 && phone_no <= 12){
+     
+    }
+  })
+
+  $('.search_by_phone').click(function(){
+    console.log("search by phone")
+     qsdata()
+  })
+
+  $(".phone_inp").keyup(function(){
+    let v=$(this).val()
+    console.log(v.length,"lenghthhhhhhhhhhhhhhhhhhhhhhhhhhh")
+    if (v.length > 5){
+      qsdata()
+    }
+  })
+
+
+
+    // $(document).on('load','.aud',function(){
+    //   console.log($(this).html())
+    //   console.log("asd")
+    // })
+    $(".clickable-row").click(function() {
+        window.location = $(this).data("href");
+    })
+
+    $('.aud').each(function(){
+      var a = $(this).children().attr('src')
+      // console.log(a)
+      var b = a.replace('http://192.168.1.46','http://192.168.1.46:1001')
+      $(this).children().attr('src',b)
+
+      // console.log($(this).children().attr('src'))
+      // console.log(b)
+      $(".hideme").attr("href",b)
+    })
+    // console.log(.html())
+
+
+    console.log($("#track1 section:nth-child(2) audio").attr("src"))
+    $(".playbtn").click(function(){
+      console.log("hi")
+      $(".start").toggleClass('fa-play')
+      $(".start").toggleClass('fa-pause')
+      // $(".start").addClass("fa-pause").removeClass("fa-play")
+      // $(".playbtn").css({"background-color":"red"})
+      // $(this).addClass("fa-pause")
+      
+    })
+    $(".hideme").click(function(){
+      $(".hideme").css({"display":"none"})
+      $(".loader").css({"display":"block"})
+    })
+  })
+    // var wavesurfer = WaveSurfer.create({
+    //     container: '#waveform',
+    //     waveColor: '#D9D9D9',
+    //     progressColor: '#959595',
+    //     barWidth:2,
+    //     barGap:1,
+    //     barRadius:4,
+    //     barHeight:1,
+    //     scrollParent	:false,
+    //     responsive:true,
+    //     backgroundColor:'#E8E8E8',
+    //     // scrollParent:false,
+    // });
+    // wavesurfer.on('ready', function () {
+    //     wavesurfer.play();
+    // });
+    
+    
+    // var wavesurfer2 = WaveSurfer.create({
+    //     container: '#waveform2',
+    //     waveColor: '#D9D9D9',
+    //     progressColor: '#959595',
+    //     barWidth:2,
+    //     barGap:1,
+    //     barRadius:4,
+    //     barHeight:1,
+    //     scrollParent	:false,
+    //     backgroundColor:'#E8E8E8',
+
+    //     // scrollParent:false,
+    // });
+    // wavesurfer2.load('http://122.15.134.76:1809/RECORDINGS/MP3/20220824-194924_9619696008_IIT_IIT_513_13-all.mp3');
+
+
+    // var wavesurfer3 = WaveSurfer.create({
+    //     container: '#waveform3',
+    //     waveColor: '#D9D9D9',
+    //     progressColor: '#959595',
+    //     barWidth:2,
+    //     barGap:1,
+    //     barRadius:4,
+    //     barHeight:1,
+    //     scrollParent	:false,
+    //     backgroundColor:'#E8E8E8',
+
+    //     // scrollParent:false,
+    // });
+    // wavesurfer3.load('http://122.15.134.76:1809/RECORDINGS/MP3/20220824-194924_9619696008_IIT_IIT_513_13-all.mp3');
+   
+    //     wavesurfer.play();
+    $(document).on("click", '.playnow',function() {
+     
+      var isPlaying = $(this).parent().children('audio').get(0)
+      
+      // console.log(isPlaying.paused , isPlaying.currentTime > 0 , !isPlaying.ended)
+      if (isPlaying.paused == false ){
+        isPlaying.pause()
+        $(this).attr('src','/static/images/pause.png')
+      }else{
+        isPlaying.play();
+        $(this).attr('src','/static/images/play.png')
+      }
+      // var audio = $("#track1")[0];
+      // audio.play();
+	});
+
+</script>
+
+  {% endblock content %}

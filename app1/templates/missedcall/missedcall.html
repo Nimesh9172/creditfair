@@ -29,9 +29,55 @@
 .sub__dispo.invalid_field .select2-container--default .select2-selection--single{
   border-color: red;
 }
+
+
+/* miss call  start */
+
+.misscall-wrapper{
+  width: min(49%);
+  border-radius: 6px;
+  display: grid;
+  gap: 6px;
+  grid-template-columns:.5fr 1fr 1fr 1fr;
+  align-items: center;
+  background-color: #fff;
+  padding: 6px 0;
+  min-height: 61px;
+}
+
+.misscall-wrapper .svg-icon{
+  text-align: center;
+}
+
+.data-card-content.missno {
+  font-weight: 500;
+  font-size: 12px;
+}
+
+.data-card-content.missdate {
+  font-weight: 500;
+  font-size: 12px;
+  color: #B7B7B7;
+  font-size: 12px;
+}
+
+.data-card-content2.missdispo {
+  color: #EA0000;
+}
+
+.data-card-content2.missdispo.g{
+  color: #00B84A;
+}
+.data-card-content2.missdispo.n{
+  color: #047BD5;
+}
+
+
+/* misscall-wrapper end */
+
 </style>
 
-<form action="/exportmiss" method="post" id="export_form">
+<form action="{% url 'exportmiss'  %}" method="post" id="export_form">
 <input type="hidden" class="filter_link" name="filter"  value="all">
 {% csrf_token  %}
 {% include 'component/exportpages.html'  %}
@@ -167,6 +213,8 @@
 
 </form>
 <script>
+  
+
     $('.datepick').daterangepicker({
       singleDatePicker:true,
       autoApply:true,
@@ -174,8 +222,6 @@
         format: 'DD-MM-YYYY'
       }
     });
-
- 
 
 
   const menu = document.querySelector('.menu');
@@ -292,64 +338,9 @@
       </a>`
   }
 
-  const call = (num) => {
-    $.ajax({
-            type:"post",
-            url:'/call',
-            data:{
-            dialnum3:num,
-              csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val(),
-            },
-            success: function(data){
-              console.log("done")
-              console.log(data.status)
-              var msg = data.msg 
-              console.log(msg)
-              if (data.status == '300'){
-                toast('Agent not logged in or not paused',"critical")
-                return
-              }
-              else if (data.status == '200'){
-                toast('Call Placed Successfully',"successfull")
-                $('.unknown__number p').html(num)
-                $('.main-data-wrapper').css("display","none")
-                $('.unknown__call').removeClass("d-none")
-                return
-              }
-            }
-          })
-  }
 
 
-  const call_disconnect = () => {
-    $.ajax({
-            type:"post",
-            url:'/disconnect',
-            data:{
-              // dialnum3:$('input[name=dialnum3]').val(),
-               csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val(),
-            },
-            success: function(data){
-              
-            }
-          })
-  } 
-
-  const call_dispose = () => {
-    $.ajax({
-            type:"post",
-            url:'/dispose',
-            data:{
-              // dialnum3:$('input[name=dialnum3]').val(),
-               csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val(),
-               dispos:$('select[name=subdis]').val()
-            },
-            success: function(data){
-              console.log("disposed")
-            } 
-          })
-  }
-
+ 
   const submitform = () => {
     let fdata = new FormData()
     fdata.append('number',$('.unknown__number p').html())
@@ -364,7 +355,7 @@
             headers: {
             "X-CSRFToken": document.querySelector('[name=csrfmiddlewaretoken]').value,
             },
-            url: "/unknown",
+            url: "",
             data: fdata,
             datatype:'json',
             processData: false,
@@ -377,6 +368,7 @@
   }
 
   function miss(){
+    console.log("misssss called")
         let data = new FormData();
 
         data.append('sd',$('input[name=fdate]').val())
@@ -391,7 +383,7 @@
             headers: {
             "X-CSRFToken": document.querySelector('[name=csrfmiddlewaretoken]').value,
             },
-            url: "/missedcallajax",
+            url: "{% url 'missajax' %}",
             data: data,
             datatype:'json',
             processData: false,
@@ -402,6 +394,7 @@
             // data: mydata,
             success: function (data) {
                 let x = data.miss
+                console.log("x",x)
                 
                 $('.main-data-wrapper').html("")
                 for(var i in x)
@@ -415,19 +408,20 @@
                                         hour12:false
                                     })
 
-                    let d = x[i].missdt
+                    let d = x[i].start
 
                     d = new Date(d);
                     d = dtFormat.format(d)
                   
-                  if(x[i].contacted == "No"){
-                    $('.main-data-wrapper').append(missedhtml(x[i].callnum,d,x[i].callcount))
+                  if(x[i].status == "No"){
+                    $('.main-data-wrapper').append(missedhtml(x[i].src,d,x[i].count))
                   }
-                  else if (x[i].sub_dispo != "Ringing No Response" && x[i].contacted.toLowerCase()  == "yes"){
-                    $('.main-data-wrapper').append(connecthtml(x[i].callnum,d))
+                  else if (x[i].status != "Ringing No Response" && x[i].status.toLowerCase()  == "yes"){
+                    $('.main-data-wrapper').append(connecthtml(x[i].src,d))
                   }
-                  else if ( x[i].contacted.toLowerCase() == "yes"){
-                    $('.main-data-wrapper').append(notconnecthtml(x[i].callnum,d))
+                  else if ( x[i].status == "Ringing No Response"){
+                    console.log("comesssssss")
+                    $('.main-data-wrapper').append(notconnecthtml(x[i].src,d))
                   }
                   
 
@@ -439,6 +433,36 @@
           
           })
         }
+
+
+        // function for calling on missedcall numbers starts
+    const dial_call = (ph) => {
+      ph=ph.slice(3,)
+      let data = new FormData()
+      console.log(ph,"calllllllllllllllllllllllllllllllll")
+    data.append('number',ph)
+    // data.append('ext',$('.ext').val())
+
+    $.ajax({
+          method: 'POST',
+          headers: {
+          "X-CSRFToken": document.querySelector('[name=csrfmiddlewaretoken]').value,
+          },
+          url: "/publish",
+          data: data,
+          datatype:'json',
+          processData: false,
+          contentType: false,
+          success: function (data) {
+            console.log("itssssssssssssss called ")
+          
+
+          }
+    })
+}
+
+//function for calling on missedcall numbers ends
+
 
   $(document).ready(function () {
 
@@ -466,8 +490,8 @@
         return
       };
 
-      call_disconnect() 
-      call_dispose()
+      // call_disconnect() 
+      // call_dispose()
       submitform()
 
     })
@@ -524,13 +548,14 @@
     })
     $('.notcon-link').click(function(){
       $('.filter_link').val("rnr")
+      console.log("clickckckckckc notcompleted")
       miss()
     })
 
     miss()
 
     $(document).on('click','.misscall-wrapper',function(){
- 
+     console.log("its click on misss")
       var user=$(this).find(".username").val()
       var ph=$(this).find('.missno').html()
       var calldt=$(this).find(".mcalldt").html()
@@ -541,29 +566,26 @@
         data.append("user",user)
         data.append("misscalldt",calldt)
         data.append("misscallc",misscallc)
-      
-        
+        // dial_call(ph)
+      console.log(ph,"phone no")
       $.ajax({
-        method: 'POST',
-        headers: {
-          "X-CSRFToken": document.querySelector('[name=csrfmiddlewaretoken]').value,
-        },
-        url: "/misscmsajax",
+        method: 'GET',
+        url: `check_missedcall?phone=${ph}`,
         data: data,
         datatype:'json',
         processData: false,
         contentType: false,
         
         success: function (data) {
-          var id =data.status
+          var id =data.id
+          var mb =data.ph
           
-          if (id == "none"){
-                      
-            call(ph)
-             
-          }else{
-            window.location.href=`/cms/${id}`
-          }
+          console.log(id,"iddddddd")
+
+          if (id != undefined){
+              window.location.href=`/cms?id=${id}&bool=True&number=${mb}&render=missedcall`
+            }
+          
         }
 
         })

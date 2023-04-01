@@ -1,0 +1,140 @@
+<script>
+
+    function isNumber(evt) {
+      evt = (evt) ? evt : window.event;
+      var charCode = (evt.which) ? evt.which : evt.keyCode;
+      if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+          return false;
+      }
+      return true;
+    }
+    
+    
+    
+    
+    const atmphtml = (id,listid,name,mob,ag_no) =>{
+     
+            return component =`   <a class="content_type attempted"  href="/cms?id=${id}&render=search">
+                            <span class="search_content attempted">Attempted</span>
+                            <span class="search_content">${listid}</span>
+                            <span class="search_content">${name}</span>
+                            <span class="search_content">${mob}</span>
+                            <span class="search_content">${ag_no}</span>
+                            <span class="search_content"><img src="/static/images/attachment1.svg" height="18px" width="18px"></span>
+                       </a>`
+            }
+    
+    
+    const nonatmphtml = (id,listid,name,mob,ag_no) =>{
+    
+            return component =`<a class="content_type non-attempted"  href="/cms?id=${id}&render=search">
+                            <span class="search_content non-attempted">Non-Attempted</span>
+                            <span class="search_content">${listid}</span>
+                            <span class="search_content">${name}</span>
+                            <span class="search_content">${mob}</span>
+                            <span class="search_content">${ag_no}</span>
+                            <span class="search_content"><img src="/static/images/attachment1.svg" height="18px" width="18px"></span>
+                       </a>`
+            }
+    const dndhtml = (id,listid,name,mob,ag_no) =>{
+        
+            return component =` <a class="content_type dnd" >
+                            <span class="search_content dnd">DNC</span>
+                            <span class="search_content">${listid}</span>
+                            <span class="search_content">${name}</span>
+                            <span class="search_content">${mob}</span>
+                            <span class="search_content">${ag_no}</span>
+                            <span class="search_content"><img src="/static/images/attachment1.svg" height="18px" width="18px"></span>
+                       </a>`
+            }
+    
+    
+    function sajax(){
+        data = new FormData()
+        
+        data.append('name',$('input[name="name"]').val())
+        data.append('mobile_number',$('input[name="mobile_number"]').val())
+        data.append('agreement_no',$('input[name="agreement_no"]').val())
+    
+    
+        $.ajax({
+                method: 'POST',
+                headers: {
+                    "X-CSRFToken": document.querySelector('[name=csrfmiddlewaretoken]').value,
+                },
+                url: "{% url 'sajax' %}",
+                data: data,
+                datatype:'json',
+                processData: false,
+                contentType: false,
+                beforeSend: function() {
+                    $('.loader__wrapper').css({"display":"block"})
+                }, 
+                success: function (data) {
+                   console.log(data.status)
+                   let x = data.all_data
+                    console.log(x)
+                    $('.table_body').html(" ")
+    
+                    for (var i in x){
+                        // console.log("inside")
+                        if (x[i].attempted != 0 && x[i].dnd_detail == 0){
+                            $('.table_body').append(atmphtml(x[i].id,x[i].list_id,x[i].name,x[i].mobile_no,x[i].agreement_no))
+                        }
+                        else if(x[i].attempted == 0 && x[i].dnd_detail == 0){
+                            $('.table_body').append(nonatmphtml(x[i].id,x[i].list_id,x[i].name,x[i].mobile_no,x[i].agreement_no))
+                        }
+                        else if( x[i].dnd_detail == 1){
+                            $('.table_body').append(dndhtml(x[i].id,x[i].list_id,x[i].name,x[i].mobile_no,x[i].agreement_no))
+                        }
+                    }   
+                    
+                   
+    
+                    $('.loader__wrapper').css({"display":"none"})
+                }
+            })
+     }
+    
+     
+     function setsess(){
+            sessionStorage.setItem('bn',$('input[name="name"]').val())
+            sessionStorage.setItem('mn',$('input[name="mobile_number"]').val())
+            sessionStorage.setItem('ld',$('input[name="agreement_no"]').val())
+        }
+         
+        function getsess(){
+            let abn = sessionStorage.getItem('bn')
+            let amn = sessionStorage.getItem('mn')
+            let ald  = sessionStorage.getItem('ld')
+            $('input[name="name"]').val(abn)
+            $('input[name="mobile_number"]').val(amn)
+            $('input[name="agreement_no"]').val(ald)
+            console.log(abn,amn,ald)
+        }
+    
+    
+    $(document).ready(function () {
+        
+       console.log( "modulename",$("input[name=user_module]").val())
+        $('.header-title').html("Search")
+    
+      
+    
+    
+      $(".sa").addClass("active-page")
+        getsess()
+        $('.searchbtn').click(function(){
+         console.log( $('input[name="name"]').val(),"input")
+            setsess()
+            sajax()
+        })
+    
+    
+        
+        sajax()
+            
+    });
+    
+     
+    </script>
